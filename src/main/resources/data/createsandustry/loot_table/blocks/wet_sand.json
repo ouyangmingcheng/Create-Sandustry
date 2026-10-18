@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "createsandustry:wet_sand"
+        }
+      ]
+    }
+  ],
+  "random_sequence": "createsandustry:blocks/wet_sand"
+}

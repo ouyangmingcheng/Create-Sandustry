@@ -1,0 +1,15 @@
+{
+  "required": false,
+  "package": "com.minechai.create_candustry.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "poopsky.FecalIncontinenceEffectMixin",
+    "poopsky.PoopTntUtilMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

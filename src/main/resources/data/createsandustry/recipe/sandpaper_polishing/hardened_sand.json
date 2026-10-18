@@ -1,0 +1,15 @@
+{
+  "type": "create:sandpaper_polishing",
+  "ingredients": [
+    {
+      "item": "createsandustry:hardened_sand"
+    }
+  ],
+  "results": [
+    {
+      "chance": 0.7,
+      "count": 2,
+      "id": "minecraft:gold_nugget"
+    }
+  ]
+}

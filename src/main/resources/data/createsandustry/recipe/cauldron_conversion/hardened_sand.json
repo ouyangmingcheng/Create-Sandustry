@@ -1,0 +1,12 @@
+{
+  "type": "createsandustry:cauldron_conversion",
+  "ingredient": {
+    "item": "createsandustry:hardened_sand"
+  },
+  "fluid": "minecraft:water",
+  "water_mb": 333,
+  "result": {
+    "id": "createsandustry:wet_sand",
+    "count": 1
+  }
+}

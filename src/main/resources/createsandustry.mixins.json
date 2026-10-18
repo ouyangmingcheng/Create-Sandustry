@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "package": "com.minechai.create_candustry.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemStackMixin",
+    "InventoryGoldenFriedRiceMixin",
+    "PlayerSetItemSlotMixin",
+    "FallingBlockEntityMixin",
+    "BrushableBlockEntityMixin",
+    "CatMixin",
+    "BrushItemMixin",
+    "ServerGamePacketListenerImplMixin",
+    "AbstractContainerMenuMixin"
+  ],
+  "client": [
+    "ItemRendererMixin",
+    "LocalPlayerDropMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

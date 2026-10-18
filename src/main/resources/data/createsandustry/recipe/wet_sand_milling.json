@@ -1,0 +1,17 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "createsandustry:wet_sand"
+    }
+  ],
+  "processing_time": 200,
+  "results": [
+    {
+      "id": "minecraft:gold_nugget"
+    },
+    {
+      "id": "createsandustry:residue"
+    }
+  ]
+}

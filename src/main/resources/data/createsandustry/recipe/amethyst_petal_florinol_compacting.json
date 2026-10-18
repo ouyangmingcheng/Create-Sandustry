@@ -1,0 +1,24 @@
+{
+  "type": "create:compacting",
+  "heat_requirement": "superheated",
+  "ingredients": [
+    {
+      "item": "createsandustry:amethyst_petal"
+    },
+    {
+      "item": "createsandustry:amethyst_petal"
+    },
+    {
+      "item": "createsandustry:amethyst_petal"
+    },
+    {
+      "item": "createsandustry:amethyst_petal"
+    }
+  ],
+  "results": [
+    {
+      "amount": 500,
+      "id": "createsandustry:florinol"
+    }
+  ]
+}

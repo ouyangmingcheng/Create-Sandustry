@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "golden_fried_rice": {
+      "trigger": "createsandustry:golden_fried_rice"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "description": {
+      "translate": "advancements.createsandustry.golden_fried_rice.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "kaleidoscope_cookery:egg_fried_rice"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.createsandustry.golden_fried_rice.title"
+    }
+  },
+  "requirements": [
+    [
+      "golden_fried_rice"
+    ]
+  ]
+}

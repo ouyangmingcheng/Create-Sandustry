@@ -1,0 +1,13 @@
+{
+  "type": "createsandustry:cauldron_conversion",
+  "ingredient": {
+    "item": "createsandustry:thunder_sand"
+  },
+  "fluid": "minecraft:water",
+  "water_mb": 333,
+  "effect": "createsandustry:thunder_lightning",
+  "result": {
+    "id": "createsandustry:wet_sand",
+    "count": 1
+  }
+}

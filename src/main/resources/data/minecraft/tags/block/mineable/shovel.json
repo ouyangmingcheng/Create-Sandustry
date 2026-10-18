@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "createsandustry:florinol_soil",
+    "createsandustry:hardened_sand",
+    "createsandustry:petrified_sand",
+    "createsandustry:volatile_sand",
+    "createsandustry:cat_litter",
+    "createsandustry:thunder_sand"
+  ]
+}
+

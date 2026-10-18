@@ -1,0 +1,16 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "createsandustry:burnt_residue"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:gold_nugget"
+    },
+    {
+      "id": "createsandustry:dormant_seeds"
+    }
+  ]
+}
