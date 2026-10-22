@@ -24,11 +24,13 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.WET_SAND.get());
                         output.accept(ModItems.HARDENED_SAND.get());
                         output.accept(ModItems.PETRIFIED_SAND.get());
+                        output.accept(ModItems.SAND_MASTER_SWORD_PEDESTAL.get());
                         output.accept(ModItems.VOLATILE_SAND.get());
                         output.accept(ModItems.CAT_LITTER.get());
                         output.accept(ModItems.THUNDER_SAND.get());
                         output.accept(ModItems.LIVING_SAND.get());
                         output.accept(ModItems.SAND_BALL.get());
+                        output.accept(ModItems.SAND_SOUL.get());
                         output.accept(ModItems.SAND_MASTER_SWORD.get());
                         // 直接给“刚断裂”的那一份（耐久 0），避免创造栏里出现正好处于修复完成状态的破损剑。
                         output.accept(SandMasterSwordForms.createBrokenInstance());

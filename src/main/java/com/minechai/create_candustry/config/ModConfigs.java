@@ -199,6 +199,203 @@ public final class ModConfigs {
                     "true：启用全局考古战利品池（默认）。",
                     "false：恢复原版及其他模组原有的可疑方块战利品表选择行为。")
             .define("universal_archaeology_loot", true);
+    // Qunyou phase-three pig ejection
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_EJECTION_COOLDOWN = BUILDER
+            .comment("第三阶段“猪弹射”的独立冷却，单位：tick。默认 800 = 40 秒。")
+            .defineInRange("qunyou.pig_ejection.cooldown", 800, 1, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_EJECTION_CHARGE_TICKS = BUILDER
+            .comment("猪弹射蓄力时间，单位：tick。默认 12。")
+            .defineInRange("qunyou.pig_ejection.charge_ticks", 12, 1, 100);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_EJECTION_BOOST_STAGES = BUILDER
+            .comment("猪弹射包含的烟花助推段数。默认 3。")
+            .defineInRange("qunyou.pig_ejection.boost_stages", 3, 1, 10);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_EJECTION_BOOST_INTERVAL = BUILDER
+            .comment("猪弹射相邻助推段之间的间隔，单位：tick。默认 6。")
+            .defineInRange("qunyou.pig_ejection.boost_interval", 6, 1, 100);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_INITIAL_SPEED = BUILDER
+            .comment("猪弹射第一段助推后的水平速度，单位：格/tick。默认 1.35。")
+            .defineInRange("qunyou.pig_ejection.initial_speed", 1.35D, 0.1D, 10.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_ACCELERATION = BUILDER
+            .comment("每段后续烟花助推增加的水平速度。默认 0.35。")
+            .defineInRange("qunyou.pig_ejection.acceleration", 0.35D, 0.0D, 10.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_MAX_SPEED = BUILDER
+            .comment("猪弹射最大水平速度。默认 2.6。")
+            .defineInRange("qunyou.pig_ejection.max_speed", 2.6D, 0.1D, 20.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_MAX_DISTANCE = BUILDER
+            .comment("猪弹射单次冲撞的最大水平距离。默认 28 格。")
+            .defineInRange("qunyou.pig_ejection.max_distance", 28.0D, 1.0D, 256.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_EJECTION_MAX_TICKS = BUILDER
+            .comment("猪弹射单次冲撞的最长时间，单位：tick。默认 45。")
+            .defineInRange("qunyou.pig_ejection.max_ticks", 45, 1, 400);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_TURN_LERP = BUILDER
+            .comment("猪弹射每 tick 允许朝目标修正方向的比例。默认 0.055。")
+            .defineInRange("qunyou.pig_ejection.turn_lerp", 0.055D, 0.0D, 1.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_DAMAGE = BUILDER
+            .comment("猪弹射命中伤害。默认 8 点。")
+            .defineInRange("qunyou.pig_ejection.damage", 8.0D, 0.0D, 1024.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_KNOCKBACK = BUILDER
+            .comment("猪弹射命中时的水平击退强度。默认 1.6。")
+            .defineInRange("qunyou.pig_ejection.knockback", 1.6D, 0.0D, 10.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_UPWARD = BUILDER
+            .comment("猪弹射命中时的向上击飞强度。默认 0.8。")
+            .defineInRange("qunyou.pig_ejection.upward", 0.8D, 0.0D, 5.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_CHASE_RANGE = BUILDER
+            .comment("猪弹射命中玩家后继续追击的最大目标距离。默认 48 格。")
+            .defineInRange("qunyou.pig_ejection.chase_range", 48.0D, 1.0D, 256.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_EJECTION_MAX_CHASE_HITS = BUILDER
+            .comment("玩家被连续命中并刷新猪弹射时的最大命中次数。默认 3。")
+            .defineInRange("qunyou.pig_ejection.max_chase_hits", 3, 1, 20);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_EJECTION_CHASE_RECOVERY_TICKS = BUILDER
+            .comment("命中玩家后再次蓄力前的最短间隔，单位：tick。默认 10。")
+            .defineInRange("qunyou.pig_ejection.chase_recovery_ticks", 10, 1, 100);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_ASCEND_ANGLE = BUILDER
+            .comment("未命中时斜向升空的仰角，单位：度。默认 42。")
+            .defineInRange("qunyou.pig_ejection.ascend_angle", 42.0D, 0.0D, 85.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_ASCEND_HEIGHT = BUILDER
+            .comment("未命中时猪弹射升空的高度增量。默认 10 格。")
+            .defineInRange("qunyou.pig_ejection.ascend_height", 10.0D, 1.0D, 64.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_EJECTION_ASCEND_SPEED = BUILDER
+            .comment("猪弹射斜向升空的初速度。默认 1.0。")
+            .defineInRange("qunyou.pig_ejection.ascend_speed", 1.0D, 0.1D, 10.0D);
+
+    // Qunyou phase-three golden carrot missiles
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_MISSILE_COOLDOWN = BUILDER
+            .comment("猪导弹独立冷却，单位：tick。默认 80 = 4 秒。")
+            .defineInRange("qunyou.pig_missile.cooldown", 80, 1, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_MISSILE_COUNT = BUILDER
+            .comment("每次猪导弹召唤数量。默认 3。")
+            .defineInRange("qunyou.pig_missile.count", 3, 1, 12);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_MISSILE_LAUNCH_INTERVAL = BUILDER
+            .comment("三枚黄金胡萝卜之间的发射间隔，单位：tick。默认 4。")
+            .defineInRange("qunyou.pig_missile.launch_interval", 4, 1, 100);
+    public static final ModConfigSpec.DoubleValue QUNYOU_GOLDEN_CARROT_SPEED_RATIO = BUILDER
+            .comment("黄金胡萝卜速度相对普通胡萝卜的速度比例。默认 0.42。")
+            .defineInRange("qunyou.pig_missile.speed_ratio", 0.42D, 0.1D, 1.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_GOLDEN_CARROT_TURN_LERP = BUILDER
+            .comment("黄金胡萝卜每 tick 追踪转向插值。默认 0.12。")
+            .defineInRange("qunyou.pig_missile.turn_lerp", 0.12D, 0.0D, 1.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_GOLDEN_CARROT_PREDICTION_TICKS = BUILDER
+            .comment("黄金胡萝卜追踪目标时使用的前置预测 tick 数。默认 8。")
+            .defineInRange("qunyou.pig_missile.prediction_ticks", 8, 0, 100);
+    public static final ModConfigSpec.DoubleValue QUNYOU_GOLDEN_CARROT_MAX_TRACK_RANGE = BUILDER
+            .comment("黄金胡萝卜最大持续追踪距离。默认 64 格。")
+            .defineInRange("qunyou.pig_missile.max_track_range", 64.0D, 1.0D, 256.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_GOLDEN_CARROT_TRAIL_INTERVAL = BUILDER
+            .comment("黄金胡萝卜火焰拖尾粒子生成间隔，单位：tick。默认 2。")
+            .defineInRange("qunyou.pig_missile.trail_interval", 2, 1, 20);
+    public static final ModConfigSpec.DoubleValue QUNYOU_GOLDEN_CARROT_EXPLOSION_RADIUS = BUILDER
+            .comment("黄金胡萝卜非破坏性小爆炸半径。默认 3 格。")
+            .defineInRange("qunyou.pig_missile.explosion_radius", 3.0D, 0.1D, 12.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_GOLDEN_CARROT_DAMAGE_MULTIPLIER = BUILDER
+            .comment("黄金胡萝卜对直接命中目标的伤害倍率，以普通胡萝卜伤害为基准。默认 2.0。")
+            .defineInRange("qunyou.pig_missile.damage_multiplier", 2.0D, 1.0D, 10.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_GOLDEN_CARROT_EXPLOSION_DAMAGE = BUILDER
+            .comment("黄金胡萝卜爆炸对周围其他有效目标的中心伤害。默认 6 点，边缘衰减至 0。")
+            .defineInRange("qunyou.pig_missile.explosion_damage", 6.0D, 0.0D, 1024.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_GOLDEN_CARROT_EXPLOSION_KNOCKBACK = BUILDER
+            .comment("黄金胡萝卜爆炸击退强度。默认 0.65。")
+            .defineInRange("qunyou.pig_missile.explosion_knockback", 0.65D, 0.0D, 10.0D);
+    public static final ModConfigSpec.BooleanValue QUNYOU_GOLDEN_CARROT_AFFECT_OTHER_TARGETS = BUILDER
+            .comment("黄金胡萝卜爆炸是否伤害周围其他有效目标。默认开启。")
+            .define("qunyou.pig_missile.affect_other_targets", true);
+
+    // Qunyou phase-three pig retreat
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_RETREAT_REPLACE_CHANCE = BUILDER
+            .comment("第三阶段准备执行猪逃离时替换为猪撤退的概率。默认 0.5 = 50%。")
+            .defineInRange("qunyou.pig_retreat.replace_chance", 0.5D, 0.0D, 1.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_RETREAT_CHARGE_TICKS = BUILDER
+            .comment("猪撤退蓄力时间，单位：tick。默认 6。")
+            .defineInRange("qunyou.pig_retreat.charge_ticks", 6, 1, 100);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_RETREAT_HORIZONTAL_TICKS = BUILDER
+            .comment("猪撤退水平助推持续时间，单位：tick。默认 14。")
+            .defineInRange("qunyou.pig_retreat.horizontal_ticks", 14, 1, 100);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_RETREAT_HORIZONTAL_SPEED = BUILDER
+            .comment("猪撤退水平助推初速度。默认 1.1。")
+            .defineInRange("qunyou.pig_retreat.horizontal_speed", 1.1D, 0.1D, 10.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_RETREAT_ACCELERATION = BUILDER
+            .comment("猪撤退水平助推每 tick 加速度。默认 0.05。")
+            .defineInRange("qunyou.pig_retreat.acceleration", 0.05D, 0.0D, 10.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_RETREAT_DISTANCE = BUILDER
+            .comment("猪撤退水平段目标逃离距离。默认 12 格。")
+            .defineInRange("qunyou.pig_retreat.distance", 12.0D, 1.0D, 64.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_RETREAT_ASCEND_ANGLE = BUILDER
+            .comment("猪撤退第二段斜向升空角度，单位：度。默认 50。")
+            .defineInRange("qunyou.pig_retreat.ascend_angle", 50.0D, 0.0D, 85.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_RETREAT_ASCEND_HEIGHT = BUILDER
+            .comment("猪撤退斜向升空的高度上限。默认 10 格。")
+            .defineInRange("qunyou.pig_retreat.ascend_height", 10.0D, 1.0D, 64.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_RETREAT_ASCEND_SPEED = BUILDER
+            .comment("猪撤退斜向升空速度。默认 1.0。")
+            .defineInRange("qunyou.pig_retreat.ascend_speed", 1.0D, 0.1D, 10.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_RETREAT_BURST_PARTICLES = BUILDER
+            .comment("猪撤退每次助推爆发的烟花粒子数量。默认 24。")
+            .defineInRange("qunyou.pig_retreat.burst_particles", 24, 1, 256);
+
+    // Qunyou phase-three air maneuver
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_MANEUVER_CHANCE = BUILDER
+            .comment("第三阶段滑翔时每次判定触发猪机动的概率。默认 0.30。")
+            .defineInRange("qunyou.pig_maneuver.chance", 0.30D, 0.0D, 1.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_MANEUVER_CHECK_INTERVAL = BUILDER
+            .comment("猪机动概率判定间隔，单位：tick。默认 40。")
+            .defineInRange("qunyou.pig_maneuver.check_interval", 40, 1, 1200);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_MANEUVER_COOLDOWN = BUILDER
+            .comment("猪机动独立冷却，单位：tick。默认 240 = 12 秒。")
+            .defineInRange("qunyou.pig_maneuver.cooldown", 240, 1, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_MANEUVER_DURATION = BUILDER
+            .comment("猪机动完整滚转和爬升的持续时间，单位：tick。默认 20。")
+            .defineInRange("qunyou.pig_maneuver.duration", 20, 4, 100);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_MANEUVER_CLIMB_HEIGHT = BUILDER
+            .comment("猪机动期望爬升高度。默认 6 格。")
+            .defineInRange("qunyou.pig_maneuver.climb_height", 6.0D, 1.0D, 32.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_MANEUVER_HORIZONTAL_SPEED = BUILDER
+            .comment("猪机动期间维持的水平速度。默认 0.75。")
+            .defineInRange("qunyou.pig_maneuver.horizontal_speed", 0.75D, 0.0D, 10.0D);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_MANEUVER_VERTICAL_SPEED = BUILDER
+            .comment("猪机动期间爬升速度倍率。默认 1.0。")
+            .defineInRange("qunyou.pig_maneuver.vertical_speed_multiplier", 1.0D, 0.1D, 5.0D);
+
+    // Qunyou phase-three airborne eating
+    public static final ModConfigSpec.DoubleValue QUNYOU_AIR_EATING_CHANCE = BUILDER
+            .comment("第三阶段滑翔时每次判定触发猪空中进食的概率。默认 0.25。")
+            .defineInRange("qunyou.air_eating.chance", 0.25D, 0.0D, 1.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_AIR_EATING_CHECK_INTERVAL = BUILDER
+            .comment("猪空中进食概率判定间隔，单位：tick。默认 60。")
+            .defineInRange("qunyou.air_eating.check_interval", 60, 1, 1200);
+    public static final ModConfigSpec.IntValue QUNYOU_AIR_EATING_COOLDOWN = BUILDER
+            .comment("猪空中进食独立冷却，单位：tick。默认 500 = 25 秒。")
+            .defineInRange("qunyou.air_eating.cooldown", 500, 1, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue QUNYOU_AIR_EATING_DURATION = BUILDER
+            .comment("猪空中进食持续时间，单位：tick。默认 36。")
+            .defineInRange("qunyou.air_eating.duration", 36, 1, 200);
+    public static final ModConfigSpec.IntValue QUNYOU_AIR_EATING_STRENGTH_DURATION = BUILDER
+            .comment("空中进食完成后的力量 V 持续时间，单位：tick。默认 400 = 20 秒。")
+            .defineInRange("qunyou.air_eating.strength_duration", 400, 1, Integer.MAX_VALUE);
+    public static final ModConfigSpec.IntValue QUNYOU_AIR_EATING_REGENERATION_DURATION = BUILDER
+            .comment("空中进食完成后的生命恢复 III 持续时间，单位：tick。默认 100 = 5 秒。")
+            .defineInRange("qunyou.air_eating.regeneration_duration", 100, 1, Integer.MAX_VALUE);
+    public static final ModConfigSpec.DoubleValue QUNYOU_AIR_EATING_TURN_LERP = BUILDER
+            .comment("空中进食期间的飞行转向幅度。默认 0.065，低于正常滑翔。")
+            .defineInRange("qunyou.air_eating.turn_lerp", 0.065D, 0.0D, 1.0D);
+
+    // Qunyou unified escape
+    public static final ModConfigSpec.DoubleValue QUNYOU_ESCAPE_ON_HURT_CHANCE = BUILDER
+            .comment("群友受到实际伤害且处于地面时，以该概率立即进入逃离。默认 0.3 = 30%。")
+            .defineInRange("qunyou.escape.on_hurt_chance", 0.3D, 0.0D, 1.0D);
+
+    // Qunyou pig clone
+    public static final ModConfigSpec.BooleanValue QUNYOU_PIG_CLONE_ENABLED = BUILDER
+            .comment("是否启用群友真正进入猪逃离时召唤猪分身。默认开启。")
+            .define("qunyou.pig_clone.enabled", true);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_CLONE_CHANCE = BUILDER
+            .comment("真正开始猪逃离时召唤分身的概率。默认 0.5 = 50%。")
+            .defineInRange("qunyou.pig_clone.chance", 0.5D, 0.0D, 1.0D);
+    public static final ModConfigSpec.IntValue QUNYOU_PIG_CLONE_COUNT = BUILDER
+            .comment("单次召唤只新增 1 只分身；同时存活上限为 4，达到上限后再次召唤会传送已有分身。")
+            .defineInRange("qunyou.pig_clone.count", 1, 1, 1);
+    public static final ModConfigSpec.DoubleValue QUNYOU_PIG_CLONE_MAX_HEALTH = BUILDER
+            .comment("猪分身最大生命值。默认 20 点，即 10 颗心。")
+            .defineInRange("qunyou.pig_clone.max_health", 20.0D, 1.0D, 1024.0D);
+
     public static final ModConfigSpec SPEC = BUILDER.build();
 
     public static void register() {
@@ -208,11 +405,4 @@ public final class ModConfigs {
     private ModConfigs() {
     }
 }
-
-
-
-
-
-
-
 

@@ -1,0 +1,43 @@
+{
+  "type": "createsandustry:random_sapling_mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:dead_bush"
+    },
+    {
+      "item": "createsandustry:sand_soul"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:oak_sapling"
+    },
+    {
+      "id": "minecraft:spruce_sapling"
+    },
+    {
+      "id": "minecraft:birch_sapling"
+    },
+    {
+      "id": "minecraft:jungle_sapling"
+    },
+    {
+      "id": "minecraft:acacia_sapling"
+    },
+    {
+      "id": "minecraft:dark_oak_sapling"
+    },
+    {
+      "id": "minecraft:cherry_sapling"
+    },
+    {
+      "id": "minecraft:mangrove_propagule"
+    },
+    {
+      "id": "minecraft:azalea"
+    },
+    {
+      "id": "minecraft:flowering_azalea"
+    }
+  ]
+}

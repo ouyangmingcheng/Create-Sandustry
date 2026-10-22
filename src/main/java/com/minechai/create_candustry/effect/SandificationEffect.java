@@ -19,8 +19,8 @@ import net.minecraft.world.entity.LivingEntity;
  *         —— 三级之后不再继续加密，避免更高等级出现离谱的判定频率。</li>
  * </ul>
  *
- * <p>概率所有等级一致（{@value #UNIT_CHANCE}）。举例：3 秒沙化 I 共 6 次判定（期望 3 个单位），
- * 6 秒沙化 II 共 24 次判定（期望 12 个单位），60 秒沙化 III 共 300 次判定（期望 150 个单位）。</p>
+ * <p>概率所有等级一致（{@value #UNIT_CHANCE}）。举例：3 秒沙化 I 共 6 次判定（期望 4.5 个单位），
+ * 6 秒沙化 II 共 24 次判定（期望 18 个单位），60 秒沙化 III 共 300 次判定（期望 225 个单位）。</p>
  *
  * <p>沙心上限由 {@link SandHeartManager#setUnits} 统一夹取（不超过生命条容量），
  * 因此当沙心填满生命条时会自动进入“沙化之兆”（见 {@code SandHeartManager#syncSandHardcore}），
@@ -42,8 +42,8 @@ public class SandificationEffect extends MobEffect {
     public static final int INTERVAL_TICKS_LEVEL_2 = 5;
     /** 三级及以上（amplifier ≥ 2）的判定间隔：4 tick = 0.2 秒。 */
     public static final int INTERVAL_TICKS_LEVEL_3 = 4;
-    /** 每次判定给予沙心的概率：所有等级一致，50%。 */
-    public static final double UNIT_CHANCE = 0.5D;
+    /** 每次判定给予沙心的概率：所有等级一致，75%。 */
+    public static final double UNIT_CHANCE = 0.75D;
     /** 每次判定成功时增加的沙心单位数（1 个内部单位 = 半颗沙心）。 */
     public static final int UNITS_ON_SUCCESS = 1;
 
@@ -61,7 +61,6 @@ public class SandificationEffect extends MobEffect {
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        // 服务端权威结算；客户端实例直接跳过。
         // 玩家与生物一视同仁：生物同样会累积“虚拟沙心”，挤占它的生命上限。
         if (!entity.level().isClientSide && entity.getRandom().nextDouble() < UNIT_CHANCE) {
             SandHeartManager.addUnits(entity, UNITS_ON_SUCCESS);

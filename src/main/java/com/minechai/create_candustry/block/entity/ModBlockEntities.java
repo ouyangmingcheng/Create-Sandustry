@@ -23,6 +23,12 @@ public final class ModBlockEntities {
                     () -> BlockEntityType.Builder.of(FlorinolBatteryBlockEntity::new, ModBlocks.FLORINOL_BATTERY.get())
                             .build(null));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SandMasterSwordPedestalBlockEntity>>
+            SAND_MASTER_SWORD_PEDESTAL = BLOCK_ENTITY_TYPES.register(
+                    "sand_master_sword_pedestal",
+                    () -> BlockEntityType.Builder.of(SandMasterSwordPedestalBlockEntity::new,
+                            ModBlocks.SAND_MASTER_SWORD_PEDESTAL.get()).build(null));
+
     public static void register(IEventBus eventBus) {
         BLOCK_ENTITY_TYPES.register(eventBus);
     }

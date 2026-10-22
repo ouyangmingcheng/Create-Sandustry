@@ -1,8 +1,12 @@
 package com.minechai.create_candustry.recipe;
 
 import com.minechai.create_candustry.CreateSandustry;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
+import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
@@ -17,6 +21,8 @@ public final class ModRecipeTypes {
 
     public static final ResourceLocation CAULDRON_CONVERSION_ID =
             ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "cauldron_conversion");
+    public static final ResourceLocation RANDOM_SAPLING_MIXING_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "random_sapling_mixing");
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<CauldronConversionRecipe>> CAULDRON_CONVERSION =
             RECIPE_TYPES.register("cauldron_conversion",
@@ -24,6 +30,33 @@ public final class ModRecipeTypes {
 
     public static final DeferredHolder<RecipeSerializer<?>, CauldronConversionRecipeSerializer> CAULDRON_CONVERSION_SERIALIZER =
             RECIPE_SERIALIZERS.register("cauldron_conversion", CauldronConversionRecipeSerializer::new);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<RandomSaplingMixingRecipe>> RANDOM_SAPLING_MIXING =
+            RECIPE_TYPES.register("random_sapling_mixing",
+                    () -> RecipeType.simple(RANDOM_SAPLING_MIXING_ID));
+
+    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<RandomSaplingMixingRecipe>>
+            RANDOM_SAPLING_MIXING_SERIALIZER = RECIPE_SERIALIZERS.register("random_sapling_mixing",
+                    () -> new StandardProcessingRecipe.Serializer<>(RandomSaplingMixingRecipe::new));
+
+    public static final IRecipeTypeInfo RANDOM_SAPLING_MIXING_INFO = new IRecipeTypeInfo() {
+        @Override
+        public ResourceLocation getId() {
+            return RANDOM_SAPLING_MIXING_ID;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends RecipeSerializer<?>> T getSerializer() {
+            return (T) RANDOM_SAPLING_MIXING_SERIALIZER.get();
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType() {
+            return (RecipeType<R>) RANDOM_SAPLING_MIXING.get();
+        }
+    };
 
     public static void register(IEventBus eventBus) {
         RECIPE_TYPES.register(eventBus);

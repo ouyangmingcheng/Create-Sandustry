@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level;
  * </ul>
  *
  * <p><b>沙团不再直接增加沙心</b>：沙心的增长完全交给“沙化”状态处理（该状态每 10 tick 判定一次，
- * 每次 50% 概率增加 1 个内部单位 = 半颗沙心，见 {@code SandificationEffect}）。
+ * 每次 75% 概率增加 1 个内部单位 = 半颗沙心，见 {@code SandificationEffect}）。
  * 因此这里只负责按概率施加状态，绝不调用 {@code SandHeartManager.addUnits}，
  * 从源头上保证同一次进食不会重复增加沙心。</p>
  *

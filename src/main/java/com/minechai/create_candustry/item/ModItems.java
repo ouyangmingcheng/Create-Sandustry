@@ -20,6 +20,9 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> WET_SAND = ITEMS.registerSimpleBlockItem("wet_sand", ModBlocks.WET_SAND);
     public static final DeferredItem<BlockItem> HARDENED_SAND = ITEMS.registerSimpleBlockItem("hardened_sand", ModBlocks.HARDENED_SAND);
     public static final DeferredItem<BlockItem> PETRIFIED_SAND = ITEMS.registerSimpleBlockItem("petrified_sand", ModBlocks.PETRIFIED_SAND);
+    public static final DeferredItem<BlockItem> SAND_MASTER_SWORD_PEDESTAL = ITEMS.registerSimpleBlockItem(
+            "sand_master_sword_pedestal",
+            ModBlocks.SAND_MASTER_SWORD_PEDESTAL);
     public static final DeferredItem<BlockItem> GOLDEN_OAK_SAPLING = ITEMS.registerSimpleBlockItem("golden_oak_sapling", ModBlocks.GOLDEN_OAK_SAPLING);
     public static final DeferredItem<BlockItem> GOLDEN_OAK_LEAVES = ITEMS.registerSimpleBlockItem("golden_oak_leaves", ModBlocks.GOLDEN_OAK_LEAVES);
     public static final DeferredItem<BlockItem> VOLATILE_SAND = ITEMS.registerSimpleBlockItem("volatile_sand", ModBlocks.VOLATILE_SAND);
@@ -38,7 +41,7 @@ public final class ModItems {
                     .alwaysEdible()
                     .build())));
 
-    /** 沙噬剑（完整形态）：攻击力即原版石剑，命中施加沙化，耐久耗尽后变为破损形态。 */
+    /** 沙噬剑（完整形态）：攻击力 3 点，命中施加沙化，耐久耗尽后变为破损形态。 */
     public static final DeferredItem<SandMasterSwordItem> SAND_MASTER_SWORD = ITEMS.registerItem(
             "sand_master_sword",
             properties -> new SandMasterSwordItem(ModTiers.SAND_MASTER_SWORD,
@@ -48,6 +51,8 @@ public final class ModItems {
     public static final DeferredItem<BrokenSandMasterSwordItem> SAND_MASTER_SWORD_BROKEN = ITEMS.registerItem(
             "sand_master_sword_broken",
             properties -> new BrokenSandMasterSwordItem(BrokenSandMasterSwordItem.applyProperties(properties)));
+    /** 沙之魂：暂无用途的独立物品。 */
+    public static final DeferredItem<Item> SAND_SOUL = ITEMS.registerSimpleItem("sand_soul");
     public static final DeferredItem<Item> RESIDUE = ITEMS.registerSimpleItem("residue");
     public static final DeferredItem<MysteriousLumpItem> MYSTERIOUS_LUMP = ITEMS.registerItem("mysterious_lump", MysteriousLumpItem::new);
     public static final DeferredItem<BucketItem> FLORINOL_BUCKET = ITEMS.registerItem(

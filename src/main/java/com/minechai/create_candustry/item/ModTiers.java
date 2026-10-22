@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.Block;
  *
  * <p>目前只有沙噬剑使用：除“耐久上限”外全部沿用原版石剑的数值
  * （{@link Tiers#STONE}：挖掘速度 4.0F、攻击伤害加成 1.0F、错误方块标签也为石剑那一套），
- * 这样 {@code SwordItem.createAttributes} 算出来的攻击力就是“石剑式”的
- * {@code 3(基础加成) + 1(材质加成) + 1(空手基础) = 5 点}。</p>
+ * 沙噬剑自身再提供 1 点攻击加成，因此 {@code SwordItem.createAttributes} 算出的攻击力为
+ * {@code 1(物品加成) + 1(材质加成) + 1(空手基础) = 3 点}。</p>
  *
  * <p><b>耐久</b>：{@value SandMasterSwordItem#MAX_DURABILITY} 点，由
  * {@code TieredItem} 构造时写入物品的 {@code MAX_DAMAGE} 组件。</p>

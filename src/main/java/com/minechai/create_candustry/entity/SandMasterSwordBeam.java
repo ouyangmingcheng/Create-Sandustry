@@ -1,7 +1,7 @@
 package com.minechai.create_candustry.entity;
 
 import com.minechai.create_candustry.CreateSandustry;
-import com.minechai.create_candustry.item.SandMasterSwordItem;
+import com.minechai.create_candustry.item.SandMasterSwordSandification;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -28,6 +28,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
@@ -41,6 +42,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.PartEntity;
+import net.neoforged.neoforge.common.Tags;
 import org.joml.Vector3f;
 
 /**
@@ -56,9 +58,9 @@ import org.joml.Vector3f;
  *
  * <p><b>伤害与沙化</b>：命中有效 {@link LivingEntity} 固定造成 {@value #DAMAGE} 点伤害，伤害来源为专用伤害类型
  * {@code createsandustry:sand_master_sword_beam}（伤害归属发射玩家，且该类型在
- * {@code #minecraft:no_knockback} 标签里 ⇒ 不产生击退）。随后按原版 {@code addEffect} 施加
- * {@value #SANDIFICATION_TICKS} tick 的沙化——完全尊重目标自身的状态效果机制，不按 boss 身份做任何过滤，
- * 也不绕过实体明确实现的免疫。</p>
+ * {@code #minecraft:no_knockback} 标签里 ⇒ 不产生击退）。随后调用与近战共用的
+ * {@link SandMasterSwordSandification}：根据发射玩家完整沙心数施加对应等级沙化，并在目标剩余
+ * 沙化时长上追加 60 tick；普通目标与 boss 使用同一规则。</p>
  *
  * <p><b>附魔联动</b>：发射时读取主手沙噬剑的附魔等级并同步到实体上——</p>
  * <ul>
@@ -66,6 +68,8 @@ import org.joml.Vector3f;
  *     <li>有横扫之刃时剑气变为<b>群伤</b>：沿途每个实体各结算一次（同一实体只结算一次），剑气继续飞行；</li>
  *     <li><b>火焰附加</b>：拖尾附带原版火焰粒子，命中时按原版规则点燃目标（每级 4 秒）；</li>
  *     <li><b>击退</b>：每级按原版近战规则把目标沿剑气飞行方向击退（无附魔时仍然完全无击退）。</li>
+ *     <li><b>锋利</b>：命中敌对生物或撞到障碍物时生成两道半月形剑气；两道剑气独立搜索目标并追踪，
+ *         没有目标时不生成。横扫之刃穿透时在首次命中敌对生物处立即生成一对，后续命中不会重复生成。</li>
  * </ul>
  *
  * <p><b>客户端</b>：客户端只负责渲染（见 {@code SandMasterSwordBeamRenderer}），旋转与尺寸由渲染器根据同步来的
@@ -81,10 +85,6 @@ public class SandMasterSwordBeam extends Projectile {
     public static final double MAX_DISTANCE = 100.0D;
     /** 命中伤害：2 点（1 颗心）。 */
     public static final float DAMAGE = 2.0F;
-    /** 命中普通目标时施加的沙化时长：80 tick（4 秒）。 */
-    public static final int SANDIFICATION_TICKS = 80;
-    /** 命中 boss 时施加的沙化时长：160 tick（8 秒）。 */
-    public static final int BOSS_SANDIFICATION_TICKS = 160;
     /** 兜底寿命，避免任何情况下残留实体。 */
     private static final int MAX_LIFETIME_TICKS = 200;
     /** 沙色拖尾粒子颜色（0~1）。 */
@@ -110,6 +110,16 @@ public class SandMasterSwordBeam extends Projectile {
     private final Set<Integer> damagedEntityIds = new HashSet<>();
     /** 击退附魔等级（0 = 无）：只在服务端命中结算时使用，客户端无需同步。 */
     private int knockbackLevel;
+    /** 锋利等级（0 = 无）：只在服务端决定是否生成两道半月形剑气。 */
+    private int sharpnessLevel;
+    /** 最近一次命中的生物脚底位置；无横扫之刃时用于在敌对生物命中点生成半月剑气。 */
+    private Vec3 lastHitEntityPos;
+    /** 最近一次命中的敌怪脚底位置；横扫模式首次命中敌怪时立即用于生成半月剑气。 */
+    private Vec3 lastHitEnemyPos;
+    /** 最近一次命中的生物是否为敌对目标；普通生物不会触发生成半月剑气。 */
+    private boolean lastHitWasHostile;
+    /** 本次剑气是否已经生成过半月形剑气，避免重复触发。 */
+    private boolean crescentsSpawned;
 
     public SandMasterSwordBeam(EntityType<? extends SandMasterSwordBeam> entityType, Level level) {
         super(entityType, level);
@@ -129,7 +139,7 @@ public class SandMasterSwordBeam extends Projectile {
      * 客户端不会上传任何坐标或方向，因此无法伪造出生点。</p>
      */
     public static SandMasterSwordBeam fire(ServerPlayer shooter, int sweepingLevel, int fireAspectLevel,
-            int knockbackLevel) {
+            int knockbackLevel, int sharpnessLevel) {
         SandMasterSwordBeam beam = new SandMasterSwordBeam(ModEntityTypes.SAND_MASTER_SWORD_BEAM.get(),
                 shooter.serverLevel());
 
@@ -155,6 +165,7 @@ public class SandMasterSwordBeam extends Projectile {
         beam.entityData.set(DATA_SWEEPING_LEVEL, Math.max(0, sweepingLevel));
         beam.entityData.set(DATA_FIRE_ASPECT_LEVEL, Math.max(0, fireAspectLevel));
         beam.knockbackLevel = Math.max(0, knockbackLevel);
+        beam.sharpnessLevel = Math.max(0, sharpnessLevel);
         return beam;
     }
 
@@ -248,6 +259,9 @@ public class SandMasterSwordBeam extends Projectile {
 
         if (entityHit != null) {
             this.hitEntity(entityHit.getEntity());
+            if (this.lastHitWasHostile) {
+                this.trySpawnCrescents(end, true);
+            }
             this.discard();
             return;
         }
@@ -255,6 +269,7 @@ public class SandMasterSwordBeam extends Projectile {
             this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.SAND_BREAK,
                     SoundSource.PLAYERS, 0.5F, 1.4F);
             this.spawnTrail(4);
+            this.trySpawnCrescents(end, true);
             this.discard();
             return;
         }
@@ -269,6 +284,7 @@ public class SandMasterSwordBeam extends Projectile {
      * 命中一个实体：固定 2 点伤害 + 与近战共用的沙化规则 + 火焰附加，然后由调用方决定是否终止剑气。
      */
     private void hitEntity(Entity hit) {
+        this.lastHitWasHostile = false;
         Entity target = hit;
         if (target instanceof PartEntity<?> part) {
             target = part.getParent();
@@ -277,14 +293,19 @@ public class SandMasterSwordBeam extends Projectile {
             return;
         }
 
+        this.lastHitEntityPos = target.position();
+        this.lastHitWasHostile = living instanceof Enemy || living.getType().is(Tags.EntityTypes.BOSSES);
+        if (this.lastHitWasHostile) {
+            this.lastHitEnemyPos = target.position();
+        }
+
         Entity owner = this.getOwner();
         // 注意 DamageSource 构造顺序是 (直接来源, 归属来源)：剑气是直接来源，玩家是归属来源，
         // 这样死亡播报/击杀统计才会算在发射者头上。
         DamageSource source = this.damageSources().source(DAMAGE_TYPE, this, owner);
         living.hurt(source, DAMAGE);
-        // 与近战沙噬剑共用同一套沙化规则：
-        // 普通目标 amplifier 1（二级）/ 80 tick；boss amplifier 2（三级）/ 160 tick，并沿用 forceAddEffect 回退。
-        SandMasterSwordItem.applySandification(living, owner, SANDIFICATION_TICKS, BOSS_SANDIFICATION_TICKS);
+        // 与近战沙噬剑共用同一套沙化规则；owner 是服务端记录的实际发射玩家。
+        SandMasterSwordSandification.apply(living, owner);
         if (this.getFireAspectLevel() > 0) {
             // 与原版火焰附加一致：每级 4 秒。
             living.igniteForSeconds(FIRE_ASPECT_SECONDS_PER_LEVEL * this.getFireAspectLevel());
@@ -306,6 +327,31 @@ public class SandMasterSwordBeam extends Projectile {
     }
 
     /**
+     * 锋利原始剑气命中敌对生物或障碍物时生成两道半月形剑气。
+     *
+     * <p>没有横扫之刃时，敌对实体命中点或方块碰撞点可以作为生成位置；普通生物不会触发生成。有横扫之刃穿透时，
+     * 第一次命中敌对生物就在 {@link #lastHitEnemyPos} 处立即生成一对，随后 {@link #crescentsSpawned} 会阻止后续命中重复生成；
+     * 若全程没有命中敌怪，则仅允许在撞到障碍物时使用碰撞点生成。</p>
+     */
+    private void trySpawnCrescents(Vec3 fallbackPosition, boolean allowFallbackPosition) {
+        if (this.sharpnessLevel <= 0 || this.crescentsSpawned) {
+            return;
+        }
+        Vec3 position = this.getSweepingLevel() > 0 ? this.lastHitEnemyPos : this.lastHitEntityPos;
+        if (position == null) {
+            if (!allowFallbackPosition) {
+                return;
+            }
+            position = fallbackPosition;
+        }
+        if (this.level() instanceof ServerLevel serverLevel) {
+            // 先置位再生成：即使当前调用链出现异常分支，也绝不允许同一次原始剑气生成第二对。
+            this.crescentsSpawned = true;
+            SandBladeCrescent.spawnPair(serverLevel, position, this.getOwner(), this.getDeltaMovement());
+        }
+    }
+
+    /**
      * 横扫之刃：剑气变成群伤——对整段扫掠体积内的所有实体各结算一次（同一实体在一次飞行中只结算一次），
      * 剑气本身继续飞行（仍会被方块与 100 格射程拦下）。扫掠半径随剑气大小（横扫之刃等级）增大。
      */
@@ -318,6 +364,10 @@ public class SandMasterSwordBeam extends Projectile {
         for (Entity entity : serverLevel.getEntities(this, sweep, this::canHitEntity)) {
             if (this.damagedEntityIds.add(entity.getId())) {
                 this.hitEntity(entity);
+                if (this.lastHitWasHostile) {
+                    // 横扫穿透继续飞行，但首次命中敌怪时立即生成；crescentsSpawned 防止后续敌怪重复生成。
+                    this.trySpawnCrescents(this.lastHitEnemyPos, false);
+                }
             }
         }
     }

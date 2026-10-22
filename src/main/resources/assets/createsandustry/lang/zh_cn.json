@@ -1,5 +1,6 @@
 {
   "itemGroup.createsandustry": "沙金工艺",
+  "block.createsandustry.sand_master_sword_pedestal": "沙噬剑座",
   "block.createsandustry.wet_sand": "湿沙子",
   "block.createsandustry.hardened_sand": "硬化沙子",
   "block.createsandustry.volatile_sand": "烈性沙子",
@@ -26,6 +27,8 @@
   "block.createsandustry.thunder_sand": "雷霆沙子",
   "item.createsandustry.living_sand": "活沙",
   "entity.createsandustry.living_sand": "活沙",
+  "entity.createsandustry.qunyou": "群友",
+  "entity.createsandustry.qunyou_clone": "群友分身",
   "death.attack.living_sand_suffocation": "%1$s被活沙寄生窒息而死",
   "death.attack.living_sand_suffocation.player": "%1$s被活沙寄生窒息而死",
   "block.createsandustry.living_sand": "活沙",
@@ -41,13 +44,16 @@
   "stat.createsandustry.archaeology_completed": "考古次数",
   "stat.createsandustry.sand_mined": "挖掘沙子数",
   "item.createsandustry.sand_ball": "沙团",
+  "item.createsandustry.sand_soul": "沙之魂",
+  "createsandustry.recipe.random_sapling_mixing": "随机树苗搅拌",
+  "jei.createsandustry.random_sapling_mixing.random_output": "随机产出一种树苗",
   "effect.createsandustry.sand_hardcore": "沙化之兆",
   "death.attack.sandification": "%1$s变成了沙子",
   "death.attack.sand_master_sword_beam": "%1$s被沙噬剑气贯穿",
   "death.attack.sand_master_sword_beam.player": "%1$s被%2$s的沙噬剑气贯穿",
   "effect.createsandustry.sandification": "沙化",
   "item.createsandustry.sand_master_sword": "沙噬剑",
-  "item.createsandustry.sand_master_sword.tooltip": "来自异界的驱魔之剑，被沙子完全侵蚀。/n命中目标时施加 6 秒的沙化 II；按 Q 释放剑气。",
+  "item.createsandustry.sand_master_sword.tooltip": "来自异界的驱魔之剑，被沙子完全侵蚀。\n命中时按当前沙心数量施加沙化（5/10/15 颗为 I/II/III），每次命中叠加 3 秒；不足 5 颗不施加。按 Q 释放剑气。",
   "item.createsandustry.sand_master_sword_broken": "沙噬剑（破损）",
   "item.createsandustry.sand_master_sword_broken.tooltip": "已经断裂，无法作为武器使用；放入背包后，每 10 秒自动恢复 1 点耐久。"
 }

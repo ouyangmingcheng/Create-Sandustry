@@ -197,15 +197,15 @@ dependencies {
     // Farmer's Delight 1.21.1 NeoForge development runtime.
     localRuntime "maven.modrinth:farmers-delight:1.21.1-1.2.8"
 
-    // Create: Meowchanics 2.2.2 (NeoForge 1.21.1), development runtime only.
-    localRuntime "curse.maven:create-meowchanics-1645794:9043018"
+    // Optional LaoWu cat litter archaeology compatibility, development runtime only.
+    localRuntime "curse.maven:create-meowchanics-1645794:9163509"
+
 
     // PoopSky (空中厕所) 2.2+NeoForge1.21.1-Hotfix2, development runtime only.
     localRuntime "maven.modrinth:poopsky:CEa86OFf"
 
-    // 更美观的血条 / Colorful Hearts 10.5.9（原名 Health Overlay，作者 Terrails；客户端血条美化模组）。
-    // 仅用于开发环境验证沙心 HUD 的渲染兼容性；纯客户端模组，发布时不依赖它。
-    localRuntime "maven.modrinth:wQfMUdZT:us0gze50"
+    // Mob Battle Mod (生物大乱斗) 1.21.1-2.8.1 NeoForge, development runtime only.
+    localRuntime "maven.modrinth:LbrJcAlI:LYSelox1"
 
     // FTB Quests (NeoForge 1.21.1) and its dependencies.
     // compileOnly exposes the quest API for optional integration code; localRuntime only loads

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "createsandustry:florinol_battery"
+    "createsandustry:florinol_battery",
+    "createsandustry:sand_master_sword_pedestal"
   ]
 }

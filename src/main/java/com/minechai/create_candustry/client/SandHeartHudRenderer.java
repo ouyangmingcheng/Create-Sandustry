@@ -10,10 +10,10 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
@@ -35,26 +35,15 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
  *         使心数与抖动序列完全一致。</li>
  *     <li><b>复刻低血颤抖</b>：{@code ceil(血量) + ceil(吸收) ≤ 4} 时，原版按 {@code getGuiTicks() * 312871}
  *         为种子、从最右一颗往左逐颗抽取 0~1px 垂直抖动；这里用同一序列，原版覆盖不到的额外沙心格
- *         按同序列继续取值。安装了“更美观的血条 / Colorful Hearts”时改用<b>它的</b>抖动序列（见下）。</li>
+ *         按同序列继续取值。</li>
  *     <li><b>半颗沙心直接绘制、必要时改为整颗</b>：{@code sand_half} 贴图本身把沙心画在<b>右半边</b>，
  *         与“沙心从右往左填充、不满的那颗在最左端”一致，所以原样绘制即可，同格里原版画在左半边的
  *         红心半心仍然可见；而当沙心<b>已经完全占据生命条</b>（{@code isFilled}）时，全部画整颗，
  *         顺带盖住原版残留在最左侧的那半颗红心，实现“完全占据时不显示红心”。</li>
  * </ol>
  *
- * <p><b>与“更美观的血条 / Colorful Hearts”（modId {@code colorfulhearts}）的兼容</b>：该模组在
- * {@code RenderGuiLayerEvent.Pre} 中把 {@code VanillaGuiLayers.PLAYER_HEALTH} 整个取消并自行绘制血条，
- * 但它的栅格与原版一致（{@code width/2 - 91} / {@code height - gui.leftHeight}，
- * 每行 10 格、间距 8px），所以默认情况（外部最大生命值 ≤ 20、即单行 10 颗）沙心仍然逐像素对齐。
- * 两处需要跟随它的地方已经在下面对齐：</p>
- * <ul>
- *     <li><b>低血抖动序列</b>：它从 index 0 开始<b>升序</b>为 0~19 号槽位各抽一次随机数（空槽也抽），
- *         与原版“从最右一颗往左”的降序恰好相反；</li>
- *     <li><b>行偏移</b>：它固定单行；而本模组超出一排的沙心改用 <b>3px 密集堆叠</b>，每排只露出 3px 并被前排遮挡（见下）。</li>
- * </ul>
- * <p><b>超出一排的密集化</b>（仅在安装 Colorful Hearts 时生效）：Colorful Hearts 本身只用一行 10 格表示血量，
- * 本模组把超出第一排的沙心逐排向上堆叠、每排仅保留 {@value #COLORFUL_HEARTS_DENSE_ROW_STEP}px，
- * 后排被前排遮挡，从而把“超出 20 点生命上限的沙心”压缩在血条上方一小条范围内，而不是散落到多行。</p>
+ * <p>玩家拥有沙心时，原版伤害吸收心由 {@code GuiHeartMixin} 从原位置隐藏，再由本层接在沙心
+ * 序列末尾绘制；红心、沙心和吸收心在同一列上共用抖动值，避免低血量时上下错位。</p>
  *
  * <p>另外：在原版没有画过容器的格子补画容器描边（含极限难度与受伤闪烁变体）；绘制前后把 GUI 颜色
  * 重置为不透明白色，避免继承其它 HUD 图层的残留着色。</p>
@@ -81,50 +70,39 @@ public final class SandHeartHudRenderer {
     private static final ResourceLocation CONTAINER_HARDCORE_BLINKING =
             ResourceLocation.withDefaultNamespace("hud/heart/container_hardcore_blinking");
 
+    private static final ResourceLocation ABSORBING_FULL =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_full");
+    private static final ResourceLocation ABSORBING_FULL_BLINKING =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_full_blinking");
+    private static final ResourceLocation ABSORBING_HALF =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_half");
+    private static final ResourceLocation ABSORBING_HALF_BLINKING =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_half_blinking");
+    private static final ResourceLocation ABSORBING_HARDCORE_FULL =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_hardcore_full");
+    private static final ResourceLocation ABSORBING_HARDCORE_FULL_BLINKING =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_hardcore_full_blinking");
+    private static final ResourceLocation ABSORBING_HARDCORE_HALF =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_hardcore_half");
+    private static final ResourceLocation ABSORBING_HARDCORE_HALF_BLINKING =
+            ResourceLocation.withDefaultNamespace("hud/heart/absorbing_hardcore_half_blinking");
+
     private static final int HEARTS_PER_ROW = 10;
     private static final int HEART_SIZE = 9;
     private static final int HEART_SEPARATION = 8;
     private static final int BASE_Y_OFFSET = 39;
-    /** Colorful Hearts 维护的槽位总数：固定 20 格，且对空槽也会抽取抖动。 */
-    private static final int COLORFUL_HEARTS_CELLS = 20;
-    /**
-     * Colorful Hearts 下，超出一排后的沙心密集堆叠步长：每排只向上移 3px。
-     *
-     * <p>沙心贴图是 9×9，相邻两排只错开 3px，因此后排（更靠上的一排）只露出顶部 3px，
-     * 其余部分被前面（更靠下）的那一排盖住——相当于把超出 20 点生命上限的部分“压扁”堆在血条上方。
-     * 绘制顺序是 index 从高到低（先画高排、最后画第一排），天然形成前排遮挡后排。</p>
-     */
-    private static final int COLORFUL_HEARTS_DENSE_ROW_STEP = 3;
-    /** 兼容目标模组的 modId。 */
-    private static final String COLORFUL_HEARTS_MOD_ID = "colorfulhearts";
 
     // 与原版 Gui 相同的血量显示状态（默认值同原版字段初始值）。
     private static int lastHealth;
     private static int displayHealth;
     private static long lastHealthTime;
     private static long healthBlinkTime;
-    /** 缓存“是否安装了 Colorful Hearts”，避免每帧查询模组列表。 */
-    private static Boolean colorfulHeartsPresent;
 
     private SandHeartHudRenderer() {
     }
 
     private static ResourceLocation sprite(String name) {
         return ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "hud/heart/" + name);
-    }
-
-    /**
-     * 是否安装了“更美观的血条 / Colorful Hearts”。
-     *
-     * <p>客户端运行时才查询（本类只会在客户端加载），结果缓存一次；未安装时沙心完全走原版栅格逻辑。</p>
-     */
-    private static boolean isColorfulHeartsPresent() {
-        Boolean cached = colorfulHeartsPresent;
-        if (cached == null) {
-            cached = ModList.get().isLoaded(COLORFUL_HEARTS_MOD_ID);
-            colorfulHeartsPresent = cached;
-        }
-        return cached;
     }
 
     /** 在原版生命条之后注册沙心覆盖层。 */
@@ -181,11 +159,23 @@ public final class SandHeartHudRenderer {
         int vanillaRows = Mth.ceil((f + (float) absorptionAmount) / 2.0F / 10.0F);
         int rowHeight = Math.max(HEARTS_PER_ROW - (vanillaRows - 2), 3);
         int absorptionHearts = Mth.ceil(absorptionAmount / 2.0D);
-        int vanillaTop = Mth.ceil(f / 2.0F) + absorptionHearts - 1;
+        // 原版伤害吸收心由 GuiHeartMixin 在沙心存在时暂时隐藏，因此红心/沙心的抖动序列
+        // 必须按“没有吸收心”的原版循环生成本。之后吸收心再从沙心序列末尾继续排布。
+        int healthTop = Mth.ceil(f / 2.0F) - 1;
+        int healthHearts = healthTop + 1;
+        int regenIndex = -1;
+        if (player.hasEffect(MobEffects.REGENERATION)) {
+            // 与原版 renderHealthLevel 相同：再生效果会让一个红心按 tickCount % ceil(f + 5) 上浮。
+            regenIndex = guiTicks % Mth.ceil(f + 5.0F);
+        }
 
         int sandHearts = Mth.ceil(units / (double) SandHeartManager.UNITS_PER_HEART);
         boolean fullyOccupied = SandHeartManager.isFilled(player);
-        boolean colorfulHearts = isColorfulHeartsPresent();
+        int absorptionMaxIndex = -1;
+        for (int a = 0; a < absorptionHearts; a++) {
+            absorptionMaxIndex = Math.max(absorptionMaxIndex,
+                    absorptionHeartIndex(totalHearts, sandHearts, absorptionHearts, a));
+        }
         int baseX = guiGraphics.guiWidth() / 2 - 91;
         int baseY = guiGraphics.guiHeight() - BASE_Y_OFFSET;
 
@@ -196,45 +186,47 @@ public final class SandHeartHudRenderer {
         ResourceLocation halfBlinkingSprite = hardcore ? HARDCORE_HALF_BLINKING : HALF_BLINKING;
         ResourceLocation containerSprite = hardcore ? CONTAINER_HARDCORE : CONTAINER;
         ResourceLocation containerBlinkingSprite = hardcore ? CONTAINER_HARDCORE_BLINKING : CONTAINER_BLINKING;
+        ResourceLocation absorbingFullSprite = hardcore ? ABSORBING_HARDCORE_FULL : ABSORBING_FULL;
+        ResourceLocation absorbingFullBlinkingSprite =
+                hardcore ? ABSORBING_HARDCORE_FULL_BLINKING : ABSORBING_FULL_BLINKING;
+        ResourceLocation absorbingHalfSprite = hardcore ? ABSORBING_HARDCORE_HALF : ABSORBING_HALF;
+        ResourceLocation absorbingHalfBlinkingSprite =
+                hardcore ? ABSORBING_HARDCORE_HALF_BLINKING : ABSORBING_HALF_BLINKING;
 
-        boolean lowHealth = health + absorptionAmount <= 4;
-        int maxIndex = Math.max(vanillaTop, totalHearts - 1);
+        boolean lowHealth = health <= 4;
+        int maxIndex = Math.max(Math.max(healthTop, totalHearts - 1),
+                Math.max(absorptionMaxIndex, HEARTS_PER_ROW - 1));
         int[] jitter = new int[Math.max(maxIndex + 1, 1)];
         if (lowHealth) {
             RandomSource random = RandomSource.create(guiTicks * 312871L);
-            if (colorfulHearts) {
-                // Colorful Hearts 的抖动：从 index 0 开始升序逐格抽取（含空槽，共 20 格），
-                // 与原版从最右一颗往左的降序恰好相反；这里复刻它的顺序，沙心才会与它画的心同相位。
-                for (int l = 0; l <= Math.max(COLORFUL_HEARTS_CELLS - 1, maxIndex); l++) {
-                    int roll = random.nextInt(2);
-                    if (l <= maxIndex) {
-                        jitter[l] = roll;
-                    }
-                }
-            } else {
-                for (int l = vanillaTop; l >= 0; l--) {
-                    jitter[l] = random.nextInt(2);
-                }
-                for (int l = vanillaTop + 1; l <= maxIndex; l++) {
-                    jitter[l] = random.nextInt(2);
-                }
+            for (int l = healthTop; l >= 0; l--) {
+                jitter[l] = random.nextInt(2);
+            }
+            for (int l = healthTop + 1; l <= maxIndex; l++) {
+                jitter[l] = random.nextInt(2);
             }
         }
 
+
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+
         for (int n = 0; n < sandHearts && n < totalHearts; n++) {
             int index = totalHearts - 1 - n;
-            int x = baseX + (index % HEARTS_PER_ROW) * HEART_SEPARATION;
-            // 行偏移：原版随行数压缩行距；Colorful Hearts 下超出一排的沙心按 3px 密集堆叠，
-            // 后排被前排遮挡（循环按 index 从高到低绘制，第一排最后画）。
-            int y = colorfulHearts
-                    ? baseY - (index / HEARTS_PER_ROW) * COLORFUL_HEARTS_DENSE_ROW_STEP + jitter[index]
-                    : baseY - (index / HEARTS_PER_ROW) * rowHeight + jitter[index];
+            int column = index % HEARTS_PER_ROW;
+            int x = baseX + column * HEART_SEPARATION;
+            // 行偏移：原版随行数压缩行距；后排被前排遮挡。
+            // 抖动按列取同一值，使红心与沙心在同一列上同步上下颤动。
+            int y = baseY - (index / HEARTS_PER_ROW) * rowHeight + jitter[column];
+            if (regenIndex >= 0 && regenIndex < healthHearts
+                    && column == regenIndex % HEARTS_PER_ROW) {
+                // 同一列的红心因再生上浮时，沙心也跟着上浮，避免列内错位。
+                y -= 2;
+            }
             // 沙心已完全占据生命条时一律画整颗：既保持整条都是沙心，也盖掉原版残留在最左侧的半颗红心。
             boolean half = !fullyOccupied
                     && n == sandHearts - 1
                     && units % SandHeartManager.UNITS_PER_HEART != 0;
-            if (index > vanillaTop) {
+            if (index > healthTop) {
                 guiGraphics.blitSprite(damageBlink ? containerBlinkingSprite : containerSprite,
                         x, y, HEART_SIZE, HEART_SIZE);
             }
@@ -244,6 +236,42 @@ public final class SandHeartHudRenderer {
             }
             guiGraphics.blitSprite(heart, x, y, HEART_SIZE, HEART_SIZE);
         }
+
+        // 伤害吸收心接在沙心序列之后；组内从左到右排列，半颗心位于最右端。
+        for (int a = 0; a < absorptionHearts; a++) {
+            int index = absorptionHeartIndex(totalHearts, sandHearts, absorptionHearts, a);
+            int column = index % HEARTS_PER_ROW;
+            int x = baseX + column * HEART_SEPARATION;
+            int y = baseY - (index / HEARTS_PER_ROW) * rowHeight + jitter[column];
+            guiGraphics.blitSprite(damageBlink ? containerBlinkingSprite : containerSprite,
+                    x, y, HEART_SIZE, HEART_SIZE);
+            boolean half = absorptionAmount % 2 != 0 && a == absorptionHearts - 1;
+            ResourceLocation heart = half ? absorbingHalfSprite : absorbingFullSprite;
+            if (damageBlink) {
+                heart = half ? absorbingHalfBlinkingSprite : absorbingFullBlinkingSprite;
+            }
+            guiGraphics.blitSprite(heart, x, y, HEART_SIZE, HEART_SIZE);
+        }
+
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+
+    /**
+     * 计算第 {@code offset} 颗伤害吸收心在沙心之后应占据的槽位。
+     *
+     * <p>如果当前排剩余空间足够，整组吸收心紧贴在沙心左侧，并按从左到右的顺序排列，
+     * 半颗心位于整组的最右端。如果当前排放不下，整组移到上方新的一排，从最左侧开始
+     * 向右排布，避免吸收心把顺序反转成沙心式的从右到左。</p>
+     */
+    private static int absorptionHeartIndex(int totalHearts, int sandHearts, int absorptionHearts, int offset) {
+        int rowsUsed = (totalHearts + HEARTS_PER_ROW - 1) / HEARTS_PER_ROW;
+        int lastRowStart = (rowsUsed - 1) * HEARTS_PER_ROW;
+        // 沙心占满生命条右端；这里只统计最后一排中沙心左侧真正可用的槽位。
+        int availableInLastRow = Math.max(0, totalHearts - sandHearts - lastRowStart);
+        if (absorptionHearts <= availableInLastRow) {
+            return availableInLastRow - absorptionHearts + offset;
+        }
+
+        return rowsUsed * HEARTS_PER_ROW + offset;
     }
 }

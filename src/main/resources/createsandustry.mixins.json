@@ -11,11 +11,13 @@
     "CatMixin",
     "BrushItemMixin",
     "ServerGamePacketListenerImplMixin",
-    "AbstractContainerMenuMixin"
+    "AbstractContainerMenuMixin",
+    "MechanicalMixerRandomRecipeMixin"
   ],
   "client": [
     "ItemRendererMixin",
-    "LocalPlayerDropMixin"
+    "LocalPlayerDropMixin",
+    "GuiHeartMixin"
   ],
   "injectors": {
     "defaultRequire": 1

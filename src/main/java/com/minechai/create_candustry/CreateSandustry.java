@@ -15,6 +15,7 @@ import com.minechai.create_candustry.client.GoldenGlintRenderBuffers;
 import com.minechai.create_candustry.client.GoldenSelectionEffectRenderer;
 import com.minechai.create_candustry.client.SandHeartBossOverlay;
 import com.minechai.create_candustry.client.SandHeartHudRenderer;
+import com.minechai.create_candustry.client.SandBladeCrescentRenderer;
 import com.minechai.create_candustry.client.SandMasterSwordBeamRenderer;
 import com.minechai.create_candustry.config.ModConfigs;
 import com.minechai.create_candustry.effect.GoldenSelectionEffectEvents;
@@ -22,6 +23,7 @@ import com.minechai.create_candustry.effect.ModMobEffects;
 import com.minechai.create_candustry.effect.SandHardcoreEvents;
 import com.minechai.create_candustry.entity.LivingSandEvents;
 import com.minechai.create_candustry.entity.ModEntityTypes;
+import com.minechai.create_candustry.entity.QunyouEvents;
 import com.minechai.create_candustry.event.GoldenSelectionEvents;
 import com.minechai.create_candustry.fluid.ModFluids;
 import com.minechai.create_candustry.interaction.HardenedSandSandpaperInteraction;
@@ -65,8 +67,14 @@ public class CreateSandustry {
             modEventBus.addListener(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers.class,
                     event -> event.registerEntityRenderer(ModEntityTypes.SAND_MASTER_SWORD_BEAM.get(),
                             SandMasterSwordBeamRenderer::new));
+            // 锋利剑气生成的半月形剑气。
+            modEventBus.addListener(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers.class,
+                    event -> event.registerEntityRenderer(ModEntityTypes.SAND_BLADE_CRESCENT.get(),
+                            SandBladeCrescentRenderer::new));
             // 末影龙 boss 条上的“沙心挤占”叠加绘制（客户端）。
             NeoForge.EVENT_BUS.addListener(SandHeartBossOverlay::onBossBarProgress);
+
+
         }
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(ModCapabilities::registerCapabilities);
@@ -111,6 +119,8 @@ public class CreateSandustry {
         NeoForge.EVENT_BUS.addListener(SandMasterSwordEvents::onPlayerTick);
         // 沙噬剑：破损形态无法进行近战攻击（在 Player#attack 最开始取消）。
         NeoForge.EVENT_BUS.addListener(SandMasterSwordEvents::onAttackEntity);
+        // 群友：受到攻击时打断睡眠/胡萝卜召唤，并在伤害结算前处理原有闪避。
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, QunyouEvents::onIncomingDamage);
 
     }
 

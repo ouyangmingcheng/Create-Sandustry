@@ -92,13 +92,16 @@ public final class SandMasterSwordEvents {
             return;
         }
 
-        // 附魔联动：横扫之刃（剑气变大 + 群伤）、火焰附加（拖尾火焰粒子 + 命中点燃）、击退（命中击退）。
+        // 附魔联动：横扫之刃（剑气变大 + 群伤）、火焰附加（拖尾火焰粒子 + 命中点燃）、
+        // 击退（命中击退）、锋利（命中结束时生成沙刃龙卷）。
         // 注意：发射瞬间不再生成火焰粒子（会糊住第一人称视线）；火焰粒子只跟随剑气飞行轨迹出现。
         int sweepingLevel = enchantmentLevel(level, stack, Enchantments.SWEEPING_EDGE);
         int fireAspectLevel = enchantmentLevel(level, stack, Enchantments.FIRE_ASPECT);
         int knockbackLevel = enchantmentLevel(level, stack, Enchantments.KNOCKBACK);
+        int sharpnessLevel = enchantmentLevel(level, stack, Enchantments.SHARPNESS);
 
-        SandMasterSwordBeam beam = SandMasterSwordBeam.fire(player, sweepingLevel, fireAspectLevel, knockbackLevel);
+        SandMasterSwordBeam beam = SandMasterSwordBeam.fire(player, sweepingLevel, fireAspectLevel,
+                knockbackLevel, sharpnessLevel);
         if (!level.addFreshEntity(beam)) {
             return;   // 发射失败：不扣耐久
         }

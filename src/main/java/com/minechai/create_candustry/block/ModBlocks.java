@@ -76,6 +76,15 @@ public final class ModBlocks {
                     .noOcclusion()
                     .isRedstoneConductor((state, level, pos) -> true)));
 
+    /** 沙噬剑座：古沙漠祭坛风格，可插入完整形态的沙噬剑。 */
+    public static final DeferredBlock<SandMasterSwordPedestalBlock> SAND_MASTER_SWORD_PEDESTAL = BLOCKS.register(
+            "sand_master_sword_pedestal",
+            () -> new SandMasterSwordPedestalBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.CUT_SANDSTONE)
+                    .strength(1.8F, 6.0F)
+                    .noOcclusion()
+                    .isViewBlocking((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)));
+
     public static final DeferredBlock<Block> FLORINOL_SOIL = BLOCKS.registerSimpleBlock(
             "florinol_soil",
             BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT));

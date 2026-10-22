@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "C": {
+      "item": "minecraft:cut_sandstone"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "S": {
+      "item": "minecraft:sand"
+    },
+    "Y": {
+      "item": "minecraft:chiseled_sandstone"
+    }
+  },
+  "pattern": [
+    "CGC",
+    "SYS",
+    "CCC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "createsandustry:sand_master_sword_pedestal"
+  }
+}
