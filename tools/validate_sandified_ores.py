@@ -52,7 +52,7 @@ def main() -> int:
     all_entries = entries()
     expected_ids = [entry.id for entry in all_entries]
 
-    java_path = root / "src/main/java/com/minechai/create_candustry/block/SandifiedOreDefinitions.java"
+    java_path = root / "src/main/java/com/minechai/create_sandustry/content/block/SandifiedOreDefinitions.java"
     java = java_path.read_text(encoding="utf-8")
     ore_pattern = re.compile(
         r'new Ore\("([^"]+)",\s*"([^"]+)",\s*"([^"]+)",\s*ToolTier\.(WOOD|STONE|IRON),\s*(\d+),\s*(\d+),\s*(true|false)\)'
@@ -84,10 +84,10 @@ def main() -> int:
     else:
         checks.append("Java defines exactly two target base variants")
 
-    mod_blocks = (root / "src/main/java/com/minechai/create_candustry/block/ModBlocks.java").read_text(
+    mod_blocks = (root / "src/main/java/com/minechai/create_sandustry/registry/ModBlocks.java").read_text(
         encoding="utf-8"
     )
-    mod_items = (root / "src/main/java/com/minechai/create_candustry/item/ModItems.java").read_text(
+    mod_items = (root / "src/main/java/com/minechai/create_sandustry/registry/ModItems.java").read_text(
         encoding="utf-8"
     )
     if "SandifiedOreDefinitions.ENTRIES" not in mod_blocks or "BLOCKS.register(entry.id()" not in mod_blocks:

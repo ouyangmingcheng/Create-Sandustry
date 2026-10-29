@@ -1,0 +1,9 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "createsandustry:block/sifting_smart_chute_mouth",
+  "textures": {
+    "8": "create:block/funnel/funnel_closed",
+    "7": "create:block/chute_smart_powered",
+    "particle": "create:block/chute_smart_powered"
+  }
+}

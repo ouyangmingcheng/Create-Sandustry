@@ -1,0 +1,23 @@
+{
+  "parent": "createsandustry:block/thermal_relay",
+  "overrides": [
+    {
+      "predicate": {
+        "createsandustry:thermal_level": 1
+      },
+      "model": "createsandustry:item/thermal_relay_1"
+    },
+    {
+      "predicate": {
+        "createsandustry:thermal_level": 2
+      },
+      "model": "createsandustry:item/thermal_relay_2"
+    },
+    {
+      "predicate": {
+        "createsandustry:thermal_level": 3
+      },
+      "model": "createsandustry:item/thermal_relay_3"
+    }
+  ]
+}

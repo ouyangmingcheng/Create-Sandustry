@@ -1,0 +1,17 @@
+{
+  "type": "createsandustry:sand_sword_repair",
+  "category": "equipment",
+  "group": "sand_sword_repair",
+  "ingredients": [
+    {
+      "tag": "createsandustry:sand_swords"
+    },
+    {
+      "item": "createsandustry:sand_ball"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "createsandustry:sand_sword"
+  }
+}

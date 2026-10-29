@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": [
+    "createsandustry:suspicious_sand_clusters",
+    "createsandustry:suspicious_gravel_clusters",
+    "createsandustry:cat_litter_clusters",
+    "createsandustry:living_sand_clusters"
+  ],
+  "step": "top_layer_modification"
+}

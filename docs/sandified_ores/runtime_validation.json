@@ -4,14 +4,14 @@
   "date": "2026-10-30",
   "timezone": "Asia/Shanghai",
   "command": "gradle runGameTestServer --no-daemon",
-  "test_class": "com.minechai.create_candustry.gametest.SandifiedOreGameTests",
+  "test_class": "com.minechai.create_sandustry.content.block.SandifiedOreGameTests",
   "test_method": "sandifiedoresruntime",
   "entries_covered": 18,
-  "result": "All 1 required tests passed",
-  "runtime_ms": 472.7,
+  "result": "All 4 required tests passed",
+  "runtime_ms": 661.4,
   "log_file": "run/logs/latest.log",
   "assertions": [
-    "unique registration IDs and BlockItems",
+    "all 18 unique sandified ore registrations and BlockItems resolved in the merged registry",
     "mineable/shovel only, never mineable/pickaxe",
     "actual needs_stone_tool / needs_iron_tool tags",
     "runtime hardness, blast resistance, sound, map color and instrument match base",
@@ -22,5 +22,7 @@
     "experience ranges and positive XP orbs for redstone, lapis, diamond and emerald",
     "normal and deepslate Create zinc ore mappings",
     "redstone ore unlit/lit light emission matches 0/9"
-  ]
+  ],
+  "total_required_tests": 4,
+  "sandified_ore_entries_covered": 18
 }

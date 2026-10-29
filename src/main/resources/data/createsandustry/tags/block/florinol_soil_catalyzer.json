@@ -1,0 +1,14 @@
+{
+  "values": [
+    "minecraft:fire",
+    "minecraft:soul_fire",
+    "minecraft:campfire",
+    "minecraft:soul_campfire",
+    "minecraft:torch",
+    "minecraft:wall_torch",
+    "minecraft:soul_torch",
+    "minecraft:soul_wall_torch",
+    "minecraft:magma_block",
+    "create:lit_blaze_burner"
+  ]
+}

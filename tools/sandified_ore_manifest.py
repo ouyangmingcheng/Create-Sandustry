@@ -6,7 +6,7 @@ The source block IDs and tool tiers below were checked against:
 - Create 1.21.1 6.0.10-280 slim JAR
 
 Keep this manifest in sync with
-src/main/java/com/minechai/create_candustry/block/SandifiedOreDefinitions.java.
+src/main/java/com/minechai/create_sandustry/content/block/SandifiedOreDefinitions.java.
 The validator checks the generated assets and Java IDs for drift.
 """
 from __future__ import annotations

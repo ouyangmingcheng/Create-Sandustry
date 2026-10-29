@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "createsandustry:sand_master_sword"
+    "createsandustry:sand_master_sword",
+    "createsandustry:sand_sword"
   ]
 }

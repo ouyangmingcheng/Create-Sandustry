@@ -118,11 +118,11 @@
 
 Java：
 
-- 修改 src/main/java/com/minechai/create_candustry/block/ModBlocks.java
-- 新增 src/main/java/com/minechai/create_candustry/block/SandifiedOreDefinitions.java
-- 修改 src/main/java/com/minechai/create_candustry/item/ModItems.java
-- 修改 src/main/java/com/minechai/create_candustry/item/ModCreativeTabs.java
-- 新增 src/main/java/com/minechai/create_candustry/gametest/SandifiedOreGameTests.java
+- 修改 src/main/java/com/minechai/create_sandustry/registry/ModBlocks.java
+- 新增 src/main/java/com/minechai/create_sandustry/content/block/SandifiedOreDefinitions.java
+- 修改 src/main/java/com/minechai/create_sandustry/registry/ModItems.java
+- 修改 src/main/java/com/minechai/create_sandustry/registry/ModCreativeTabs.java
+- 新增 src/main/java/com/minechai/create_sandustry/content/block/SandifiedOreGameTests.java
 
 资源：
 
@@ -159,10 +159,10 @@ Java：
 
 ## 验证结果
 
-- Gradle build：通过。产物 build/libs/createsandustry-0.1.1.jar，SHA-256 433BD59C06E020307422DE01B1660307B859848E0D1B3AD805D4DAF43C3C2E5B。
+- Gradle build：通过。产物 build/libs/createsandustry-0.1.3.jar，SHA-256 51C1C25A004AA54E25ABAAF499B99786D7AAAA96AB83E17838F8E293CCD00ED7。
 - 静态验证：通过，18 个唯一 ID、18 个战利品表、18 个模型/方块状态、18 个纹理、18 个铲标签条目全部匹配。
 - 纹理幂等性：104 个生成/纹理相关文件在连续两次生成后 SHA-256 均无变化；纹理 --check 模式也通过。
-- GameTest：通过，1 个运行时测试覆盖全部 18 个目标，实际调用 ServerPlayerGameMode.destroyBlock。
+- GameTest：通过，服务端 4 个 required tests 全部通过；其中沙化矿石运行时测试覆盖全部 18 个目标，实际调用 ServerPlayerGameMode.destroyBlock。
 - 实测覆盖：错误镐、低等级锹无物品无经验；正确等级锹正常掉落；精准采集掉落目标自身；时运锹正常产出；红石/青金石/钻石/绿宝石经验球；红石 0/9 光照；Create 普通锌矿与深层锌矿。
 
 ## 尚未完成与注意事项

@@ -81,3 +81,8 @@ secrets.properties
 ### Python tooling caches ###
 __pycache__/
 *.py[cod]
+
+### Local generated run/output data ###
+/output/
+/run-gametest/
+/config/

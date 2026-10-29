@@ -2,10 +2,11 @@
 
 - 结果：通过
 - GameTest：sandifiedoresruntime
-- 覆盖目标：18/18
+- 覆盖沙化矿石目标：18/18
+- 服务端 required tests：4/4
 - 日志：run/logs/latest.log
-- 输出：All 1 required tests passed
-- 最终运行耗时：472.7 ms
+- 输出：All 4 required tests passed
+- 最终运行耗时：661.4 ms
 
 本测试实际调用 ServerPlayerGameMode.destroyBlock，并检查服务端物品实体与经验球，而不是只检查 JSON。
 

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
+    "createsandustry:sand_casing",
+    "createsandustry:sand_encased_shaft",
+    "createsandustry:sand_encased_fluid_pipe",
     "createsandustry:hardened_sand_gold_ore",
     "createsandustry:hardened_sand_redstone_ore",
     "createsandustry:hardened_sand_diamond_ore",

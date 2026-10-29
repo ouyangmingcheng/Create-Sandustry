@@ -1,0 +1,9 @@
+{
+  "credit": "Made with Blockbench",
+  "parent": "createsandustry:block/sifting_chute_mouth",
+  "textures": {
+    "2": "create_connected:block/brass_chute",
+    "3": "create_connected:block/brass_chute_hole",
+    "particle": "create_connected:block/brass_chute"
+  }
+}
