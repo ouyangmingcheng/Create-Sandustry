@@ -24,6 +24,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.WET_SAND.get());
                         output.accept(ModItems.HARDENED_SAND.get());
                         output.accept(ModItems.PETRIFIED_SAND.get());
+                        ModItems.SANDIFIED_ORE_ITEMS.values().forEach(item -> output.accept(item.get()));
                         output.accept(ModItems.SAND_MASTER_SWORD_PEDESTAL.get());
                         output.accept(ModItems.VOLATILE_SAND.get());
                         output.accept(ModItems.CAT_LITTER.get());

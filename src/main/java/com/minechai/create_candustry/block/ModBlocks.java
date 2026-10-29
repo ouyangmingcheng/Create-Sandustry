@@ -1,15 +1,22 @@
 package com.minechai.create_candustry.block;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.minechai.create_candustry.CreateSandustry;
 import com.minechai.create_candustry.block.crop.AmethystFlowerBlock;
 import com.minechai.create_candustry.block.machine.FlorinolBatteryBlock;
 import com.minechai.create_candustry.fluid.ModFluids;
 import com.simibubi.create.foundation.data.SharedProperties;
 
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.RedStoneOreBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -27,12 +34,16 @@ public final class ModBlocks {
 
     public static final DeferredBlock<Block> HARDENED_SAND = BLOCKS.registerSimpleBlock(
             "hardened_sand",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SAND));
+            hardenedSandProperties());
 
     public static final DeferredBlock<Block> PETRIFIED_SAND = BLOCKS.registerSimpleBlock(
             "petrified_sand",
-            BlockBehaviour.Properties.ofFullCopy(Blocks.SAND).strength(3.0F, 6.0F));
+            petrifiedSandProperties());
 
+    /**
+     * 所有沙化矿石。键为不含命名空间的注册路径；顺序为硬化沙子矿石一组、石化沙子矿石一组。
+     */
+    public static final Map<String, DeferredBlock<Block>> SANDIFIED_ORES = createSandifiedOres();
 
     public static final DeferredBlock<LeavesBlock> GOLDEN_OAK_LEAVES = BLOCKS.register(
             "golden_oak_leaves",
@@ -102,14 +113,37 @@ public final class ModBlocks {
         BLOCKS.register(eventBus);
     }
 
+    private static Map<String, DeferredBlock<Block>> createSandifiedOres() {
+        Map<String, DeferredBlock<Block>> ores = new LinkedHashMap<>();
+        for (SandifiedOreDefinitions.Entry entry : SandifiedOreDefinitions.ENTRIES) {
+            ores.put(entry.id(), BLOCKS.register(entry.id(), () -> createSandifiedOreBlock(entry)));
+        }
+        return Collections.unmodifiableMap(ores);
+    }
+
+    private static Block createSandifiedOreBlock(SandifiedOreDefinitions.Entry entry) {
+        BlockBehaviour.Properties properties = (entry.variant().usesDeepslateSource()
+                ? petrifiedSandProperties()
+                : hardenedSandProperties())
+                .requiresCorrectToolForDrops();
+        if (entry.ore().redstoneBehavior()) {
+            properties.lightLevel(state -> state.getValue(RedStoneOreBlock.LIT) ? 9 : 0);
+            return new RedStoneOreBlock(properties);
+        }
+        return new DropExperienceBlock(
+                UniformInt.of(entry.ore().xpMin(), entry.ore().xpMax()), properties);
+    }
+
+    /** 硬化沙子及其矿石共用的基底属性。 */
+    private static BlockBehaviour.Properties hardenedSandProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.SAND);
+    }
+
+    /** 石化沙子及其矿石共用的基底属性。 */
+    private static BlockBehaviour.Properties petrifiedSandProperties() {
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.SAND).strength(3.0F, 6.0F);
+    }
+
     private ModBlocks() {
     }
 }
-
-
-
-
-
-
-
-

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "checks": [
+    "Java ore definitions match the Python manifest",
+    "Java defines exactly two target base variants",
+    "ModBlocks registers the manifest entries",
+    "ModItems creates a BlockItem for every sandified ore",
+    "18 unique target IDs asserted",
+    "parsed 18 loot tables and verified exact source adaptation",
+    "validated 18 blockstates/models/item models",
+    "validated 18 16x16 RGBA textures and report hashes",
+    "validated 18 shovel tag entries and actual needs_* tier tags"
+  ],
+  "errors": [],
+  "counts": {
+    "entries": 18,
+    "unique_ids": 18,
+    "loot_tables": 18,
+    "models": 18,
+    "textures": 18,
+    "shovel_tag_entries": 18
+  }
+}

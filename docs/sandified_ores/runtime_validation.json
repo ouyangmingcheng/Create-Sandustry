@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "date": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "command": "gradle runGameTestServer --no-daemon",
+  "test_class": "com.minechai.create_candustry.gametest.SandifiedOreGameTests",
+  "test_method": "sandifiedoresruntime",
+  "entries_covered": 18,
+  "result": "All 1 required tests passed",
+  "runtime_ms": 472.7,
+  "log_file": "run/logs/latest.log",
+  "assertions": [
+    "unique registration IDs and BlockItems",
+    "mineable/shovel only, never mineable/pickaxe",
+    "actual needs_stone_tool / needs_iron_tool tags",
+    "runtime hardness, blast resistance, sound, map color and instrument match base",
+    "wrong pickaxe and under-tier shovel break block with no item drops and no XP",
+    "correct shovel tier produces actual server-side drops",
+    "silk touch drops target sand ore instead of source ore",
+    "fortune shovel produces drops",
+    "experience ranges and positive XP orbs for redstone, lapis, diamond and emerald",
+    "normal and deepslate Create zinc ore mappings",
+    "redstone ore unlit/lit light emission matches 0/9"
+  ]
+}

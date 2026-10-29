@@ -6,7 +6,24 @@
     "createsandustry:petrified_sand",
     "createsandustry:volatile_sand",
     "createsandustry:cat_litter",
-    "createsandustry:thunder_sand"
+    "createsandustry:thunder_sand",
+    "createsandustry:hardened_sand_coal_ore",
+    "createsandustry:hardened_sand_iron_ore",
+    "createsandustry:hardened_sand_copper_ore",
+    "createsandustry:hardened_sand_gold_ore",
+    "createsandustry:hardened_sand_redstone_ore",
+    "createsandustry:hardened_sand_lapis_ore",
+    "createsandustry:hardened_sand_diamond_ore",
+    "createsandustry:hardened_sand_emerald_ore",
+    "createsandustry:hardened_sand_zinc_ore",
+    "createsandustry:petrified_sand_coal_ore",
+    "createsandustry:petrified_sand_iron_ore",
+    "createsandustry:petrified_sand_copper_ore",
+    "createsandustry:petrified_sand_gold_ore",
+    "createsandustry:petrified_sand_redstone_ore",
+    "createsandustry:petrified_sand_lapis_ore",
+    "createsandustry:petrified_sand_diamond_ore",
+    "createsandustry:petrified_sand_emerald_ore",
+    "createsandustry:petrified_sand_zinc_ore"
   ]
 }
-

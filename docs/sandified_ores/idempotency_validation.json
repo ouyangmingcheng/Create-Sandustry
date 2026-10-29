@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "files_compared": 104,
+  "changed_files": 0,
+  "checks": [
+    "generate_sandified_ore_textures.py run twice",
+    "generate_sandified_ore_data.py run twice",
+    "SHA-256 comparison before and after generation",
+    "generate_sandified_ore_textures.py --check"
+  ]
+}

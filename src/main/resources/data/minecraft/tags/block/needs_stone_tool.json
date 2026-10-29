@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "createsandustry:hardened_sand_iron_ore",
+    "createsandustry:hardened_sand_copper_ore",
+    "createsandustry:hardened_sand_lapis_ore",
+    "createsandustry:petrified_sand_iron_ore",
+    "createsandustry:petrified_sand_copper_ore",
+    "createsandustry:petrified_sand_lapis_ore"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "createsandustry:block/hardened_sand_redstone_ore"
+    },
+    "lit=true": {
+      "model": "createsandustry:block/hardened_sand_redstone_ore"
+    }
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "source_block": "minecraft:coal_ore",
+      "source_texture": "minecraft:block/coal_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_coal_ore",
+      "target_texture": "createsandustry:block/hardened_sand_coal_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_coal_ore",
+      "source_texture": "minecraft:block/deepslate_coal_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_coal_ore",
+      "target_texture": "createsandustry:block/petrified_sand_coal_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "minecraft:iron_ore",
+      "source_texture": "minecraft:block/iron_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_iron_ore",
+      "target_texture": "createsandustry:block/hardened_sand_iron_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_iron_ore",
+      "source_texture": "minecraft:block/deepslate_iron_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_iron_ore",
+      "target_texture": "createsandustry:block/petrified_sand_iron_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "minecraft:copper_ore",
+      "source_texture": "minecraft:block/copper_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_copper_ore",
+      "target_texture": "createsandustry:block/hardened_sand_copper_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_copper_ore",
+      "source_texture": "minecraft:block/deepslate_copper_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_copper_ore",
+      "target_texture": "createsandustry:block/petrified_sand_copper_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "minecraft:gold_ore",
+      "source_texture": "minecraft:block/gold_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_gold_ore",
+      "target_texture": "createsandustry:block/hardened_sand_gold_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_gold_ore",
+      "source_texture": "minecraft:block/deepslate_gold_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_gold_ore",
+      "target_texture": "createsandustry:block/petrified_sand_gold_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "minecraft:redstone_ore",
+      "source_texture": "minecraft:block/redstone_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_redstone_ore",
+      "target_texture": "createsandustry:block/hardened_sand_redstone_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_redstone_ore",
+      "source_texture": "minecraft:block/deepslate_redstone_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_redstone_ore",
+      "target_texture": "createsandustry:block/petrified_sand_redstone_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "minecraft:lapis_ore",
+      "source_texture": "minecraft:block/lapis_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_lapis_ore",
+      "target_texture": "createsandustry:block/hardened_sand_lapis_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_lapis_ore",
+      "source_texture": "minecraft:block/deepslate_lapis_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_lapis_ore",
+      "target_texture": "createsandustry:block/petrified_sand_lapis_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "minecraft:diamond_ore",
+      "source_texture": "minecraft:block/diamond_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_diamond_ore",
+      "target_texture": "createsandustry:block/hardened_sand_diamond_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_diamond_ore",
+      "source_texture": "minecraft:block/deepslate_diamond_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_diamond_ore",
+      "target_texture": "createsandustry:block/petrified_sand_diamond_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "minecraft:emerald_ore",
+      "source_texture": "minecraft:block/emerald_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_emerald_ore",
+      "target_texture": "createsandustry:block/hardened_sand_emerald_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "minecraft:deepslate_emerald_ore",
+      "source_texture": "minecraft:block/deepslate_emerald_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_emerald_ore",
+      "target_texture": "createsandustry:block/petrified_sand_emerald_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    },
+    {
+      "source_block": "create:zinc_ore",
+      "source_texture": "create:block/zinc_ore",
+      "source_base_block": "minecraft:stone",
+      "source_base_texture": "minecraft:block/stone",
+      "target_block": "createsandustry:hardened_sand_zinc_ore",
+      "target_texture": "createsandustry:block/hardened_sand_zinc_ore",
+      "target_base_block": "createsandustry:hardened_sand",
+      "target_base_texture": "minecraft:block/sand",
+      "variant": "hardened"
+    },
+    {
+      "source_block": "create:deepslate_zinc_ore",
+      "source_texture": "create:block/deepslate_zinc_ore",
+      "source_base_block": "minecraft:deepslate",
+      "source_base_texture": "minecraft:block/deepslate",
+      "target_block": "createsandustry:petrified_sand_zinc_ore",
+      "target_texture": "createsandustry:block/petrified_sand_zinc_ore",
+      "target_base_block": "createsandustry:petrified_sand",
+      "target_base_texture": "createsandustry:block/petrified_sand",
+      "variant": "petrified"
+    }
+  ]
+}

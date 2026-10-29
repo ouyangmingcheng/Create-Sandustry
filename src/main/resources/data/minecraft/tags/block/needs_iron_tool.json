@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "createsandustry:hardened_sand_gold_ore",
+    "createsandustry:hardened_sand_redstone_ore",
+    "createsandustry:hardened_sand_diamond_ore",
+    "createsandustry:hardened_sand_emerald_ore",
+    "createsandustry:hardened_sand_zinc_ore",
+    "createsandustry:petrified_sand_gold_ore",
+    "createsandustry:petrified_sand_redstone_ore",
+    "createsandustry:petrified_sand_diamond_ore",
+    "createsandustry:petrified_sand_emerald_ore",
+    "createsandustry:petrified_sand_zinc_ore"
+  ]
+}

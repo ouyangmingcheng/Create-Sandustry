@@ -4,6 +4,10 @@ import com.minechai.create_candustry.CreateSandustry;
 import com.minechai.create_candustry.block.ModBlocks;
 import com.minechai.create_candustry.fluid.ModFluids;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.food.FoodProperties;
@@ -20,6 +24,7 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> WET_SAND = ITEMS.registerSimpleBlockItem("wet_sand", ModBlocks.WET_SAND);
     public static final DeferredItem<BlockItem> HARDENED_SAND = ITEMS.registerSimpleBlockItem("hardened_sand", ModBlocks.HARDENED_SAND);
     public static final DeferredItem<BlockItem> PETRIFIED_SAND = ITEMS.registerSimpleBlockItem("petrified_sand", ModBlocks.PETRIFIED_SAND);
+    public static final Map<String, DeferredItem<BlockItem>> SANDIFIED_ORE_ITEMS = createSandifiedOreItems();
     public static final DeferredItem<BlockItem> SAND_MASTER_SWORD_PEDESTAL = ITEMS.registerSimpleBlockItem(
             "sand_master_sword_pedestal",
             ModBlocks.SAND_MASTER_SWORD_PEDESTAL);
@@ -76,6 +81,13 @@ public final class ModItems {
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
+    }
+
+    private static Map<String, DeferredItem<BlockItem>> createSandifiedOreItems() {
+        Map<String, DeferredItem<BlockItem>> items = new LinkedHashMap<>();
+        ModBlocks.SANDIFIED_ORES.forEach((id, block) ->
+                items.put(id, ITEMS.registerSimpleBlockItem(id, block)));
+        return Collections.unmodifiableMap(items);
     }
 
     private ModItems() {
