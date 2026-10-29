@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.worldgen.geology.rules;
 
-import com.minechai.create_sandustry.config.GeologyConfig.HeightMode;
+import com.minechai.create_sandustry.worldgen.geology.GeologyHeightMode;
 import com.minechai.create_sandustry.worldgen.geology.GeologyConfigSnapshot.DepthRockSettings;
 import com.minechai.create_sandustry.worldgen.geology.GeologyGenerationContext;
 import net.minecraft.core.BlockPos;
@@ -56,7 +56,7 @@ abstract class AbstractDepthRockRule {
             int x,
             int z) {
         int minY;
-        if (settings.heightMode() == HeightMode.FIXED) {
+        if (settings.heightMode() == GeologyHeightMode.FIXED) {
             minY = Math.min(settings.fixedMinY(), settings.fixedMaxY());
         } else {
             int maxDepth = Math.max(settings.relativeMinDepth(), settings.relativeMaxDepth());
@@ -71,7 +71,7 @@ abstract class AbstractDepthRockRule {
             int x,
             int z) {
         int maxY;
-        if (settings.heightMode() == HeightMode.FIXED) {
+        if (settings.heightMode() == GeologyHeightMode.FIXED) {
             maxY = Math.max(settings.fixedMinY(), settings.fixedMaxY());
         } else {
             int minDepth = Math.min(settings.relativeMinDepth(), settings.relativeMaxDepth());

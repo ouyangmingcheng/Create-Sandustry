@@ -9,6 +9,14 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class ModConfigs {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
+    // World generation
+    public static final ModConfigSpec.BooleanValue WORLDGEN_ENABLED = BUILDER
+            .comment("沙金工艺所有自然世界生成的总开关。默认关闭。",
+                    "开启后统一启用基础地质替换、可疑沙/沙砾、猫砂和活沙团簇。",
+                    "关闭后所有相关 Feature 立即返回，不扫描方块、读取结构引用或生成方块。",
+                    "只影响新生成区块，不会回写已有区块。")
+            .define("worldgen.enabled", false);
+
     // Florinol Battery
     public static final ModConfigSpec.IntValue FLORINOL_BATTERY_FE_PER_MB = BUILDER
             .comment("每 1 mB 弗洛林电池液可以提供多少 FE 能量。",
