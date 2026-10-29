@@ -1,0 +1,14 @@
+{
+  "required": false,
+  "package": "com.minechai.create_sandustry.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "aeronautics.LevititeBlendHelperMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

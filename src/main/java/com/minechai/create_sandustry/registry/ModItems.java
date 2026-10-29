@@ -1,0 +1,159 @@
+package com.minechai.create_sandustry.registry;
+
+import com.minechai.create_sandustry.content.item.ThermalBufferBlockItem;
+import com.minechai.create_sandustry.content.item.SandSwordItem;
+import com.minechai.create_sandustry.content.item.SandMasterSwordItem;
+import com.minechai.create_sandustry.content.item.SandBallItem;
+import com.minechai.create_sandustry.content.item.MysteriousLumpItem;
+import com.minechai.create_sandustry.content.item.MoonCrystalItem;
+import com.minechai.create_sandustry.content.item.ModTiers;
+import com.minechai.create_sandustry.content.item.LivingSandItem;
+import com.minechai.create_sandustry.content.item.BrokenSandSwordItem;
+import com.minechai.create_sandustry.content.item.BrokenSandMasterSwordItem;
+import com.minechai.create_sandustry.CreateSandustry;
+
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.Items;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+public final class ModItems {
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreateSandustry.MODID);
+
+    /** 沙合金：普通物品，仅用于物品、纹理与标签。 */
+    public static final DeferredItem<Item> SAND_ALLOY = ITEMS.registerSimpleItem("sand_alloy");
+
+    /** 月晶石碎片：恢复 1 点饱食度、不恢复饱和度，并获得月亮崇拜。 */
+    public static final DeferredItem<MoonCrystalItem> MOONCRYSTAL = ITEMS.registerItem(
+            "mooncrystal",
+            properties -> new MoonCrystalItem(properties.food(new FoodProperties.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.0F)
+                    .alwaysEdible()
+                    .build())));
+
+    /** 月跃石：恢复 4 点饱食度、6 点饱和度，并给予 90 秒跳跃提升。 */
+    public static final DeferredItem<Item> MOONHOP = ITEMS.registerItem(
+            "moonhop",
+            properties -> new Item(properties.food(new FoodProperties.Builder()
+                    .nutrition(4)
+                    // 饱和度公式：饱食度 4 × 0.75 × 2 = 6。
+                    .saturationModifier(0.75F)
+                    .alwaysEdible()
+                    .effect(() -> new MobEffectInstance(MobEffects.JUMP, 90 * 20, 0), 1.0F)
+                    .build())));
+
+    /** 可可跃石：恢复 6 点饱食度，并提供 30 秒跳跃提升、敏捷和力量。 */
+    public static final DeferredItem<Item> CHOCOLATE_MOONHOP = ITEMS.registerItem(
+            "chocolate_moonhop",
+            properties -> new Item(properties.food(new FoodProperties.Builder()
+                    .nutrition(6)
+                    .saturationModifier(0.6F)
+                    .alwaysEdible()
+                    .effect(() -> new MobEffectInstance(MobEffects.JUMP, 30 * 20, 0), 1.0F)
+                    .effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 30 * 20, 0), 1.0F)
+                    .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 30 * 20, 0), 1.0F)
+                    .build())));
+
+    /** 月跃板：沿用旧版月跃石废案纹理的普通物品。 */
+    public static final DeferredItem<Item> MOONHOP_BOARD = ITEMS.registerSimpleItem("moonhop_board");
+
+    public static final DeferredItem<BlockItem> SAND_CASING = ITEMS.registerSimpleBlockItem("sand_casing", ModBlocks.SAND_CASING);
+    public static final DeferredItem<BlockItem> WET_SAND = ITEMS.registerSimpleBlockItem("wet_sand", ModBlocks.WET_SAND);
+    public static final DeferredItem<BlockItem> HARDENED_SAND = ITEMS.registerSimpleBlockItem("hardened_sand", ModBlocks.HARDENED_SAND);
+    public static final DeferredItem<BlockItem> PETRIFIED_SAND = ITEMS.registerSimpleBlockItem("petrified_sand", ModBlocks.PETRIFIED_SAND);
+    public static final DeferredItem<BlockItem> SAND_MASTER_SWORD_PEDESTAL = ITEMS.registerSimpleBlockItem(
+            "sand_master_sword_pedestal",
+            ModBlocks.SAND_MASTER_SWORD_PEDESTAL);
+    public static final DeferredItem<BlockItem> GOLDEN_OAK_SAPLING = ITEMS.registerSimpleBlockItem("golden_oak_sapling", ModBlocks.GOLDEN_OAK_SAPLING);
+    public static final DeferredItem<BlockItem> GOLDEN_OAK_LEAVES = ITEMS.registerSimpleBlockItem("golden_oak_leaves", ModBlocks.GOLDEN_OAK_LEAVES);
+    public static final DeferredItem<BlockItem> VOLATILE_SAND = ITEMS.registerSimpleBlockItem("volatile_sand", ModBlocks.VOLATILE_SAND);
+    public static final DeferredItem<BlockItem> CAT_LITTER = ITEMS.registerSimpleBlockItem("cat_litter", ModBlocks.CAT_LITTER);
+    public static final DeferredItem<BlockItem> THUNDER_SAND = ITEMS.registerSimpleBlockItem("thunder_sand", ModBlocks.THUNDER_SAND);
+    public static final DeferredItem<LivingSandItem> LIVING_SAND = ITEMS.registerItem(
+            "living_sand",
+            properties -> new LivingSandItem(ModBlocks.LIVING_SAND.get(), properties));
+    /** 群友刷怪蛋：沿用原版猪刷怪蛋的模型、纹理与颜色。 */
+    public static final DeferredItem<DeferredSpawnEggItem> QUNYOU_SPAWN_EGG = ITEMS.registerItem(
+            "qunyou_spawn_egg",
+            properties -> new DeferredSpawnEggItem(ModEntityTypes.QUNYOU, 0xF0A5A2, 0xDB635F, properties));
+    /** 沙团：可食用，恢复随机饱食度，并有 50% 概率施加 3 秒的“沙化”状态。 */
+    public static final DeferredItem<SandBallItem> SAND_BALL = ITEMS.registerItem(
+            "sand_ball",
+            properties -> new SandBallItem(properties.food(new FoodProperties.Builder()
+                    .nutrition(0)
+                    .saturationModifier(0.0F)
+                    // 满饱食度时也能食用（沙团还会施加“沙化”状态）。
+                    .alwaysEdible()
+                    .build())));
+
+    /** 火箭土豆：机械动力土豆加农炮的高速弹药。 */
+    public static final DeferredItem<Item> POTATO_ROCKET = ITEMS.registerSimpleItem("potato_rocket");
+
+    /** 沙噬剑（完整形态）：攻击力 3 点，命中施加沙化，耐久耗尽后变为破损形态。 */
+    public static final DeferredItem<SandMasterSwordItem> SAND_MASTER_SWORD = ITEMS.registerItem(
+            "sand_master_sword",
+            properties -> new SandMasterSwordItem(ModTiers.SAND_MASTER_SWORD,
+                    SandMasterSwordItem.applyProperties(properties)));
+
+    /** 沙噬剑（破损形态）：不能作为武器，放在背包里会随时间自动修复（不需要材料）。 */
+    public static final DeferredItem<BrokenSandMasterSwordItem> SAND_MASTER_SWORD_BROKEN = ITEMS.registerItem(
+            "sand_master_sword_broken",
+            properties -> new BrokenSandMasterSwordItem(BrokenSandMasterSwordItem.applyProperties(properties)));
+
+    /** 沙金剑（完整形态）：攻击力 3 点、攻击速度 1.6、最大耐久 40。 */
+    public static final DeferredItem<SandSwordItem> SAND_SWORD = ITEMS.registerItem(
+            "sand_sword",
+            properties -> new SandSwordItem(ModTiers.SAND_SWORD, SandSwordItem.applyProperties(properties)));
+
+    /** 沙金剑（破损形态）：不能作为武器，只能与沙团无序合成恢复耐久。 */
+    public static final DeferredItem<BrokenSandSwordItem> SAND_SWORD_BROKEN = ITEMS.registerItem(
+            "sand_sword_broken",
+            properties -> new BrokenSandSwordItem(BrokenSandSwordItem.applyProperties(properties)));
+
+    /** 沙之魂：暂无用途的独立物品。 */
+    public static final DeferredItem<Item> SAND_SOUL = ITEMS.registerSimpleItem("sand_soul");
+    public static final DeferredItem<Item> RESIDUE = ITEMS.registerSimpleItem("residue");
+    public static final DeferredItem<MysteriousLumpItem> MYSTERIOUS_LUMP = ITEMS.registerItem("mysterious_lump", MysteriousLumpItem::new);
+    public static final DeferredItem<BucketItem> FLORINOL_BUCKET = ITEMS.registerItem(
+            "florinol_bucket",
+            properties -> new BucketItem(ModFluids.FLORINOL.get(), properties.craftRemainder(Items.BUCKET).stacksTo(1)));
+    public static final DeferredItem<Item> BURNT_RESIDUE = ITEMS.registerSimpleItem("burnt_residue");
+    public static final DeferredItem<BlockItem> FLORINOL_BATTERY = ITEMS.registerSimpleBlockItem(
+            "florinol_battery",
+            ModBlocks.FLORINOL_BATTERY);
+    public static final DeferredItem<BlockItem> FLORINOL_SOIL = ITEMS.registerSimpleBlockItem(
+            "florinol_soil",
+            ModBlocks.FLORINOL_SOIL);
+    public static final DeferredItem<ThermalBufferBlockItem> THERMAL_RELAY = ITEMS.registerItem(
+            "thermal_relay",
+            properties -> new ThermalBufferBlockItem(ModBlocks.THERMAL_RELAY.get(), properties));
+    public static final DeferredItem<ItemNameBlockItem> AMETHYST_FLOWER_SEEDS = ITEMS.registerItem(
+            "amethyst_flower_seeds",
+            properties -> new ItemNameBlockItem(ModBlocks.AMETHYST_FLOWER.get(), properties));
+    public static final DeferredItem<Item> DORMANT_SEEDS = ITEMS.registerSimpleItem("dormant_seeds");
+    public static final DeferredItem<Item> AMETHYST_PETAL = ITEMS.registerSimpleItem("amethyst_petal");
+    public static final DeferredItem<BlockItem> AMETHYST_FLOWER = ITEMS.registerSimpleBlockItem(
+            "amethyst_flower",
+            ModBlocks.AMETHYST_FLOWER);
+
+    public static void register(IEventBus eventBus) {
+        ITEMS.register(eventBus);
+    }
+
+    private ModItems() {
+    }
+}
+
+
+
+
+

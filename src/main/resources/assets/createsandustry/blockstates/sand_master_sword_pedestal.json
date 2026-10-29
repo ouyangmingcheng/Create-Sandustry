@@ -1,8 +1,12 @@
 {
   "variants": {
-    "facing=north": { "model": "createsandustry:block/sand_master_sword_pedestal" },
-    "facing=east": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 90 },
-    "facing=south": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 180 },
-    "facing=west": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 270 }
+    "facing=north,has_sand_sword=false": { "model": "createsandustry:block/sand_master_sword_pedestal" },
+    "facing=east,has_sand_sword=false": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 90 },
+    "facing=south,has_sand_sword=false": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 180 },
+    "facing=west,has_sand_sword=false": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 270 },
+    "facing=north,has_sand_sword=true": { "model": "createsandustry:block/sand_master_sword_pedestal" },
+    "facing=east,has_sand_sword=true": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 90 },
+    "facing=south,has_sand_sword=true": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 180 },
+    "facing=west,has_sand_sword=true": { "model": "createsandustry:block/sand_master_sword_pedestal", "y": 270 }
   }
 }

@@ -1,0 +1,21 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "battery": "createsandustry:block/florinol_battery",
+    "particle": "createsandustry:block/florinol_battery_particle_inactive"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "down": { "uv": [0.0, 0, 2.666667, 16], "texture": "#battery", "cullface": "down" },
+        "up": { "uv": [0.0, 0, 2.666667, 16], "texture": "#battery", "cullface": "up" },
+        "north": { "uv": [0.0, 0, 2.666667, 16], "texture": "#battery", "cullface": "north" },
+        "south": { "uv": [0.0, 0, 2.666667, 16], "texture": "#battery", "cullface": "south" },
+        "west": { "uv": [0.0, 0, 2.666667, 16], "texture": "#battery", "cullface": "west" },
+        "east": { "uv": [0.0, 0, 2.666667, 16], "texture": "#battery", "cullface": "east" }
+      }
+    }
+  ]
+}

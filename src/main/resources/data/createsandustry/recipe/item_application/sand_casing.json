@@ -1,0 +1,10 @@
+{
+  "type": "create:item_application",
+  "ingredients": [
+    {"item": "create:brass_casing"},
+    {"item": "createsandustry:sand_alloy"}
+  ],
+  "results": [
+    {"id": "createsandustry:sand_casing"}
+  ]
+}

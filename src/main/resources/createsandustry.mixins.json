@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "com.minechai.create_candustry.mixin",
+  "package": "com.minechai.create_sandustry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ItemStackMixin",
@@ -12,12 +12,28 @@
     "BrushItemMixin",
     "ServerGamePacketListenerImplMixin",
     "AbstractContainerMenuMixin",
-    "MechanicalMixerRandomRecipeMixin"
+    "MechanicalMixerRandomRecipeMixin",
+    "DepotMoonCrystalConversionMixin",
+    "ChuteMoonCrystalConversionMixin",
+    "BeltBlockEntitySiftingMixin",
+    "TransportedItemStackSiftingMixin",
+    "LightningBoltMixin",
+    "LivingEntitySwingMixin",
+    "ThrownTridentMixin",
+    "ClockworkBearingTimeMixin",
+    "KineticStressAccessor",
+    "ServerLevelTimeLockMixin",
+    "LevelDaytimeMixin"
   ],
   "client": [
     "ItemRendererMixin",
     "LocalPlayerDropMixin",
-    "GuiHeartMixin"
+    "GuiHeartMixin",
+    "HumanoidModelMixin",
+    "PlayerRendererMixin",
+    "ItemInHandRendererMixin",
+    "ClientSwingLockMixin",
+    "BeltRendererSiftingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

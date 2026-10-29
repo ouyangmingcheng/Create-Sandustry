@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "createsandustry:florinol_battery",
-    "createsandustry:sand_master_sword_pedestal"
+    "createsandustry:sand_master_sword_pedestal",
+    "createsandustry:sand_casing",
+    "createsandustry:sand_encased_shaft",
+    "createsandustry:sand_encased_fluid_pipe",
+    "createsandustry:thermal_relay"
   ]
 }

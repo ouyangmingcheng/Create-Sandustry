@@ -1,0 +1,16 @@
+{
+  "type": "createsandustry:sand_sword_deploying",
+  "ingredients": [
+    {
+      "tag": "createsandustry:sand_swords"
+    },
+    {
+      "item": "createsandustry:sand_ball"
+    }
+  ],
+  "results": [
+    {
+      "id": "createsandustry:sand_sword"
+    }
+  ]
+}

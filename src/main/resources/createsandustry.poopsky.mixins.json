@@ -1,6 +1,6 @@
 {
   "required": false,
-  "package": "com.minechai.create_candustry.mixin",
+  "package": "com.minechai.create_sandustry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "poopsky.FecalIncontinenceEffectMixin",

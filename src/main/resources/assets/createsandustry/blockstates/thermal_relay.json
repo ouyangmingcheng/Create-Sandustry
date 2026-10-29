@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "blaze=none,powered=false": {
+      "model": "createsandustry:block/thermal_relay"
+    },
+    "blaze=smouldering,powered=false": {
+      "model": "createsandustry:block/thermal_relay_1"
+    },
+    "blaze=fading,powered=false": {
+      "model": "createsandustry:block/thermal_relay_2"
+    },
+    "blaze=kindled,powered=false": {
+      "model": "createsandustry:block/thermal_relay_2"
+    },
+    "blaze=seething,powered=false": {
+      "model": "createsandustry:block/thermal_relay_3"
+    },
+    "blaze=none,powered=true": {
+      "model": "createsandustry:block/thermal_relay_powered"
+    },
+    "blaze=smouldering,powered=true": {
+      "model": "createsandustry:block/thermal_relay_powered"
+    },
+    "blaze=fading,powered=true": {
+      "model": "createsandustry:block/thermal_relay_powered"
+    },
+    "blaze=kindled,powered=true": {
+      "model": "createsandustry:block/thermal_relay_powered"
+    },
+    "blaze=seething,powered=true": {
+      "model": "createsandustry:block/thermal_relay_powered"
+    }
+  }
+}

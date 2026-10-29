@@ -78,3 +78,8 @@ $RECYCLE.BIN/
 *.jks
 *.keystore
 secrets.properties
+
+### Local generated run/output data ###
+/output/
+/run-gametest/
+/config/
