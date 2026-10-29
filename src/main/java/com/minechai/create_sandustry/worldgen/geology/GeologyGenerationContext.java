@@ -128,6 +128,26 @@ public final class GeologyGenerationContext {
     }
 
     /**
+     * 精确单方块映射重载，避免矿石逐块替换时创建临时 Set。
+     */
+    public boolean replaceIfAllowed(BlockPos pos, Block allowedTarget, Block replacement) {
+        if (!contains(pos.getX(), pos.getY(), pos.getZ())) {
+            return false;
+        }
+
+        BlockState current = level.getBlockState(pos);
+        if (current.getBlock() != allowedTarget || current.is(replacement)) {
+            return false;
+        }
+        if (!level.ensureCanWrite(pos)) {
+            return false;
+        }
+
+        level.setBlock(pos, replacement.defaultBlockState(), 2);
+        return true;
+    }
+
+    /**
      * 放置带考古战利品表的刷子方块，并在 proto-chunk 的待加载方块实体 NBT 中写入战利品信息。
      */
     public boolean replaceIfAllowedWithLoot(
