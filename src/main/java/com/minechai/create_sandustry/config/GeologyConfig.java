@@ -106,16 +106,17 @@ public final class GeologyConfig {
 
     public static final ModConfigSpec.EnumValue<HeightMode> HARDENED_HEIGHT_MODE = BUILDER
             .comment("硬化沙子高度模式：FIXED 使用固定 Y 范围；SURFACE_RELATIVE 从地表向下计算深度。",
-                    "默认 SURFACE_RELATIVE，便于在海平面、平原、山地与海岸保持相对一致的浅层表现。")
-            .defineEnum("geology.hardened.height_mode", HeightMode.SURFACE_RELATIVE);
+                    "默认 FIXED，从深板岩层以上的 Y=0 开始覆盖全部石头层，直到 Y=320。")
+            .defineEnum("geology.hardened.height_mode", HeightMode.FIXED);
 
     public static final ModConfigSpec.IntValue HARDENED_FIXED_MIN_Y = BUILDER
-            .comment("FIXED 模式下的最低 Y（含）。默认 -16。")
-            .defineInRange("geology.hardened.fixed_min_y", -16, -2032, 2031);
+            .comment("FIXED 模式下的最低 Y（含）。默认 0，即主世界深板岩层以上。",
+                    "若要保留部分浅层石头，可提高此值或改用 SURFACE_RELATIVE。")
+            .defineInRange("geology.hardened.fixed_min_y", 0, -2032, 2031);
 
     public static final ModConfigSpec.IntValue HARDENED_FIXED_MAX_Y = BUILDER
-            .comment("FIXED 模式下的最高 Y（含）。默认 32。")
-            .defineInRange("geology.hardened.fixed_max_y", 32, -2032, 2031);
+            .comment("FIXED 模式下的最高 Y（含）。默认 320，覆盖原版主世界全部可用高度。")
+            .defineInRange("geology.hardened.fixed_max_y", 320, -2032, 2031);
 
     public static final ModConfigSpec.IntValue HARDENED_RELATIVE_MIN_DEPTH = BUILDER
             .comment("SURFACE_RELATIVE 模式下距离地表的最近深度。0 表示地表方块本身。默认 0。")
@@ -126,8 +127,9 @@ public final class GeologyConfig {
             .defineInRange("geology.hardened.relative_max_depth", 8, 0, 256);
 
     public static final ModConfigSpec.IntValue HARDENED_MAX_REPLACEMENTS = BUILDER
-            .comment("每个区块中硬化沙子规则最多替换的方块数。默认 4096。")
-            .defineInRange("geology.hardened.max_replacements_per_chunk", 4096, 0, 65536);
+            .comment("每个区块中硬化沙子规则最多替换的方块数。默认 131072，可覆盖整个 320 格高度。",
+                    "设为 0 可临时关闭替换；该上限只用于异常配置时的硬保护。")
+            .defineInRange("geology.hardened.max_replacements_per_chunk", 131072, 0, 262144);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> HARDENED_TARGET_BLOCKS = BUILDER
             .comment("硬化沙子规则的精确岩石白名单。默认花岗岩、闪长岩、安山岩和石头。",

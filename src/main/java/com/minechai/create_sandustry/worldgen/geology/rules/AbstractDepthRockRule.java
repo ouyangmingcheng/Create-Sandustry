@@ -1,7 +1,6 @@
 package com.minechai.create_sandustry.worldgen.geology.rules;
 
 import com.minechai.create_sandustry.config.GeologyConfig.HeightMode;
-import com.minechai.create_sandustry.worldgen.geology.CandidateSampler;
 import com.minechai.create_sandustry.worldgen.geology.GeologyConfigSnapshot.DepthRockSettings;
 import com.minechai.create_sandustry.worldgen.geology.GeologyGenerationContext;
 import net.minecraft.core.BlockPos;
@@ -20,8 +19,9 @@ abstract class AbstractDepthRockRule {
             return false;
         }
 
-        CandidateSampler sampler = new CandidateSampler(settings.maxReplacements());
         BlockPos.MutableBlockPos candidate = new BlockPos.MutableBlockPos();
+        int replaced = 0;
+        boolean changed = false;
 
         outer:
         for (int x = context.chunkMinX(); x <= context.chunkMaxX(); x++) {
@@ -29,23 +29,24 @@ abstract class AbstractDepthRockRule {
                 int minY = minY(context, settings, x, z);
                 int maxY = maxY(context, settings, x, z);
                 for (int y = minY; y <= maxY; y++) {
-                    if (!context.consumeCheck()) {
+                    if (replaced >= settings.maxReplacements() || !context.consumeCheck()) {
                         break outer;
                     }
 
                     candidate.set(x, y, z);
                     BlockState state = context.level().getBlockState(candidate);
-                    if (settings.targets().contains(state.getBlock())) {
-                        sampler.offer(candidate, context.random());
+                    if (!settings.targets().contains(state.getBlock())) {
+                        continue;
+                    }
+
+                    if (context.replaceIfAllowed(candidate, settings.targets(), replacement)) {
+                        replaced++;
+                        changed = true;
                     }
                 }
             }
         }
 
-        boolean changed = false;
-        for (BlockPos pos : sampler.selected()) {
-            changed |= context.replaceIfAllowed(pos, settings.targets(), replacement);
-        }
         return changed;
     }
 
