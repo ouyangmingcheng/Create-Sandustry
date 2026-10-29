@@ -10,7 +10,8 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 /**
  * 沙金工艺地质替换 Feature。
  *
- * <p>该 Feature 在 TOP_LAYER_MODIFICATION 阶段每个区块执行一次，只处理当前区块。
+ * <p>该 Feature 在 VEGETAL_DECORATION 阶段每个区块执行一次，只处理当前区块；
+ * 特殊沙子和考古团簇会在之后的 TOP_LAYER_MODIFICATION 阶段执行。
  * 各规则独立扫描，并共享相同的区块边界和安全写入约束。</p>
  */
 public final class GeologyFeature extends Feature<GeologyFeatureConfiguration> {

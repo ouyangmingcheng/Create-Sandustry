@@ -2,12 +2,19 @@ package com.minechai.create_sandustry.worldgen.geology;
 
 import java.util.Set;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 /**
  * 单条规则的区块内生成上下文。
@@ -108,6 +115,36 @@ public final class GeologyGenerationContext {
         }
 
         level.setBlock(pos, replacement.defaultBlockState(), 2);
+        return true;
+    }
+
+    /**
+     * 放置带考古战利品表的刷子方块，并在 proto-chunk 的待加载方块实体 NBT 中写入战利品信息。
+     */
+    public boolean replaceIfAllowedWithLoot(
+            BlockPos pos,
+            Set<Block> allowedTargets,
+            Block replacement,
+            ResourceKey<LootTable> lootTable) {
+        if (!replaceIfAllowed(pos, allowedTargets, replacement)) {
+            return false;
+        }
+
+        ResourceLocation entityId = BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(BlockEntityType.BRUSHABLE_BLOCK);
+        if (entityId == null) {
+            return true;
+        }
+
+        CompoundTag tag = new CompoundTag();
+        tag.putString("id", entityId.toString());
+        tag.putInt("x", pos.getX());
+        tag.putInt("y", pos.getY());
+        tag.putInt("z", pos.getZ());
+        tag.putString("LootTable", lootTable.location().toString());
+        tag.putLong("LootTableSeed", random.nextLong());
+        level.getChunk(
+                SectionPos.blockToSectionCoord(pos.getX()),
+                SectionPos.blockToSectionCoord(pos.getZ())).setBlockEntityNbt(tag);
         return true;
     }
 }
