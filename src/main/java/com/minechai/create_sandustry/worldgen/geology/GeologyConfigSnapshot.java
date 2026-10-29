@@ -1,22 +1,14 @@
 package com.minechai.create_sandustry.worldgen.geology;
 
-import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.config.GeologyConfig;
-import com.minechai.create_sandustry.config.GeologyConfig.HeightMode;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import com.minechai.create_sandustry.config.ModConfigs;
 import java.util.Set;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 /**
- * 地质生成配置的不可变快照。
+ * 基础地质生成设置快照。
  *
- * <p>世界生成可能并行执行，因此 Feature 不直接反复解析配置列表和方块 ID；
- * 配置值变化时会自动重建快照。</p>
+ * <p>除唯一总开关外，其余参数采用代码固定默认值。</p>
  */
 public record GeologyConfigSnapshot(
         boolean enabled,
@@ -24,136 +16,81 @@ public record GeologyConfigSnapshot(
         WetSandSettings wet,
         VolatileSandSettings volatileSand,
         DepthRockSettings hardened,
-        DepthRockSettings petrified,
-        List<Object> fingerprint) {
+        DepthRockSettings petrified) {
 
     private static volatile GeologyConfigSnapshot cached;
 
     public static GeologyConfigSnapshot current() {
-        List<Object> key = createFingerprint();
+        boolean enabled = ModConfigs.WORLDGEN_ENABLED.get();
         GeologyConfigSnapshot snapshot = cached;
-        if (snapshot != null && snapshot.fingerprint.equals(key)) {
+        if (snapshot != null && snapshot.enabled == enabled) {
             return snapshot;
         }
 
         synchronized (GeologyConfigSnapshot.class) {
             snapshot = cached;
-            if (snapshot != null && snapshot.fingerprint.equals(key)) {
+            if (snapshot != null && snapshot.enabled == enabled) {
                 return snapshot;
             }
-            snapshot = build(key);
+            snapshot = build(enabled);
             cached = snapshot;
             return snapshot;
         }
     }
 
     public boolean anyRuleEnabled() {
-        return enabled && (wet.enabled || volatileSand.enabled || hardened.enabled || petrified.enabled);
+        return enabled;
     }
 
-    private static GeologyConfigSnapshot build(List<Object> fingerprint) {
+    private static GeologyConfigSnapshot build(boolean enabled) {
         WetSandSettings wet = new WetSandSettings(
-                GeologyConfig.WET_ENABLED.get(),
-                GeologyConfig.WET_HORIZONTAL_RADIUS.get(),
-                GeologyConfig.WET_VERTICAL_RADIUS.get(),
-                GeologyConfig.WET_SURFACE_SCAN_DEPTH.get(),
-                GeologyConfig.WET_INCLUDE_RED_SAND.get(),
-                Set.copyOf(resolveBlocks("wet_sand", GeologyConfig.WET_TARGET_BLOCKS.get())),
-                GeologyConfig.WET_MAX_REPLACEMENTS.get());
+                enabled,
+                8,
+                4,
+                16,
+                true,
+                Set.of(Blocks.SAND, Blocks.RED_SAND),
+                512);
 
         VolatileSandSettings volatileSand = new VolatileSandSettings(
-                GeologyConfig.VOLATILE_ENABLED.get(),
-                GeologyConfig.VOLATILE_HORIZONTAL_RADIUS.get(),
-                GeologyConfig.VOLATILE_VERTICAL_RADIUS.get(),
-                GeologyConfig.VOLATILE_MINIMUM_HEAT_BLOCKS.get(),
-                GeologyConfig.VOLATILE_INCLUDE_MAGMA_BLOCKS.get(),
-                Set.copyOf(resolveBlocks("volatile_sand", GeologyConfig.VOLATILE_TARGET_BLOCKS.get())),
-                GeologyConfig.VOLATILE_MAX_REPLACEMENTS.get());
+                enabled,
+                6,
+                8,
+                4,
+                true,
+                true,
+                Set.of(Blocks.STONE),
+                2048,
+                Set.of(Blocks.SAND, Blocks.RED_SAND),
+                128);
 
         DepthRockSettings hardened = new DepthRockSettings(
-                GeologyConfig.HARDENED_ENABLED.get(),
-                GeologyConfig.HARDENED_HEIGHT_MODE.get(),
-                GeologyConfig.HARDENED_FIXED_MIN_Y.get(),
-                GeologyConfig.HARDENED_FIXED_MAX_Y.get(),
-                GeologyConfig.HARDENED_RELATIVE_MIN_DEPTH.get(),
-                GeologyConfig.HARDENED_RELATIVE_MAX_DEPTH.get(),
-                Set.copyOf(resolveBlocks("hardened_sand", GeologyConfig.HARDENED_TARGET_BLOCKS.get())),
-                GeologyConfig.HARDENED_MAX_REPLACEMENTS.get());
+                enabled,
+                GeologyHeightMode.FIXED,
+                0,
+                320,
+                0,
+                8,
+                Set.of(Blocks.GRANITE, Blocks.DIORITE, Blocks.ANDESITE, Blocks.STONE),
+                131072);
 
         DepthRockSettings petrified = new DepthRockSettings(
-                GeologyConfig.PETRIFIED_ENABLED.get(),
-                GeologyConfig.PETRIFIED_HEIGHT_MODE.get(),
-                GeologyConfig.PETRIFIED_FIXED_MIN_Y.get(),
-                GeologyConfig.PETRIFIED_FIXED_MAX_Y.get(),
-                GeologyConfig.PETRIFIED_RELATIVE_MIN_DEPTH.get(),
-                GeologyConfig.PETRIFIED_RELATIVE_MAX_DEPTH.get(),
-                Set.copyOf(resolveBlocks("petrified_sand", GeologyConfig.PETRIFIED_TARGET_BLOCKS.get())),
-                GeologyConfig.PETRIFIED_MAX_REPLACEMENTS.get());
+                enabled,
+                GeologyHeightMode.FIXED,
+                -64,
+                -16,
+                32,
+                64,
+                Set.of(Blocks.DEEPSLATE),
+                16384);
 
         return new GeologyConfigSnapshot(
-                GeologyConfig.GEOLOGY_ENABLED.get(),
-                GeologyConfig.MAX_BLOCK_CHECKS_PER_RULE.get(),
+                enabled,
+                200000,
                 wet,
                 volatileSand,
                 hardened,
-                petrified,
-                List.copyOf(fingerprint));
-    }
-
-    private static List<Object> createFingerprint() {
-        List<Object> values = new ArrayList<>();
-        values.add(GeologyConfig.GEOLOGY_ENABLED.get());
-        values.add(GeologyConfig.MAX_BLOCK_CHECKS_PER_RULE.get());
-        values.add(GeologyConfig.WET_ENABLED.get());
-        values.add(GeologyConfig.WET_HORIZONTAL_RADIUS.get());
-        values.add(GeologyConfig.WET_VERTICAL_RADIUS.get());
-        values.add(GeologyConfig.WET_SURFACE_SCAN_DEPTH.get());
-        values.add(GeologyConfig.WET_INCLUDE_RED_SAND.get());
-        values.add(List.copyOf(GeologyConfig.WET_TARGET_BLOCKS.get()));
-        values.add(GeologyConfig.WET_MAX_REPLACEMENTS.get());
-        values.add(GeologyConfig.VOLATILE_ENABLED.get());
-        values.add(GeologyConfig.VOLATILE_HORIZONTAL_RADIUS.get());
-        values.add(GeologyConfig.VOLATILE_VERTICAL_RADIUS.get());
-        values.add(GeologyConfig.VOLATILE_MINIMUM_HEAT_BLOCKS.get());
-        values.add(GeologyConfig.VOLATILE_INCLUDE_MAGMA_BLOCKS.get());
-        values.add(List.copyOf(GeologyConfig.VOLATILE_TARGET_BLOCKS.get()));
-        values.add(GeologyConfig.VOLATILE_MAX_REPLACEMENTS.get());
-        values.add(GeologyConfig.HARDENED_ENABLED.get());
-        values.add(GeologyConfig.HARDENED_HEIGHT_MODE.get());
-        values.add(GeologyConfig.HARDENED_FIXED_MIN_Y.get());
-        values.add(GeologyConfig.HARDENED_FIXED_MAX_Y.get());
-        values.add(GeologyConfig.HARDENED_RELATIVE_MIN_DEPTH.get());
-        values.add(GeologyConfig.HARDENED_RELATIVE_MAX_DEPTH.get());
-        values.add(List.copyOf(GeologyConfig.HARDENED_TARGET_BLOCKS.get()));
-        values.add(GeologyConfig.HARDENED_MAX_REPLACEMENTS.get());
-        values.add(GeologyConfig.PETRIFIED_ENABLED.get());
-        values.add(GeologyConfig.PETRIFIED_HEIGHT_MODE.get());
-        values.add(GeologyConfig.PETRIFIED_FIXED_MIN_Y.get());
-        values.add(GeologyConfig.PETRIFIED_FIXED_MAX_Y.get());
-        values.add(GeologyConfig.PETRIFIED_RELATIVE_MIN_DEPTH.get());
-        values.add(GeologyConfig.PETRIFIED_RELATIVE_MAX_DEPTH.get());
-        values.add(List.copyOf(GeologyConfig.PETRIFIED_TARGET_BLOCKS.get()));
-        values.add(GeologyConfig.PETRIFIED_MAX_REPLACEMENTS.get());
-        return List.copyOf(values);
-    }
-
-    private static Set<Block> resolveBlocks(String ruleName, List<? extends String> configuredIds) {
-        Set<Block> blocks = new HashSet<>();
-        for (String configuredId : configuredIds) {
-            ResourceLocation id = ResourceLocation.tryParse(configuredId);
-            if (id == null) {
-                CreateSandustry.LOGGER.warn("地质规则 {} 忽略无效方块 ID：{}", ruleName, configuredId);
-                continue;
-            }
-
-            Block block = BuiltInRegistries.BLOCK.get(id);
-            if (block == Blocks.AIR) {
-                CreateSandustry.LOGGER.warn("地质规则 {} 忽略未注册或不安全的方块 ID：{}", ruleName, configuredId);
-                continue;
-            }
-            blocks.add(block);
-        }
-        return blocks;
+                petrified);
     }
 
     public record WetSandSettings(
@@ -172,13 +109,16 @@ public record GeologyConfigSnapshot(
             int verticalRadius,
             int minimumHeatBlocks,
             boolean includeMagmaBlocks,
+            boolean replaceLavaLakeStone,
+            Set<Block> lavaLakeStoneTargets,
+            int lavaLakeStoneMaxReplacements,
             Set<Block> targets,
             int maxReplacements) {
     }
 
     public record DepthRockSettings(
             boolean enabled,
-            HeightMode heightMode,
+            GeologyHeightMode heightMode,
             int fixedMinY,
             int fixedMaxY,
             int relativeMinDepth,
