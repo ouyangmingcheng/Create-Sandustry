@@ -8,15 +8,15 @@ import com.minechai.create_sandustry.worldgen.geology.rules.VolatileSandRule;
 import com.minechai.create_sandustry.worldgen.geology.rules.WetSandRule;
 
 /**
- * 地质规则执行顺序：先完成矿石精确映射，再执行岩浆、湿沙、浅层和深层替换。
+ * 地质规则顺序：矿石映射 -> 浅层/深层硬化 -> 岩浆湖烈性沙辐射 -> 湿沙。
  */
 public final class GeologyRules {
     public static final List<GeologyRuleProcessor> ALL = List.of(
             new SandifiedOreRule(),
-            new VolatileSandRule(),
-            new WetSandRule(),
             new HardenedSandRule(),
-            new PetrifiedSandRule());
+            new PetrifiedSandRule(),
+            new VolatileSandRule(),
+            new WetSandRule());
 
     private GeologyRules() {
     }

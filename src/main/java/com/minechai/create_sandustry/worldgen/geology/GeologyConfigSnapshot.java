@@ -1,6 +1,7 @@
 package com.minechai.create_sandustry.worldgen.geology;
 
 import com.minechai.create_sandustry.config.ModConfigs;
+import com.minechai.create_sandustry.registry.ModBlocks;
 import java.util.Set;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -59,10 +60,10 @@ public record GeologyConfigSnapshot(
                 4,
                 true,
                 true,
-                Set.of(Blocks.STONE),
+                Set.of(Blocks.STONE, ModBlocks.HARDENED_SAND.get()),
                 2048,
-                Set.of(Blocks.SAND, Blocks.RED_SAND),
-                128);
+                Set.of(Blocks.SAND, Blocks.RED_SAND, ModBlocks.HARDENED_SAND.get()),
+                2048);
 
         DepthRockSettings hardened = new DepthRockSettings(
                 enabled,
