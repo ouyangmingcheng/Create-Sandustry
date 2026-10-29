@@ -2,6 +2,7 @@ package com.minechai.create_sandustry.worldgen.geology.special;
 
 import com.minechai.create_sandustry.CreateSandustry;
 import com.minechai.create_sandustry.config.SpecialSandConfig;
+import com.minechai.create_sandustry.config.WorldgenConfig;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,7 +53,7 @@ public record SpecialClusterConfigSnapshot(
 
     private static SpecialClusterConfigSnapshot build(List<Object> fingerprint) {
         TerrainClusterSettings suspiciousSand = new TerrainClusterSettings(
-                SpecialSandConfig.SUSPICIOUS_SAND_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 resolveLocations("suspicious_sand biomes", SpecialSandConfig.SUSPICIOUS_SAND_BIOMES.get()),
                 resolveBlocks("suspicious_sand", SpecialSandConfig.SUSPICIOUS_SAND_TARGETS.get()),
                 SpecialSandConfig.SUSPICIOUS_SAND_ATTEMPTS.get(),
@@ -66,7 +67,7 @@ public record SpecialClusterConfigSnapshot(
                         "minecraft:archaeology/desert_pyramid"));
 
         TerrainClusterSettings suspiciousGravel = new TerrainClusterSettings(
-                SpecialSandConfig.SUSPICIOUS_GRAVEL_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 resolveLocations("suspicious_gravel biomes", SpecialSandConfig.SUSPICIOUS_GRAVEL_BIOMES.get()),
                 resolveBlocks("suspicious_gravel", SpecialSandConfig.SUSPICIOUS_GRAVEL_TARGETS.get()),
                 SpecialSandConfig.SUSPICIOUS_GRAVEL_ATTEMPTS.get(),
@@ -80,7 +81,7 @@ public record SpecialClusterConfigSnapshot(
                         "minecraft:archaeology/trail_ruins_common"));
 
         StructureClusterSettings catLitter = new StructureClusterSettings(
-                SpecialSandConfig.CAT_LITTER_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 resolveLocations("cat_litter structures", SpecialSandConfig.CAT_LITTER_STRUCTURES.get()),
                 resolveBlocks("cat_litter", SpecialSandConfig.CAT_LITTER_TARGETS.get()),
                 SpecialSandConfig.CAT_LITTER_RADIUS.get(),
@@ -93,7 +94,7 @@ public record SpecialClusterConfigSnapshot(
                 SpecialSandConfig.CAT_LITTER_SCAN_DEPTH.get());
 
         StructureClusterSettings livingSand = new StructureClusterSettings(
-                SpecialSandConfig.LIVING_SAND_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 resolveLocations("living_sand structures", SpecialSandConfig.LIVING_SAND_STRUCTURES.get()),
                 resolveBlocks("living_sand", SpecialSandConfig.LIVING_SAND_TARGETS.get()),
                 SpecialSandConfig.LIVING_SAND_RADIUS.get(),
@@ -106,7 +107,7 @@ public record SpecialClusterConfigSnapshot(
                 SpecialSandConfig.LIVING_SAND_SCAN_DEPTH.get());
 
         return new SpecialClusterConfigSnapshot(
-                SpecialSandConfig.ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 SpecialSandConfig.MAX_BLOCK_CHECKS_PER_FEATURE.get(),
                 suspiciousSand,
                 suspiciousGravel,
@@ -117,10 +118,10 @@ public record SpecialClusterConfigSnapshot(
 
     private static List<Object> createFingerprint() {
         List<Object> values = new ArrayList<>();
-        values.add(SpecialSandConfig.ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(SpecialSandConfig.MAX_BLOCK_CHECKS_PER_FEATURE.get());
 
-        values.add(SpecialSandConfig.SUSPICIOUS_SAND_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(List.copyOf(SpecialSandConfig.SUSPICIOUS_SAND_BIOMES.get()));
         values.add(List.copyOf(SpecialSandConfig.SUSPICIOUS_SAND_TARGETS.get()));
         values.add(SpecialSandConfig.SUSPICIOUS_SAND_ATTEMPTS.get());
@@ -132,7 +133,7 @@ public record SpecialClusterConfigSnapshot(
         values.add(SpecialSandConfig.SUSPICIOUS_SAND_SCAN_DEPTH.get());
         values.add(SpecialSandConfig.SUSPICIOUS_SAND_LOOT_TABLE.get());
 
-        values.add(SpecialSandConfig.SUSPICIOUS_GRAVEL_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(List.copyOf(SpecialSandConfig.SUSPICIOUS_GRAVEL_BIOMES.get()));
         values.add(List.copyOf(SpecialSandConfig.SUSPICIOUS_GRAVEL_TARGETS.get()));
         values.add(SpecialSandConfig.SUSPICIOUS_GRAVEL_ATTEMPTS.get());
@@ -144,7 +145,7 @@ public record SpecialClusterConfigSnapshot(
         values.add(SpecialSandConfig.SUSPICIOUS_GRAVEL_SCAN_DEPTH.get());
         values.add(SpecialSandConfig.SUSPICIOUS_GRAVEL_LOOT_TABLE.get());
 
-        values.add(SpecialSandConfig.CAT_LITTER_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(List.copyOf(SpecialSandConfig.CAT_LITTER_STRUCTURES.get()));
         values.add(List.copyOf(SpecialSandConfig.CAT_LITTER_TARGETS.get()));
         values.add(SpecialSandConfig.CAT_LITTER_RADIUS.get());
@@ -156,7 +157,7 @@ public record SpecialClusterConfigSnapshot(
         values.add(SpecialSandConfig.CAT_LITTER_MAX_Y.get());
         values.add(SpecialSandConfig.CAT_LITTER_SCAN_DEPTH.get());
 
-        values.add(SpecialSandConfig.LIVING_SAND_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(List.copyOf(SpecialSandConfig.LIVING_SAND_STRUCTURES.get()));
         values.add(List.copyOf(SpecialSandConfig.LIVING_SAND_TARGETS.get()));
         values.add(SpecialSandConfig.LIVING_SAND_RADIUS.get());

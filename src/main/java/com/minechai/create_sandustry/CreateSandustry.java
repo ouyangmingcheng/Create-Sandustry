@@ -35,6 +35,7 @@ import com.minechai.create_sandustry.content.client.event.ThermalBufferItemPrope
 import com.minechai.create_sandustry.config.ModConfigs;
 import com.minechai.create_sandustry.config.GeologyConfig;
 import com.minechai.create_sandustry.config.SpecialSandConfig;
+import com.minechai.create_sandustry.config.WorldgenConfig;
 import com.minechai.create_sandustry.content.timebearing.TimeBearingEvents;
 import com.minechai.create_sandustry.content.conversion.FlorinolSoilEvents;
 import com.minechai.create_sandustry.content.conversion.MoonCrystalDepotEvents;
@@ -84,6 +85,7 @@ public class CreateSandustry {
 
     public CreateSandustry(IEventBus modEventBus) {
         ModConfigs.register();
+        WorldgenConfig.register();
         GeologyConfig.register();
         SpecialSandConfig.register();
         ModDataComponents.register(modEventBus);

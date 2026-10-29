@@ -20,21 +20,12 @@ public final class GeologyConfig {
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    public static final ModConfigSpec.BooleanValue GEOLOGY_ENABLED = BUILDER
-            .comment("地质生成系统总开关。默认关闭。",
-                    "关闭后四条基础规则都不运行；该 Feature 只在新区块生成阶段执行，不会改写已加载或已有区块。")
-            .define("geology.enabled", false);
-
     public static final ModConfigSpec.IntValue MAX_BLOCK_CHECKS_PER_RULE = BUILDER
             .comment("每条规则在每个区块内允许执行的最大方块检查次数，用于限制最坏情况下的生成开销。",
                     "默认 200000。四条规则各自拥有独立预算，互不抢占。")
             .defineInRange("geology.performance.max_block_checks_per_rule", 200000, 256, 4000000);
 
     // 规则 A：湿沙子
-    public static final ModConfigSpec.BooleanValue WET_ENABLED = BUILDER
-            .comment("是否启用湿沙子地质规则。默认关闭。")
-            .define("geology.wet.enabled", false);
-
     public static final ModConfigSpec.IntValue WET_HORIZONTAL_RADIUS = BUILDER
             .comment("湿沙子检测天然水体时使用的水平半径，单位：方块。默认 8。",
                     "检测范围限制在当前生成区块内，不会为了寻找水体而加载邻区块。")
@@ -66,10 +57,6 @@ public final class GeologyConfig {
                     value -> value instanceof String);
 
     // 规则 B：烈性沙子
-    public static final ModConfigSpec.BooleanValue VOLATILE_ENABLED = BUILDER
-            .comment("是否启用烈性沙子地质规则。默认关闭。")
-            .define("geology.volatile.enabled", false);
-
     public static final ModConfigSpec.IntValue VOLATILE_HORIZONTAL_RADIUS = BUILDER
             .comment("烈性沙子检测岩浆热源时使用的水平半径，单位：方块。默认 6。",
                     "只读取当前区块；跨区块边界的热源不会触发邻区块加载。")
@@ -116,10 +103,6 @@ public final class GeologyConfig {
                     value -> value instanceof String);
 
     // 规则 C：硬化沙子
-    public static final ModConfigSpec.BooleanValue HARDENED_ENABLED = BUILDER
-            .comment("是否启用硬化沙子地质规则。默认关闭。")
-            .define("geology.hardened.enabled", false);
-
     public static final ModConfigSpec.EnumValue<HeightMode> HARDENED_HEIGHT_MODE = BUILDER
             .comment("硬化沙子高度模式：FIXED 使用固定 Y 范围；SURFACE_RELATIVE 从地表向下计算深度。",
                     "默认 FIXED，从深板岩层以上的 Y=0 开始覆盖全部石头层，直到 Y=320。")
@@ -155,10 +138,6 @@ public final class GeologyConfig {
                     value -> value instanceof String);
 
     // 规则 D：石化沙子
-    public static final ModConfigSpec.BooleanValue PETRIFIED_ENABLED = BUILDER
-            .comment("是否启用石化沙子地质规则。默认关闭。")
-            .define("geology.petrified.enabled", false);
-
     public static final ModConfigSpec.EnumValue<HeightMode> PETRIFIED_HEIGHT_MODE = BUILDER
             .comment("石化沙子高度模式：FIXED 或 SURFACE_RELATIVE。默认 FIXED。",
                     "深度机制与硬化沙子一致，便于后续按需要切换。")

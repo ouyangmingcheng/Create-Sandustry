@@ -14,21 +14,12 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class SpecialSandConfig {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
-    public static final ModConfigSpec.BooleanValue ENABLED = BUILDER
-            .comment("特殊沙子和考古团簇系统总开关。默认关闭。",
-                    "关闭后可疑沙、可疑沙砾、村庄猫砂和建筑活沙规则都不运行。")
-            .define("special_sand.enabled", false);
-
     public static final ModConfigSpec.IntValue MAX_BLOCK_CHECKS_PER_FEATURE = BUILDER
             .comment("每个特殊 Feature 在每个区块允许执行的最大方块检查次数。",
                     "默认 50000，用于限制异常大范围或高尝试次数配置的开销。")
             .defineInRange("special_sand.performance.max_block_checks_per_feature", 50000, 256, 2000000);
 
     // 可疑沙子
-    public static final ModConfigSpec.BooleanValue SUSPICIOUS_SAND_ENABLED = BUILDER
-            .comment("是否启用可疑沙子自然团簇。默认关闭。")
-            .define("special_sand.suspicious_sand.enabled", false);
-
     public static final ModConfigSpec.ConfigValue<List<? extends String>> SUSPICIOUS_SAND_BIOMES = BUILDER
             .comment("允许生成可疑沙子团簇的群系 ID 白名单。默认仅沙漠。",
                     "Feature 会加入全部主世界群系，但会在运行时严格检查此列表。")
@@ -75,10 +66,6 @@ public final class SpecialSandConfig {
             .define("special_sand.suspicious_sand.loot_table", "minecraft:archaeology/desert_pyramid");
 
     // 可疑沙砾
-    public static final ModConfigSpec.BooleanValue SUSPICIOUS_GRAVEL_ENABLED = BUILDER
-            .comment("是否启用可疑沙砾自然团簇。默认关闭。")
-            .define("special_sand.suspicious_gravel.enabled", false);
-
     public static final ModConfigSpec.ConfigValue<List<? extends String>> SUSPICIOUS_GRAVEL_BIOMES = BUILDER
             .comment("允许生成可疑沙砾团簇的群系 ID 白名单。默认砾石丘陵和石岸。")
             .defineListAllowEmpty("special_sand.suspicious_gravel.biomes",
@@ -125,10 +112,6 @@ public final class SpecialSandConfig {
             .define("special_sand.suspicious_gravel.loot_table", "minecraft:archaeology/trail_ruins_common");
 
     // 村庄猫砂
-    public static final ModConfigSpec.BooleanValue CAT_LITTER_ENABLED = BUILDER
-            .comment("是否启用村庄周边的猫砂生成。默认关闭。")
-            .define("special_sand.cat_litter.enabled", false);
-
     public static final ModConfigSpec.ConfigValue<List<? extends String>> CAT_LITTER_STRUCTURES = BUILDER
             .comment("被视为村庄的结构 ID 白名单。默认包含五种原版村庄。",
                     "结构 ID 取自 minecraft:worldgen/structure 注册表，不是群系或模板池 ID。")
@@ -176,10 +159,6 @@ public final class SpecialSandConfig {
             .defineInRange("special_sand.cat_litter.surface_scan_depth", 12, 1, 64);
 
     // 建筑活沙
-    public static final ModConfigSpec.BooleanValue LIVING_SAND_ENABLED = BUILDER
-            .comment("是否启用建筑周边的活沙生成。默认关闭，生成频率远低于可疑沙子。")
-            .define("special_sand.living_sand.enabled", false);
-
     public static final ModConfigSpec.ConfigValue<List<? extends String>> LIVING_SAND_STRUCTURES = BUILDER
             .comment("允许触发活沙生成的结构 ID 白名单。默认包含原版村庄、神殿、前哨站、 mansion 等建筑。",
                     "可加入其他模组结构 ID；结构必须使用 Minecraft Structure 系统生成。")

@@ -3,6 +3,7 @@ package com.minechai.create_sandustry.worldgen.geology;
 import com.minechai.create_sandustry.CreateSandustry;
 import com.minechai.create_sandustry.config.GeologyConfig;
 import com.minechai.create_sandustry.config.GeologyConfig.HeightMode;
+import com.minechai.create_sandustry.config.WorldgenConfig;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -53,7 +54,7 @@ public record GeologyConfigSnapshot(
 
     private static GeologyConfigSnapshot build(List<Object> fingerprint) {
         WetSandSettings wet = new WetSandSettings(
-                GeologyConfig.WET_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 GeologyConfig.WET_HORIZONTAL_RADIUS.get(),
                 GeologyConfig.WET_VERTICAL_RADIUS.get(),
                 GeologyConfig.WET_SURFACE_SCAN_DEPTH.get(),
@@ -62,7 +63,7 @@ public record GeologyConfigSnapshot(
                 GeologyConfig.WET_MAX_REPLACEMENTS.get());
 
         VolatileSandSettings volatileSand = new VolatileSandSettings(
-                GeologyConfig.VOLATILE_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 GeologyConfig.VOLATILE_HORIZONTAL_RADIUS.get(),
                 GeologyConfig.VOLATILE_VERTICAL_RADIUS.get(),
                 GeologyConfig.VOLATILE_MINIMUM_HEAT_BLOCKS.get(),
@@ -74,7 +75,7 @@ public record GeologyConfigSnapshot(
                 GeologyConfig.VOLATILE_MAX_REPLACEMENTS.get());
 
         DepthRockSettings hardened = new DepthRockSettings(
-                GeologyConfig.HARDENED_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 GeologyConfig.HARDENED_HEIGHT_MODE.get(),
                 GeologyConfig.HARDENED_FIXED_MIN_Y.get(),
                 GeologyConfig.HARDENED_FIXED_MAX_Y.get(),
@@ -84,7 +85,7 @@ public record GeologyConfigSnapshot(
                 GeologyConfig.HARDENED_MAX_REPLACEMENTS.get());
 
         DepthRockSettings petrified = new DepthRockSettings(
-                GeologyConfig.PETRIFIED_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 GeologyConfig.PETRIFIED_HEIGHT_MODE.get(),
                 GeologyConfig.PETRIFIED_FIXED_MIN_Y.get(),
                 GeologyConfig.PETRIFIED_FIXED_MAX_Y.get(),
@@ -94,7 +95,7 @@ public record GeologyConfigSnapshot(
                 GeologyConfig.PETRIFIED_MAX_REPLACEMENTS.get());
 
         return new GeologyConfigSnapshot(
-                GeologyConfig.GEOLOGY_ENABLED.get(),
+                WorldgenConfig.ENABLED.get(),
                 GeologyConfig.MAX_BLOCK_CHECKS_PER_RULE.get(),
                 wet,
                 volatileSand,
@@ -105,16 +106,16 @@ public record GeologyConfigSnapshot(
 
     private static List<Object> createFingerprint() {
         List<Object> values = new ArrayList<>();
-        values.add(GeologyConfig.GEOLOGY_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(GeologyConfig.MAX_BLOCK_CHECKS_PER_RULE.get());
-        values.add(GeologyConfig.WET_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(GeologyConfig.WET_HORIZONTAL_RADIUS.get());
         values.add(GeologyConfig.WET_VERTICAL_RADIUS.get());
         values.add(GeologyConfig.WET_SURFACE_SCAN_DEPTH.get());
         values.add(GeologyConfig.WET_INCLUDE_RED_SAND.get());
         values.add(List.copyOf(GeologyConfig.WET_TARGET_BLOCKS.get()));
         values.add(GeologyConfig.WET_MAX_REPLACEMENTS.get());
-        values.add(GeologyConfig.VOLATILE_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(GeologyConfig.VOLATILE_HORIZONTAL_RADIUS.get());
         values.add(GeologyConfig.VOLATILE_VERTICAL_RADIUS.get());
         values.add(GeologyConfig.VOLATILE_MINIMUM_HEAT_BLOCKS.get());
@@ -124,7 +125,7 @@ public record GeologyConfigSnapshot(
         values.add(GeologyConfig.VOLATILE_LAVA_LAKE_STONE_MAX_REPLACEMENTS.get());
         values.add(List.copyOf(GeologyConfig.VOLATILE_TARGET_BLOCKS.get()));
         values.add(GeologyConfig.VOLATILE_MAX_REPLACEMENTS.get());
-        values.add(GeologyConfig.HARDENED_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(GeologyConfig.HARDENED_HEIGHT_MODE.get());
         values.add(GeologyConfig.HARDENED_FIXED_MIN_Y.get());
         values.add(GeologyConfig.HARDENED_FIXED_MAX_Y.get());
@@ -132,7 +133,7 @@ public record GeologyConfigSnapshot(
         values.add(GeologyConfig.HARDENED_RELATIVE_MAX_DEPTH.get());
         values.add(List.copyOf(GeologyConfig.HARDENED_TARGET_BLOCKS.get()));
         values.add(GeologyConfig.HARDENED_MAX_REPLACEMENTS.get());
-        values.add(GeologyConfig.PETRIFIED_ENABLED.get());
+        values.add(WorldgenConfig.ENABLED.get());
         values.add(GeologyConfig.PETRIFIED_HEIGHT_MODE.get());
         values.add(GeologyConfig.PETRIFIED_FIXED_MIN_Y.get());
         values.add(GeologyConfig.PETRIFIED_FIXED_MAX_Y.get());
