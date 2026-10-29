@@ -88,6 +88,22 @@ public final class GeologyConfig {
             .comment("是否把 minecraft:magma_block 也视为合格热源。默认开启。")
             .define("geology.volatile.include_magma_blocks", true);
 
+    public static final ModConfigSpec.BooleanValue VOLATILE_REPLACE_LAVA_LAKE_STONE = BUILDER
+            .comment("是否把天然岩浆湖 LakeFeature 生成、直接紧邻岩浆的石头替换为烈性沙子。",
+                    "只检测六个正方向相邻的岩浆，不转换附近普通地下石头。默认开启。")
+            .define("geology.volatile.replace_lava_lake_stone", true);
+
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> VOLATILE_LAVA_LAKE_STONE_TARGETS = BUILDER
+            .comment("允许作为岩浆湖屏障替换的精确石头白名单。默认仅 minecraft:stone。",
+                    "矿石、结构方块、深板岩、凝灰岩及其他未列出的方块不会替换。")
+            .defineListAllowEmpty("geology.volatile.lava_lake_stone_blocks",
+                    List.of("minecraft:stone"), value -> value instanceof String);
+
+    public static final ModConfigSpec.IntValue VOLATILE_LAVA_LAKE_STONE_MAX_REPLACEMENTS = BUILDER
+            .comment("每个区块中岩浆湖屏障石头最多替换数量。默认 2048。",
+                    "与沙子规则的上限分别计算，避免大型岩浆湖只转换一部分屏障。")
+            .defineInRange("geology.volatile.lava_lake_stone_max_replacements_per_chunk", 2048, 0, 65536);
+
     public static final ModConfigSpec.IntValue VOLATILE_MAX_REPLACEMENTS = BUILDER
             .comment("每个区块中烈性沙子规则最多替换的方块数。默认 128。")
             .defineInRange("geology.volatile.max_replacements_per_chunk", 128, 0, 65536);

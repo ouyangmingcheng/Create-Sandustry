@@ -7,15 +7,17 @@ import com.minechai.create_sandustry.worldgen.geology.GeologyConfigSnapshot.Vola
 import com.minechai.create_sandustry.worldgen.geology.GeologyGenerationContext;
 import com.minechai.create_sandustry.worldgen.geology.GeologyRuleProcessor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * 规则 B：把已生成岩浆区域附近的普通沙子替换为烈性沙子。
+ * 规则 B：把天然岩浆区域附近的普通沙子，以及原版岩浆湖 LakeFeature 生成的紧邻岩浆石头，
+ * 替换为烈性沙子。
  *
- * <p>该规则在 TOP_LAYER_MODIFICATION 阶段运行，此时原版岩浆湖、岩浆泉和洞穴装饰已经生成。
- * 热源检测仍限制在当前区块内，不请求邻区块。</p>
+ * <p>该规则在 VEGETAL_DECORATION 阶段运行，此时岩浆湖、岩浆泉和洞穴装饰已经生成。
+ * 石头屏障只按六个正方向与岩浆相邻来识别；普通地下石头不会因为邻近洞穴空气而转换。</p>
  */
 public final class VolatileSandRule implements GeologyRuleProcessor {
     @Override
@@ -31,11 +33,17 @@ public final class VolatileSandRule implements GeologyRuleProcessor {
     @Override
     public boolean apply(GeologyGenerationContext context, GeologyConfigSnapshot config) {
         VolatileSandSettings settings = config.volatileSand();
-        if (settings.targets().isEmpty() || settings.maxReplacements() == 0) {
+        boolean replaceSand = !settings.targets().isEmpty() && settings.maxReplacements() > 0;
+        boolean replaceStone = settings.replaceLavaLakeStone()
+                && !settings.lavaLakeStoneTargets().isEmpty()
+                && settings.lavaLakeStoneMaxReplacements() > 0;
+        if (!replaceSand && !replaceStone) {
             return false;
         }
 
-        CandidateSampler sampler = new CandidateSampler(settings.maxReplacements());
+        CandidateSampler sandSampler = new CandidateSampler(replaceSand ? settings.maxReplacements() : 0);
+        CandidateSampler stoneSampler = new CandidateSampler(
+                replaceStone ? settings.lavaLakeStoneMaxReplacements() : 0);
         BlockPos.MutableBlockPos candidate = new BlockPos.MutableBlockPos();
         BlockPos.MutableBlockPos probe = new BlockPos.MutableBlockPos();
 
@@ -49,22 +57,55 @@ public final class VolatileSandRule implements GeologyRuleProcessor {
 
                     candidate.set(x, y, z);
                     BlockState state = context.level().getBlockState(candidate);
-                    if (!settings.targets().contains(state.getBlock())) {
+                    boolean canReplaceAsSand = replaceSand && settings.targets().contains(state.getBlock());
+                    boolean canReplaceAsStone = replaceStone
+                            && settings.lavaLakeStoneTargets().contains(state.getBlock());
+                    if (!canReplaceAsSand && !canReplaceAsStone) {
                         continue;
                     }
 
-                    if (hasEnoughNearbyHeat(context, candidate, settings, probe)) {
-                        sampler.offer(candidate, context.random());
+                    if (canReplaceAsStone && touchesLava(context, candidate, probe)) {
+                        stoneSampler.offer(candidate, context.random());
+                    }
+                    if (canReplaceAsSand && hasEnoughNearbyHeat(context, candidate, settings, probe)) {
+                        sandSampler.offer(candidate, context.random());
                     }
                 }
             }
         }
 
         boolean changed = false;
-        for (BlockPos pos : sampler.selected()) {
+        for (BlockPos pos : stoneSampler.selected()) {
+            changed |= context.replaceIfAllowed(
+                    pos, settings.lavaLakeStoneTargets(), ModBlocks.VOLATILE_SAND.get());
+        }
+        for (BlockPos pos : sandSampler.selected()) {
             changed |= context.replaceIfAllowed(pos, settings.targets(), ModBlocks.VOLATILE_SAND.get());
         }
         return changed;
+    }
+
+    /**
+     * LakeFeature 用六邻接判定构建屏障，因此同样只检查六个正方向。
+     * 邻区块只在已存在于当前 WorldGenRegion 缓存时读取，不触发生成或加载。
+     */
+    static boolean touchesLava(
+            GeologyGenerationContext context,
+            BlockPos candidate,
+            BlockPos.MutableBlockPos probe) {
+        for (Direction direction : Direction.values()) {
+            probe.setWithOffset(candidate, direction);
+            if (!context.canRead(probe)) {
+                continue;
+            }
+            if (!context.consumeCheck()) {
+                return false;
+            }
+            if (context.level().getBlockState(probe).getFluidState().is(FluidTags.LAVA)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean hasEnoughNearbyHeat(

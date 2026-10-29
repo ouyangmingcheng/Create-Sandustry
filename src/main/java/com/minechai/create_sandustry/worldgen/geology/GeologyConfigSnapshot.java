@@ -67,6 +67,9 @@ public record GeologyConfigSnapshot(
                 GeologyConfig.VOLATILE_VERTICAL_RADIUS.get(),
                 GeologyConfig.VOLATILE_MINIMUM_HEAT_BLOCKS.get(),
                 GeologyConfig.VOLATILE_INCLUDE_MAGMA_BLOCKS.get(),
+                GeologyConfig.VOLATILE_REPLACE_LAVA_LAKE_STONE.get(),
+                Set.copyOf(resolveBlocks("volatile_lava_lake_stone", GeologyConfig.VOLATILE_LAVA_LAKE_STONE_TARGETS.get())),
+                GeologyConfig.VOLATILE_LAVA_LAKE_STONE_MAX_REPLACEMENTS.get(),
                 Set.copyOf(resolveBlocks("volatile_sand", GeologyConfig.VOLATILE_TARGET_BLOCKS.get())),
                 GeologyConfig.VOLATILE_MAX_REPLACEMENTS.get());
 
@@ -116,6 +119,9 @@ public record GeologyConfigSnapshot(
         values.add(GeologyConfig.VOLATILE_VERTICAL_RADIUS.get());
         values.add(GeologyConfig.VOLATILE_MINIMUM_HEAT_BLOCKS.get());
         values.add(GeologyConfig.VOLATILE_INCLUDE_MAGMA_BLOCKS.get());
+        values.add(GeologyConfig.VOLATILE_REPLACE_LAVA_LAKE_STONE.get());
+        values.add(List.copyOf(GeologyConfig.VOLATILE_LAVA_LAKE_STONE_TARGETS.get()));
+        values.add(GeologyConfig.VOLATILE_LAVA_LAKE_STONE_MAX_REPLACEMENTS.get());
         values.add(List.copyOf(GeologyConfig.VOLATILE_TARGET_BLOCKS.get()));
         values.add(GeologyConfig.VOLATILE_MAX_REPLACEMENTS.get());
         values.add(GeologyConfig.HARDENED_ENABLED.get());
@@ -172,6 +178,9 @@ public record GeologyConfigSnapshot(
             int verticalRadius,
             int minimumHeatBlocks,
             boolean includeMagmaBlocks,
+            boolean replaceLavaLakeStone,
+            Set<Block> lavaLakeStoneTargets,
+            int lavaLakeStoneMaxReplacements,
             Set<Block> targets,
             int maxReplacements) {
     }

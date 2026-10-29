@@ -90,6 +90,15 @@ public final class GeologyGenerationContext {
                 && y >= minY && y <= maxY;
     }
 
+    /**
+     * 只读检查目标区块是否已在当前世界生成区域缓存中，不触发区块加载。
+     */
+    public boolean canRead(BlockPos pos) {
+        return level.hasChunk(
+                SectionPos.blockToSectionCoord(pos.getX()),
+                SectionPos.blockToSectionCoord(pos.getZ()));
+    }
+
     public int clampY(int y) {
         return Mth.clamp(y, minY, maxY);
     }
