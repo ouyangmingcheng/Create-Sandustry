@@ -17,23 +17,26 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
 /**
  * 当前区块 3×3 世界生成缓存内的结构快照。
  *
- * <p>不使用 {@code StructureManager#startsForStructure}，因为该方法会通过
- * {@code fillStartsForStructure} 请求 structure reference 指向的远端起点区块；
- * 该区块可能不在 {@link WorldGenRegion} 的 3×3 缓存内并导致世界生成崩溃。</p>
+ * <p>不调用 StructureManager#startsForStructure，避免 fillStartsForStructure
+ * 请求远端 structure reference 指向的区块。这里只解析起点区块也在缓存内的引用。</p>
  *
- * <p>这里只读取 {@link WorldGenRegion#hasChunk(int, int)} 已存在的区块，
- * 并且只解析起点区块同样位于该缓存内的 references。远端结构本次区块不参与生成，
- * 不会强制加载或间接生成任何区块。</p>
+ * <p>结构 Piece 被拆分为普通保护盒和目标道路盒。道路通过真实的
+ * {@link StructureTemplatePool.Projection#TERRAIN_MATCHING} 投影识别；
+ * 建筑、地基和其他 Piece 仍全部受保护。</p>
  */
 public record NearbyStructureStarts(
-        List<BoundingBox> allFootprints,
-        List<BoundingBox> targetFootprints) {
+        List<BoundingBox> protectedFootprints,
+        List<BoundingBox> targetFootprints,
+        List<BoundingBox> targetRoadFootprints) {
 
     public static NearbyStructureStarts find(
             WorldGenLevel level,
@@ -52,7 +55,7 @@ public record NearbyStructureStarts(
             Set<ResourceLocation> targetStructures,
             int chunkRadius) {
         if (!(level instanceof WorldGenRegion region)) {
-            return new NearbyStructureStarts(List.of(), List.of());
+            return empty();
         }
 
         Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
@@ -66,7 +69,6 @@ public record NearbyStructureStarts(
                     continue;
                 }
 
-                // EMPTY 只请求缓存内区块对象，不触发结构起点区块的额外加载。
                 ChunkAccess localChunk = region.getChunk(chunkX, chunkZ);
                 for (StructureStart start : localChunk.getAllStarts().values()) {
                     addIfEligible(starts, start);
@@ -81,7 +83,6 @@ public record NearbyStructureStarts(
                     for (long packedOrigin : entry.getValue()) {
                         ChunkPos origin = new ChunkPos(packedOrigin);
                         if (!region.hasChunk(origin.x, origin.z)) {
-                            // 远端起点区块不可访问；绝不让 StructureManager 递归取块。
                             continue;
                         }
 
@@ -95,20 +96,38 @@ public record NearbyStructureStarts(
             }
         }
 
-        List<BoundingBox> allFootprints = new ArrayList<>();
+        List<BoundingBox> protectedFootprints = new ArrayList<>();
         List<BoundingBox> targetFootprints = new ArrayList<>();
+        List<BoundingBox> targetRoadFootprints = new ArrayList<>();
         for (StructureStart start : starts) {
             if (!start.isValid()) {
                 continue;
             }
-            BoundingBox box = start.getBoundingBox();
-            allFootprints.add(box);
+
             ResourceLocation id = registry.getKey(start.getStructure());
-            if (id != null && targetStructures.contains(id)) {
-                targetFootprints.add(box);
+            boolean target = id != null && targetStructures.contains(id);
+            for (StructurePiece piece : start.getPieces()) {
+                BoundingBox box = piece.getBoundingBox();
+                boolean road = target && isRoadPiece(piece);
+                if (road) {
+                    targetRoadFootprints.add(box);
+                } else {
+                    protectedFootprints.add(box);
+                }
+                if (target) {
+                    targetFootprints.add(box);
+                }
             }
         }
-        return new NearbyStructureStarts(List.copyOf(allFootprints), List.copyOf(targetFootprints));
+
+        return new NearbyStructureStarts(
+                List.copyOf(protectedFootprints),
+                List.copyOf(targetFootprints),
+                List.copyOf(targetRoadFootprints));
+    }
+
+    private static NearbyStructureStarts empty() {
+        return new NearbyStructureStarts(List.of(), List.of(), List.of());
     }
 
     private static void addIfEligible(Set<StructureStart> starts, StructureStart start) {
@@ -121,6 +140,11 @@ public record NearbyStructureStarts(
         return structure.step().ordinal() <= GenerationStep.Decoration.TOP_LAYER_MODIFICATION.ordinal();
     }
 
+    private static boolean isRoadPiece(StructurePiece piece) {
+        return piece instanceof PoolElementStructurePiece poolPiece
+                && poolPiece.getElement().getProjection() == StructureTemplatePool.Projection.TERRAIN_MATCHING;
+    }
+
     public boolean hasTargets() {
         return !targetFootprints.isEmpty();
     }
@@ -130,7 +154,7 @@ public record NearbyStructureStarts(
     }
 
     public boolean isOutsideAllFootprints(int x, int z) {
-        for (BoundingBox box : allFootprints) {
+        for (BoundingBox box : protectedFootprints) {
             if (containsHorizontally(box, x, z)) {
                 return false;
             }
@@ -138,10 +162,27 @@ public record NearbyStructureStarts(
         return true;
     }
 
+    public boolean isInsideTargetRoad(int x, int z) {
+        for (BoundingBox box : targetRoadFootprints) {
+            if (containsHorizontally(box, x, z)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isWithinTargetRadius(int x, int z, int radius) {
+        return isWithinTargetRadius(x, z, radius, false);
+    }
+
+    public boolean isWithinTargetRadius(int x, int z, int radius, boolean includeTargetRoads) {
         if (!isOutsideAllFootprints(x, z)) {
             return false;
         }
+        if (includeTargetRoads && isInsideTargetRoad(x, z)) {
+            return true;
+        }
+
         long radiusSquared = (long) radius * radius;
         for (BoundingBox box : targetFootprints) {
             if (horizontalDistanceSquared(box, x, z) <= radiusSquared) {

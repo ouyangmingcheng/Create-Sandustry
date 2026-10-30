@@ -34,8 +34,9 @@ final class StructureClusterSupport {
             return false;
         }
 
-        List<BlockPos> ringColumns = collectRingColumns(context, structures, settings.structureRadius());
-        if (ringColumns.isEmpty()) {
+        List<BlockPos> candidateColumns = collectCandidateColumns(
+                context, structures, settings.structureRadius(), settings.includeTargetRoads());
+        if (candidateColumns.isEmpty()) {
             return false;
         }
 
@@ -48,14 +49,15 @@ final class StructureClusterSupport {
                 continue;
             }
 
-            BlockPos column = ringColumns.get(context.random().nextInt(ringColumns.size()));
-            BlockPos anchor = findAnchor(context, column.getX(), column.getZ(), settings);
+            BlockPos column = candidateColumns.get(context.random().nextInt(candidateColumns.size()));
+            BlockPos anchor = findAnchor(context, structures, column.getX(), column.getZ(), settings);
             if (anchor == null) {
                 continue;
             }
 
-            if (placeCluster(context, anchor, settings, replacement,
-                    pos -> structures.isWithinTargetRadius(pos.getX(), pos.getZ(), settings.structureRadius()))) {
+            if (placeCluster(context, structures, anchor, settings, replacement,
+                    pos -> structures.isWithinTargetRadius(
+                            pos.getX(), pos.getZ(), settings.structureRadius(), settings.includeTargetRoads()))) {
                 generated++;
                 changed = true;
             }
@@ -63,14 +65,15 @@ final class StructureClusterSupport {
         return changed;
     }
 
-    private static List<BlockPos> collectRingColumns(
+    private static List<BlockPos> collectCandidateColumns(
             GeologyGenerationContext context,
             NearbyStructureStarts structures,
-            int radius) {
+            int radius,
+            boolean includeTargetRoads) {
         List<BlockPos> columns = new ArrayList<>();
         for (int x = context.chunkMinX(); x <= context.chunkMaxX(); x++) {
             for (int z = context.chunkMinZ(); z <= context.chunkMaxZ(); z++) {
-                if (structures.isWithinTargetRadius(x, z, radius)) {
+                if (structures.isWithinTargetRadius(x, z, radius, includeTargetRoads)) {
                     columns.add(new BlockPos(x, context.minY(), z));
                 }
             }
@@ -80,6 +83,7 @@ final class StructureClusterSupport {
 
     private static BlockPos findAnchor(
             GeologyGenerationContext context,
+            NearbyStructureStarts structures,
             int x,
             int z,
             StructureClusterSettings settings) {
@@ -97,7 +101,7 @@ final class StructureClusterSupport {
             }
             cursor.set(x, y, z);
             BlockState state = context.level().getBlockState(cursor);
-            if (settings.targets().contains(state.getBlock())) {
+            if (targetsAt(structures, settings, x, z).contains(state.getBlock())) {
                 return cursor.immutable();
             }
         }
@@ -106,6 +110,7 @@ final class StructureClusterSupport {
 
     private static boolean placeCluster(
             GeologyGenerationContext context,
+            NearbyStructureStarts structures,
             BlockPos anchor,
             StructureClusterSettings settings,
             Block replacement,
@@ -115,7 +120,7 @@ final class StructureClusterSupport {
         int maxSteps = settings.clusterSize() * 8;
         int placed = 0;
 
-        if (tryPlace(context, anchor, settings, replacement, guard)) {
+        if (tryPlace(context, structures, anchor, settings, replacement, guard)) {
             frontier.add(anchor);
             visited.add(anchor);
             placed++;
@@ -139,7 +144,7 @@ final class StructureClusterSupport {
                 continue;
             }
 
-            if (tryPlace(context, candidate, settings, replacement, guard)) {
+            if (tryPlace(context, structures, candidate, settings, replacement, guard)) {
                 frontier.add(candidate.immutable());
                 placed++;
             }
@@ -149,6 +154,7 @@ final class StructureClusterSupport {
 
     private static boolean tryPlace(
             GeologyGenerationContext context,
+            NearbyStructureStarts structures,
             BlockPos pos,
             StructureClusterSettings settings,
             Block replacement,
@@ -159,7 +165,17 @@ final class StructureClusterSupport {
                 || !guard.test(pos)) {
             return false;
         }
-        return context.replaceIfAllowed(pos, settings.targets(), replacement);
+        return context.replaceIfAllowed(pos, targetsAt(structures, settings, pos.getX(), pos.getZ()), replacement);
+    }
+
+    private static Set<Block> targetsAt(
+            NearbyStructureStarts structures,
+            StructureClusterSettings settings,
+            int x,
+            int z) {
+        return settings.includeTargetRoads() && structures.isInsideTargetRoad(x, z)
+                ? settings.roadTargets()
+                : settings.targets();
     }
 
     @FunctionalInterface
