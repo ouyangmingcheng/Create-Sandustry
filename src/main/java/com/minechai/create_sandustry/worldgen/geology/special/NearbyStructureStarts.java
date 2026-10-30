@@ -1,9 +1,11 @@
 package com.minechai.create_sandustry.worldgen.geology.special;
 
+import it.unimi.dsi.fastutil.longs.LongSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -11,8 +13,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -21,8 +23,13 @@ import net.minecraft.world.level.levelgen.structure.StructureStart;
 /**
  * 当前区块 3×3 世界生成缓存内的结构快照。
  *
- * <p>只查询 {@link WorldGenRegion#hasChunk(int, int)} 已存在的区块，
- * 不会通过 StructureManager 请求或生成邻区块。</p>
+ * <p>不使用 {@code StructureManager#startsForStructure}，因为该方法会通过
+ * {@code fillStartsForStructure} 请求 structure reference 指向的远端起点区块；
+ * 该区块可能不在 {@link WorldGenRegion} 的 3×3 缓存内并导致世界生成崩溃。</p>
+ *
+ * <p>这里只读取 {@link WorldGenRegion#hasChunk(int, int)} 已存在的区块，
+ * 并且只解析起点区块同样位于该缓存内的 references。远端结构本次区块不参与生成，
+ * 不会强制加载或间接生成任何区块。</p>
  */
 public record NearbyStructureStarts(
         List<BoundingBox> allFootprints,
@@ -48,7 +55,6 @@ public record NearbyStructureStarts(
             return new NearbyStructureStarts(List.of(), List.of());
         }
 
-        StructureManager structureManager = level.getLevel().structureManager().forWorldGenRegion(region);
         Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
         Set<StructureStart> starts = Collections.newSetFromMap(new IdentityHashMap<>());
 
@@ -60,8 +66,32 @@ public record NearbyStructureStarts(
                     continue;
                 }
 
-                starts.addAll(structureManager.startsForStructure(new ChunkPos(chunkX, chunkZ),
-                        structure -> structure.step().ordinal() <= GenerationStep.Decoration.TOP_LAYER_MODIFICATION.ordinal()));
+                // EMPTY 只请求缓存内区块对象，不触发结构起点区块的额外加载。
+                ChunkAccess localChunk = region.getChunk(chunkX, chunkZ);
+                for (StructureStart start : localChunk.getAllStarts().values()) {
+                    addIfEligible(starts, start);
+                }
+
+                for (Map.Entry<Structure, LongSet> entry : localChunk.getAllReferences().entrySet()) {
+                    Structure structure = entry.getKey();
+                    if (!isEligible(structure)) {
+                        continue;
+                    }
+
+                    for (long packedOrigin : entry.getValue()) {
+                        ChunkPos origin = new ChunkPos(packedOrigin);
+                        if (!region.hasChunk(origin.x, origin.z)) {
+                            // 远端起点区块不可访问；绝不让 StructureManager 递归取块。
+                            continue;
+                        }
+
+                        StructureStart start = region.getChunk(origin.x, origin.z)
+                                .getStartForStructure(structure);
+                        if (start != null) {
+                            starts.add(start);
+                        }
+                    }
+                }
             }
         }
 
@@ -79,6 +109,16 @@ public record NearbyStructureStarts(
             }
         }
         return new NearbyStructureStarts(List.copyOf(allFootprints), List.copyOf(targetFootprints));
+    }
+
+    private static void addIfEligible(Set<StructureStart> starts, StructureStart start) {
+        if (start.isValid() && isEligible(start.getStructure())) {
+            starts.add(start);
+        }
+    }
+
+    private static boolean isEligible(Structure structure) {
+        return structure.step().ordinal() <= GenerationStep.Decoration.TOP_LAYER_MODIFICATION.ordinal();
     }
 
     public boolean hasTargets() {
