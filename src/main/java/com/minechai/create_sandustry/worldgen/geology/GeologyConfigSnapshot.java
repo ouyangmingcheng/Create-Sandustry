@@ -87,7 +87,7 @@ public record GeologyConfigSnapshot(
 
         return new GeologyConfigSnapshot(
                 enabled,
-                200000,
+                400000,
                 wet,
                 volatileSand,
                 hardened,

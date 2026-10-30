@@ -34,6 +34,11 @@ final class StructureClusterSupport {
             return false;
         }
 
+        List<BlockPos> ringColumns = collectRingColumns(context, structures, settings.structureRadius());
+        if (ringColumns.isEmpty()) {
+            return false;
+        }
+
         int generated = 0;
         boolean changed = false;
         for (int attempt = 0;
@@ -43,13 +48,8 @@ final class StructureClusterSupport {
                 continue;
             }
 
-            int x = context.chunkMinX() + context.random().nextInt(16);
-            int z = context.chunkMinZ() + context.random().nextInt(16);
-            if (!structures.isWithinTargetRadius(x, z, settings.structureRadius())) {
-                continue;
-            }
-
-            BlockPos anchor = findAnchor(context, x, z, settings);
+            BlockPos column = ringColumns.get(context.random().nextInt(ringColumns.size()));
+            BlockPos anchor = findAnchor(context, column.getX(), column.getZ(), settings);
             if (anchor == null) {
                 continue;
             }
@@ -61,6 +61,21 @@ final class StructureClusterSupport {
             }
         }
         return changed;
+    }
+
+    private static List<BlockPos> collectRingColumns(
+            GeologyGenerationContext context,
+            NearbyStructureStarts structures,
+            int radius) {
+        List<BlockPos> columns = new ArrayList<>();
+        for (int x = context.chunkMinX(); x <= context.chunkMaxX(); x++) {
+            for (int z = context.chunkMinZ(); z <= context.chunkMaxZ(); z++) {
+                if (structures.isWithinTargetRadius(x, z, radius)) {
+                    columns.add(new BlockPos(x, context.minY(), z));
+                }
+            }
+        }
+        return columns;
     }
 
     private static BlockPos findAnchor(

@@ -13,11 +13,10 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * 规则 B：把天然岩浆区域附近的普通沙子，以及原版岩浆湖 LakeFeature 生成的紧邻岩浆石头，
- * 替换为烈性沙子。
+ * 规则 B：天然岩浆区域附近的普通沙、红沙和硬化沙转换为烈性沙。
  *
- * <p>该规则在 VEGETAL_DECORATION 阶段运行，此时岩浆湖、岩浆泉和洞穴装饰已经生成。
- * 石头屏障只按六个正方向与岩浆相邻来识别；普通地下石头不会因为邻近洞穴空气而转换。</p>
+ * <p>硬化规则先运行，因此地表岩浆湖周围的石头已经变成硬化沙；本规则随后按
+ * 岩浆热源辐射范围转换它们。紧邻岩浆的屏障方块仍使用六邻接直接识别。</p>
  */
 public final class VolatileSandRule implements GeologyRuleProcessor {
     @Override
@@ -41,6 +40,9 @@ public final class VolatileSandRule implements GeologyRuleProcessor {
             return false;
         }
 
+        VolatileHeatMap heatMap = replaceSand
+                ? VolatileHeatMap.build(context, settings.includeMagmaBlocks())
+                : null;
         CandidateSampler sandSampler = new CandidateSampler(replaceSand ? settings.maxReplacements() : 0);
         CandidateSampler stoneSampler = new CandidateSampler(
                 replaceStone ? settings.lavaLakeStoneMaxReplacements() : 0);
@@ -67,7 +69,8 @@ public final class VolatileSandRule implements GeologyRuleProcessor {
                     if (canReplaceAsStone && touchesLava(context, candidate, probe)) {
                         stoneSampler.offer(candidate, context.random());
                     }
-                    if (canReplaceAsSand && hasEnoughNearbyHeat(context, candidate, settings, probe)) {
+                    if (canReplaceAsSand && heatMap != null
+                            && heatMap.hasEnoughHeat(context, candidate, settings)) {
                         sandSampler.offer(candidate, context.random());
                     }
                 }
@@ -108,51 +111,103 @@ public final class VolatileSandRule implements GeologyRuleProcessor {
         return false;
     }
 
-    private static boolean hasEnoughNearbyHeat(
-            GeologyGenerationContext context,
-            BlockPos.MutableBlockPos candidate,
-            VolatileSandSettings settings,
-            BlockPos.MutableBlockPos probe) {
-        int horizontalRadius = settings.horizontalRadius();
-        int horizontalRadiusSquared = horizontalRadius * horizontalRadius;
-        int verticalRadius = settings.verticalRadius();
-        int requiredHeatBlocks = settings.minimumHeatBlocks();
-        int found = 0;
+    /**
+     * 当前区块的三维热源前缀表。构造时只读取当前区块一次，
+     * 后续每个候选方块的热源数量查询为 O(1)，避免大量硬化沙候选耗尽扫描预算。
+     */
+    private static final class VolatileHeatMap {
+        private static final int SIZE_X = 16;
+        private static final int SIZE_Z = 16;
 
-        for (int dx = -horizontalRadius; dx <= horizontalRadius; dx++) {
-            for (int dz = -horizontalRadius; dz <= horizontalRadius; dz++) {
-                if (dx * dx + dz * dz > horizontalRadiusSquared) {
-                    continue;
-                }
+        private final int sizeY;
+        private final int[] prefix;
+        private final int minY;
 
-                int x = candidate.getX() + dx;
-                int z = candidate.getZ() + dz;
-                if (x < context.chunkMinX() || x > context.chunkMaxX()
-                        || z < context.chunkMinZ() || z > context.chunkMaxZ()) {
-                    continue;
-                }
+        private VolatileHeatMap(int sizeY, int[] prefix, int minY) {
+            this.sizeY = sizeY;
+            this.prefix = prefix;
+            this.minY = minY;
+        }
 
-                for (int dy = -verticalRadius; dy <= verticalRadius; dy++) {
-                    int y = candidate.getY() + dy;
-                    if (y < context.minY() || y > context.maxY()) {
-                        continue;
-                    }
-                    if (!context.consumeCheck()) {
-                        return false;
-                    }
+        static VolatileHeatMap build(GeologyGenerationContext context, boolean includeMagmaBlocks) {
+            int sizeY = context.maxY() - context.minY() + 1;
+            int strideY = SIZE_Z + 1;
+            int strideX = (sizeY + 1) * strideY;
+            int[] prefix = new int[(SIZE_X + 1) * strideX];
+            BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
 
-                    probe.set(x, y, z);
-                    BlockState state = context.level().getBlockState(probe);
-                    if (state.getFluidState().is(FluidTags.LAVA)
-                            || (settings.includeMagmaBlocks() && state.is(Blocks.MAGMA_BLOCK))) {
-                        found++;
-                        if (found >= requiredHeatBlocks) {
-                            return true;
+            for (int y = 0; y < sizeY; y++) {
+                for (int x = 0; x < SIZE_X; x++) {
+                    for (int z = 0; z < SIZE_Z; z++) {
+                        if (!context.consumeCheck()) {
+                            return null;
+                        }
+
+                        cursor.set(context.chunkMinX() + x, context.minY() + y, context.chunkMinZ() + z);
+                        BlockState state = context.level().getBlockState(cursor);
+                        if (state.getFluidState().is(FluidTags.LAVA)
+                                || (includeMagmaBlocks && state.is(Blocks.MAGMA_BLOCK))) {
+                            prefix[index(x + 1, y + 1, z + 1, strideX, strideY)] = 1;
                         }
                     }
                 }
             }
+
+            for (int x = 1; x <= SIZE_X; x++) {
+                for (int y = 1; y <= sizeY; y++) {
+                    for (int z = 1; z <= SIZE_Z; z++) {
+                        int value = prefix[index(x, y, z, strideX, strideY)]
+                                + prefix[index(x - 1, y, z, strideX, strideY)]
+                                + prefix[index(x, y - 1, z, strideX, strideY)]
+                                + prefix[index(x, y, z - 1, strideX, strideY)]
+                                - prefix[index(x - 1, y - 1, z, strideX, strideY)]
+                                - prefix[index(x - 1, y, z - 1, strideX, strideY)]
+                                - prefix[index(x, y - 1, z - 1, strideX, strideY)]
+                                + prefix[index(x - 1, y - 1, z - 1, strideX, strideY)];
+                        prefix[index(x, y, z, strideX, strideY)] = value;
+                    }
+                }
+            }
+            return new VolatileHeatMap(sizeY, prefix, context.minY());
         }
-        return false;
+
+        boolean hasEnoughHeat(
+                GeologyGenerationContext context,
+                BlockPos candidate,
+                VolatileSandSettings settings) {
+            int minX = Math.max(context.chunkMinX(), candidate.getX() - settings.horizontalRadius());
+            int maxX = Math.min(context.chunkMaxX(), candidate.getX() + settings.horizontalRadius());
+            int minZ = Math.max(context.chunkMinZ(), candidate.getZ() - settings.horizontalRadius());
+            int maxZ = Math.min(context.chunkMaxZ(), candidate.getZ() + settings.horizontalRadius());
+            int minWorldY = Math.max(context.minY(), candidate.getY() - settings.verticalRadius());
+            int maxWorldY = Math.min(context.maxY(), candidate.getY() + settings.verticalRadius());
+
+            int x1 = minX - context.chunkMinX();
+            int x2 = maxX - context.chunkMinX();
+            int z1 = minZ - context.chunkMinZ();
+            int z2 = maxZ - context.chunkMinZ();
+            int y1 = minWorldY - minY;
+            int y2 = maxWorldY - minY;
+            int strideY = SIZE_Z + 1;
+            int strideX = (sizeY + 1) * strideY;
+
+            int count = boxSum(x2 + 1, y2 + 1, z2 + 1, strideX, strideY)
+                    - boxSum(x1, y2 + 1, z2 + 1, strideX, strideY)
+                    - boxSum(x2 + 1, y1, z2 + 1, strideX, strideY)
+                    - boxSum(x2 + 1, y2 + 1, z1, strideX, strideY)
+                    + boxSum(x1, y1, z2 + 1, strideX, strideY)
+                    + boxSum(x1, y2 + 1, z1, strideX, strideY)
+                    + boxSum(x2 + 1, y1, z1, strideX, strideY)
+                    - boxSum(x1, y1, z1, strideX, strideY);
+            return count >= settings.minimumHeatBlocks();
+        }
+
+        private int boxSum(int x, int y, int z, int strideX, int strideY) {
+            return prefix[index(x, y, z, strideX, strideY)];
+        }
+
+        private static int index(int x, int y, int z, int strideX, int strideY) {
+            return x * strideX + y * strideY + z;
+        }
     }
 }
