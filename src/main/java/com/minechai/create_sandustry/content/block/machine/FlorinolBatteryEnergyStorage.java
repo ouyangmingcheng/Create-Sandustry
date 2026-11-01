@@ -34,7 +34,7 @@ public class FlorinolBatteryEnergyStorage implements IEnergyStorage {
 
     @Override
     public boolean canExtract() {
-        return blockEntity.isAssembled() && blockEntity.getFlorinolCells() > 0;
+        return blockEntity.isAssembled() && blockEntity.getEnergyStored() > 0;
     }
 
     @Override

@@ -1,0 +1,17 @@
+{
+  "id": "healing",
+  "clue_sound": "createsandustry:music.healing_clue",
+  "solution_sound": "createsandustry:music.healing_solution",
+  "answer": [
+    59, 62, 59
+  ],
+  "input_timeout": 200,
+  "range": 16,
+  "audio_range": 16,
+  "reward": [
+    {
+      "item": "createsandustry:disc_fragment_healing",
+      "count": 1
+    }
+  ]
+}

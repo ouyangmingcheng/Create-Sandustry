@@ -13,8 +13,11 @@ import com.minechai.create_sandustry.content.block.LivingSandBlock;
 import com.minechai.create_sandustry.content.block.GoldenOakSaplingBlock;
 import com.minechai.create_sandustry.content.block.FlorinolSoilBlock;
 import com.minechai.create_sandustry.content.block.CatLitterBlock;
+import com.minechai.create_sandustry.content.block.GoldenDirtBlock;
+import com.minechai.create_sandustry.content.block.GoldenFarmlandBlock;
 import com.minechai.create_sandustry.CreateSandustry;
 import com.minechai.create_sandustry.content.block.crop.AmethystFlowerBlock;
+import com.minechai.create_sandustry.content.block.crop.GoldenCarrotCropBlock;
 import com.minechai.create_sandustry.content.block.machine.FlorinolBatteryBlock;
 import com.minechai.create_sandustry.content.block.machine.ThermalBufferBlock;
 import com.simibubi.create.AllBlocks;
@@ -146,6 +149,24 @@ public final class ModBlocks {
     public static final DeferredBlock<AmethystFlowerBlock> AMETHYST_FLOWER = BLOCKS.register(
             "amethyst_flower",
             () -> new AmethystFlowerBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.PLANT)
+                    .noCollission()
+                    .randomTicks()
+                    .instabreak()
+                    .sound(SoundType.CROP)
+                    .pushReaction(PushReaction.DESTROY)));
+
+    public static final DeferredBlock<GoldenDirtBlock> GOLDEN_DIRT = BLOCKS.register(
+            "golden_dirt",
+            () -> new GoldenDirtBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.DIRT).mapColor(MapColor.GOLD)));
+
+    public static final DeferredBlock<GoldenFarmlandBlock> GOLDEN_FARMLAND = BLOCKS.register(
+            "golden_farmland",
+            () -> new GoldenFarmlandBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.FARMLAND).mapColor(MapColor.GOLD).randomTicks()));
+
+    public static final DeferredBlock<GoldenCarrotCropBlock> GOLDEN_CARROT_CROP = BLOCKS.register(
+            "golden_carrot_crop",
+            () -> new GoldenCarrotCropBlock(BlockBehaviour.Properties.of()
                     .mapColor(MapColor.PLANT)
                     .noCollission()
                     .randomTicks()

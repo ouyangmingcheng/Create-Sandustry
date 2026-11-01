@@ -1,5 +1,7 @@
 package com.minechai.create_sandustry.network;
 
+import com.minechai.create_sandustry.content.client.event.MelodyPuzzleAudioClient;
+import com.minechai.create_sandustry.content.client.event.MelodyPuzzleClientState;
 import com.minechai.create_sandustry.content.client.event.SwordPullClient;
 import com.minechai.create_sandustry.content.item.SandMasterSwordEvents;
 import com.minechai.create_sandustry.content.sandheart.SandSwordPullManager;
@@ -14,7 +16,7 @@ public final class ModNetwork {
     }
 
     public static void register(RegisterPayloadHandlersEvent event) {
-        PayloadRegistrar registrar = event.registrar("3");
+        PayloadRegistrar registrar = event.registrar("5");
         registrar.playToServer(FireSandBeamPayload.TYPE, FireSandBeamPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(() -> {
                     if (context.player() instanceof ServerPlayer player) {
@@ -31,5 +33,9 @@ public final class ModNetwork {
                 (payload, context) -> context.enqueueWork(() -> SwordPullClient.handleState(payload)));
         registrar.playToClient(SwordPullHurtPayload.TYPE, SwordPullHurtPayload.STREAM_CODEC,
                 (payload, context) -> context.enqueueWork(SwordPullClient::handleHurt));
+        registrar.playToClient(MelodyPuzzleStatePayload.TYPE, MelodyPuzzleStatePayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> MelodyPuzzleClientState.handle(payload)));
+        registrar.playToClient(MelodyPuzzleAudioPayload.TYPE, MelodyPuzzleAudioPayload.STREAM_CODEC,
+                (payload, context) -> context.enqueueWork(() -> MelodyPuzzleAudioClient.handle(payload)));
     }
 }

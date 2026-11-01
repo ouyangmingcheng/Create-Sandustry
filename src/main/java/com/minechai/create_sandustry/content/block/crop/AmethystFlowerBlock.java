@@ -1,9 +1,12 @@
 package com.minechai.create_sandustry.content.block.crop;
 
+import com.minechai.create_sandustry.content.block.GoldenFarmlandBlock;
 import com.minechai.create_sandustry.registry.ModItems;
 
 import com.mojang.serialization.MapCodec;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.Level;
@@ -40,6 +43,12 @@ public class AmethystFlowerBlock extends CropBlock {
     @Override
     protected ItemLike getBaseSeedId() {
         return ModItems.AMETHYST_FLOWER_SEEDS.get();
+    }
+
+    /** 紫金花只能种植在黄金耕地上。 */
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        return state.getBlock() instanceof GoldenFarmlandBlock;
     }
 
     @Override

@@ -1,0 +1,8 @@
+{
+  "comparator_output": 7,
+  "description": {
+    "translate": "jukebox_song.createsandustry.birds_clue"
+  },
+  "length_in_seconds": 2.8571429,
+  "sound_event": "createsandustry:music.birds_clue"
+}

@@ -1,0 +1,21 @@
+{
+  "id": "opening",
+  "clue_sound": "createsandustry:music.opening_clue",
+  "solution_sound": "createsandustry:music.opening_solution",
+  "answer": [
+    69, 69, 69,
+    66, 64, 66,
+    69, 64, 61,
+    64, 66, 69,
+    68, 64, 66
+  ],
+  "input_timeout": 400,
+  "range": 16,
+  "audio_range": 16,
+  "reward": [
+    {
+      "item": "createsandustry:sand_sword",
+      "count": 1
+    }
+  ]
+}

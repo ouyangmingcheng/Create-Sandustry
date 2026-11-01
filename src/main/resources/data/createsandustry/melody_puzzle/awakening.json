@@ -1,0 +1,17 @@
+{
+  "id": "awakening",
+  "clue_sound": "createsandustry:music.awakening_clue",
+  "solution_sound": "createsandustry:music.awakening_solution",
+  "answer": [
+    64, 66
+  ],
+  "input_timeout": 200,
+  "range": 16,
+  "audio_range": 16,
+  "reward": [
+    {
+      "item": "createsandustry:disc_fragment_awakening",
+      "count": 1
+    }
+  ]
+}

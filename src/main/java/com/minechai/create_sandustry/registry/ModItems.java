@@ -4,6 +4,8 @@ import com.minechai.create_sandustry.content.item.ThermalBufferBlockItem;
 import com.minechai.create_sandustry.content.item.SandSwordItem;
 import com.minechai.create_sandustry.content.item.SandMasterSwordItem;
 import com.minechai.create_sandustry.content.item.SandBallItem;
+import com.minechai.create_sandustry.content.item.SandHeartItem;
+import com.minechai.create_sandustry.content.item.GoldenHeartItem;
 import com.minechai.create_sandustry.content.item.MysteriousLumpItem;
 import com.minechai.create_sandustry.content.item.MoonCrystalItem;
 import com.minechai.create_sandustry.content.item.ModTiers;
@@ -18,12 +20,14 @@ import java.util.Map;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.DiscFragmentItem;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemNameBlockItem;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -100,6 +104,16 @@ public final class ModItems {
                     .alwaysEdible()
                     .build())));
 
+    /** 沙之心：右键使用后立刻增加一颗完整沙心。 */
+    public static final DeferredItem<SandHeartItem> SAND_HEART = ITEMS.registerItem(
+            "sand_heart",
+            SandHeartItem::new);
+
+    /** 金之心：右键使用后获得一颗无持续时间的伤害吸收心。 */
+    public static final DeferredItem<GoldenHeartItem> GOLDEN_HEART = ITEMS.registerItem(
+            "golden_heart",
+            GoldenHeartItem::new);
+
     /** 火箭土豆：机械动力土豆加农炮的高速弹药。 */
     public static final DeferredItem<Item> POTATO_ROCKET = ITEMS.registerSimpleItem("potato_rocket");
 
@@ -119,6 +133,56 @@ public final class ModItems {
             "sand_sword",
             properties -> new SandSwordItem(ModTiers.SAND_SWORD, SandSwordItem.applyProperties(properties)));
 
+    /** Opening 谜题唱片：可放入原版唱片机，并由 MelodyPuzzleManager 接管谜题流程。 */
+    public static final DeferredItem<Item> MUSIC_DISC_OPENING = ITEMS.registerItem(
+            "music_disc_opening",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+                    .jukeboxPlayable(ModJukeboxSongs.OPENING_CLUE)
+                    .component(ModDataComponents.MELODY_PUZZLE_ID.get(), "opening")));
+
+    /** Song of Awakening 谜题唱片。 */
+    public static final DeferredItem<Item> MUSIC_DISC_AWAKENING = ITEMS.registerItem(
+            "music_disc_awakening",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+                    .jukeboxPlayable(ModJukeboxSongs.AWAKENING_CLUE)
+                    .component(ModDataComponents.MELODY_PUZZLE_ID.get(), "awakening")));
+
+    /** 唱片残片：所有曲目共用 disc_fragment 纹理，通过描述区分曲名。 */
+    public static final DeferredItem<DiscFragmentItem> DISC_FRAGMENT_AWAKENING = ITEMS.registerItem(
+            "disc_fragment_awakening",
+            DiscFragmentItem::new);
+
+    /** Song of Healing 谜题唱片。 */
+    public static final DeferredItem<Item> MUSIC_DISC_HEALING = ITEMS.registerItem(
+            "music_disc_healing",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+                    .jukeboxPlayable(ModJukeboxSongs.HEALING_CLUE)
+                    .component(ModDataComponents.MELODY_PUZZLE_ID.get(), "healing")));
+
+    /** Song of Healing 唱片残片。 */
+    public static final DeferredItem<DiscFragmentItem> DISC_FRAGMENT_HEALING = ITEMS.registerItem(
+            "disc_fragment_healing",
+            DiscFragmentItem::new);
+
+    /** Song of Birds 谜题唱片。 */
+    public static final DeferredItem<Item> MUSIC_DISC_BIRDS = ITEMS.registerItem(
+            "music_disc_birds",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+                    .jukeboxPlayable(ModJukeboxSongs.BIRDS_CLUE)
+                    .component(ModDataComponents.MELODY_PUZZLE_ID.get(), "birds")));
+
+    /** Song of Birds 唱片残片。 */
+    public static final DeferredItem<DiscFragmentItem> DISC_FRAGMENT_BIRDS = ITEMS.registerItem(
+            "disc_fragment_birds",
+            DiscFragmentItem::new);
     /** 沙金剑（破损形态）：不能作为武器，只能与沙团无序合成恢复耐久。 */
     public static final DeferredItem<BrokenSandSwordItem> SAND_SWORD_BROKEN = ITEMS.registerItem(
             "sand_sword_broken",
@@ -149,6 +213,13 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> AMETHYST_FLOWER = ITEMS.registerSimpleBlockItem(
             "amethyst_flower",
             ModBlocks.AMETHYST_FLOWER);
+
+    public static final DeferredItem<BlockItem> GOLDEN_DIRT = ITEMS.registerSimpleBlockItem(
+            "golden_dirt",
+            ModBlocks.GOLDEN_DIRT);
+    public static final DeferredItem<BlockItem> GOLDEN_FARMLAND = ITEMS.registerSimpleBlockItem(
+            "golden_farmland",
+            ModBlocks.GOLDEN_FARMLAND);
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

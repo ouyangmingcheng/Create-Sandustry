@@ -202,6 +202,11 @@ dependencies {
     compileOnly "maven.modrinth:create-connected:${create_connected_version}"
     localRuntime "maven.modrinth:create-connected:${create_connected_version}"
 
+    // Create Stuff 'N Additions 2.1.4.b for NeoForge 1.21.1.
+    // compileOnly exposes its optional API; localRuntime is development-only.
+    compileOnly "maven.modrinth:create-stuff-additions:${create_stuff_additions_version}"
+    localRuntime "maven.modrinth:create-stuff-additions:${create_stuff_additions_version}"
+
     compileOnly "maven.modrinth:nvQzSEkH:eYz2YBGT" // Jade 15.10.6 (NeoForge 1.21.1)
     localRuntime "maven.modrinth:nvQzSEkH:eYz2YBGT"
 
@@ -209,6 +214,15 @@ dependencies {
     // is available in runClient without becoming a runtime dependency of this mod.
     localRuntime "maven.modrinth:the-ponderer:${ponderer_version}"
 
+    // Botany Pots development runtime. Its optional integration is data-driven, so the
+    // main API and required Bookshelf/Prickle dependencies are exposed at compile time
+    // but are never bundled into the published mod.
+    compileOnly files("libs/botanypots-neoforge-${minecraft_version}-${botanypots_version}.jar")
+    compileOnly files("libs/bookshelf-neoforge-${minecraft_version}-${bookshelf_version}.jar")
+    compileOnly files("libs/prickle-neoforge-${minecraft_version}-${prickle_version}.jar")
+    localRuntime files("libs/botanypots-neoforge-${minecraft_version}-${botanypots_version}.jar")
+    localRuntime files("libs/bookshelf-neoforge-${minecraft_version}-${bookshelf_version}.jar")
+    localRuntime files("libs/prickle-neoforge-${minecraft_version}-${prickle_version}.jar")
     // Farmer's Delight 1.21.1 NeoForge development runtime.
     localRuntime "maven.modrinth:farmers-delight:1.21.1-1.2.8"
 

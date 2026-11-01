@@ -1,8 +1,14 @@
 package com.minechai.create_sandustry.content.sandheart;
 
+import com.minechai.create_sandustry.registry.ModItems;
+import com.minechai.create_sandustry.registry.ModMobEffects;
+
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.entity.living.LivingUseTotemEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 /** 沙心与永久生命上限惩罚相关的登录、重生和实体载入事件。 */
@@ -35,6 +41,36 @@ public final class SandHeartEvents {
         }
         if (SandHeartManager.getUnits(entity) > 0) {
             SandHeartManager.refresh(entity);
+        }
+    }
+
+    /**
+     * 玩家在“沙化之兆”期间被不死图腾救下时，将当前沙心转化为等量沙之心掉落。
+     *
+     * <p>沙心内部按半颗心计数；掉落数量按 HUD 显示的完整/半颗沙心向上取整。
+     * 掉落前会清空玩家的沙心，既让沙化之兆立即安全解除，也保证同一次状态最多结算一次，
+     * 不会因继续持有不死图腾而重复复制沙之心。</p>
+     */
+    public static void onTotemUsed(LivingUseTotemEvent event) {
+        if (event.isCanceled() || !(event.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+        if (!player.hasEffect(ModMobEffects.SAND_HARDCORE)) {
+            return;
+        }
+
+        int units = SandHeartManager.getUnits(player);
+        if (units <= 0) {
+            return;
+        }
+
+        int hearts = Mth.ceil(units / (double) SandHeartManager.UNITS_PER_HEART);
+        SandHeartManager.setUnits(player, 0);
+
+        int maxStackSize = new ItemStack(ModItems.SAND_HEART.get()).getMaxStackSize();
+        for (int remaining = hearts; remaining > 0; remaining -= maxStackSize) {
+            int count = Math.min(remaining, maxStackSize);
+            player.drop(new ItemStack(ModItems.SAND_HEART.get(), count), false);
         }
     }
 

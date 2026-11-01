@@ -1,0 +1,17 @@
+{
+  "id": "birds",
+  "clue_sound": "createsandustry:music.birds_clue",
+  "solution_sound": "createsandustry:music.birds_solution",
+  "answer": [
+    69, 68, 69
+  ],
+  "input_timeout": 200,
+  "range": 16,
+  "audio_range": 16,
+  "reward": [
+    {
+      "item": "createsandustry:disc_fragment_birds",
+      "count": 1
+    }
+  ]
+}

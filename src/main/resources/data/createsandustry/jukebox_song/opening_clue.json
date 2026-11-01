@@ -1,0 +1,8 @@
+{
+  "comparator_output": 1,
+  "description": {
+    "translate": "jukebox_song.createsandustry.opening_clue"
+  },
+  "length_in_seconds": 7.1873469,
+  "sound_event": "createsandustry:music.opening_clue"
+}

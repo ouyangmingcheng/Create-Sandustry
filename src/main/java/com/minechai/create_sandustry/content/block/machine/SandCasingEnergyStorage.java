@@ -48,7 +48,7 @@ public class SandCasingEnergyStorage implements IEnergyStorage {
     @Override
     public boolean canExtract() {
         FlorinolBatteryBlockEntity be = controller();
-        return be != null && be.isAssembled() && be.getFlorinolCells() > 0;
+        return be != null && be.isAssembled() && be.getEnergyStored() > 0;
     }
 
     @Override public boolean canReceive() { return false; }

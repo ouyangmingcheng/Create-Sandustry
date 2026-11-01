@@ -21,6 +21,9 @@
     "LivingEntitySwingMixin",
     "ThrownTridentMixin",
     "ClockworkBearingTimeMixin",
+    "SteamWhistleBlockMixin",
+    "JukeboxBlockEntityPuzzleMixin",
+    "ServerLevelJukeboxAudioMixin",
     "KineticStressAccessor",
     "ServerLevelTimeLockMixin",
     "LevelDaytimeMixin"

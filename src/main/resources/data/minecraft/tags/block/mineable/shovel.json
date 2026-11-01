@@ -24,6 +24,8 @@
     "createsandustry:petrified_sand_lapis_ore",
     "createsandustry:petrified_sand_diamond_ore",
     "createsandustry:petrified_sand_emerald_ore",
-    "createsandustry:petrified_sand_zinc_ore"
+    "createsandustry:petrified_sand_zinc_ore",
+    "createsandustry:golden_dirt",
+    "createsandustry:golden_farmland"
   ]
 }

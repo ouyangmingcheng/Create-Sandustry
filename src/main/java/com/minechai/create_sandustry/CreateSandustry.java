@@ -1,6 +1,7 @@
 package com.minechai.create_sandustry;
 
 import com.minechai.create_sandustry.registry.ModRecipeTypes;
+import com.minechai.create_sandustry.registry.ModSounds;
 import com.minechai.create_sandustry.registry.ModCreativeTabs;
 import com.minechai.create_sandustry.registry.ModItems;
 import com.minechai.create_sandustry.registry.ModFluids;
@@ -36,6 +37,10 @@ import com.minechai.create_sandustry.config.ModConfigs;
 import com.minechai.create_sandustry.content.timebearing.TimeBearingEvents;
 import com.minechai.create_sandustry.content.conversion.FlorinolSoilEvents;
 import com.minechai.create_sandustry.content.conversion.MoonCrystalDepotEvents;
+import com.minechai.create_sandustry.content.compat.createstuffadditions.BrassArmorFlorinolCompat;
+import com.minechai.create_sandustry.content.compat.createstuffadditions.CreateStuffAdditionsDiggingCompat;
+import com.minechai.create_sandustry.content.compat.createstuffadditions.PortableDrillFlorinolCompat;
+import com.minechai.create_sandustry.content.event.FlorinolToolBindingEvents;
 import com.minechai.create_sandustry.content.compat.create.CreateHeatCompat;
 import com.minechai.create_sandustry.content.compat.create.RocketPotatoIntegration;
 import com.minechai.create_sandustry.content.compat.create.SandSwordDeployerEvents;
@@ -48,6 +53,8 @@ import com.minechai.create_sandustry.registry.ModEntityTypes;
 import com.minechai.create_sandustry.content.entity.QunyouEvents;
 import com.minechai.create_sandustry.content.event.GoldenSelectionEvents;
 import com.minechai.create_sandustry.content.event.SandMasterSwordPedestalEvents;
+import com.minechai.create_sandustry.content.melody.MelodyPuzzleManager;
+import com.minechai.create_sandustry.content.steamwhistle.SteamWhistlePerformanceProbe;
 import com.minechai.create_sandustry.registry.ModFluids;
 import com.minechai.create_sandustry.content.compat.create.HardenedSandSandpaperInteraction;
 import com.minechai.create_sandustry.registry.ModCreativeTabs;
@@ -57,6 +64,7 @@ import com.minechai.create_sandustry.content.item.SandSwordEvents;
 import com.minechai.create_sandustry.network.ModNetwork;
 import com.minechai.create_sandustry.content.ponder.CreateSandustryPonderPlugin;
 import com.minechai.create_sandustry.registry.ModRecipeTypes;
+import com.minechai.create_sandustry.registry.ModSounds;
 import com.minechai.create_sandustry.registry.ModAttachments;
 import com.minechai.create_sandustry.registry.ModCapabilities;
 import com.minechai.create_sandustry.registry.ModDataComponents;
@@ -125,6 +133,7 @@ public class CreateSandustry {
         modEventBus.addListener(CatLitterBlock::addBlockEntityType);
         ModEntityTypes.register(modEventBus);
         ModItems.register(modEventBus);
+        ModSounds.register(modEventBus);
         ModRecipeTypes.register(modEventBus);
         ModCreativeTabs.register(modEventBus);
 
@@ -149,6 +158,15 @@ public class CreateSandustry {
         NeoForge.EVENT_BUS.addListener(LivingSandEvents::onLivingDrown);
         NeoForge.EVENT_BUS.addListener(SpecialSandEffects::onExplosionDetonate);
         NeoForge.EVENT_BUS.addListener(RocketPotatoIntegration::onProjectileTick);
+        // Create: Stuff 'N Additions Digging 附魔兼容铲子可挖掘方块。
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, PortableDrillFlorinolCompat::onBlockBreak);
+        NeoForge.EVENT_BUS.addListener(CreateStuffAdditionsDiggingCompat::onBlockBreak);
+        // 弗洛林电池工具绑定：右键总控绑定，Shift+右键解绑，Tooltip 显示绑定信息。
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, FlorinolToolBindingEvents::onRightClickBlock);
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, FlorinolToolBindingEvents::onRightClickItem);
+        NeoForge.EVENT_BUS.addListener(FlorinolToolBindingEvents::onItemTooltip);
+        NeoForge.EVENT_BUS.addListener(FlorinolToolBindingEvents::onPlayerTick);
+        NeoForge.EVENT_BUS.addListener(BrassArmorFlorinolCompat::onCriticalHit);
         // 沙金剑 + 沙团：机械手装配时按实际耐久生成动态修复结果。
         NeoForge.EVENT_BUS.addListener(SandSwordDeployerEvents::onRecipeSearch);
 
@@ -174,6 +192,8 @@ public class CreateSandustry {
         NeoForge.EVENT_BUS.addListener(MoonWorshipEvents::onEntityInteract);
         NeoForge.EVENT_BUS.addListener(SandHeartEvents::onPlayerLoggedIn);
         NeoForge.EVENT_BUS.addListener(SandHeartEvents::onPlayerClone);
+        // 沙化之兆期间被不死图腾救下：将沙心转化为沙之心掉落，并立即清空沙心。
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, SandHeartEvents::onTotemUsed);
         // 沙心：生物进入世界（含区块重载）后重施一次临时属性修饰符。
         NeoForge.EVENT_BUS.addListener(SandHeartEvents::onEntityJoinLevel);
         // 沙噬剑：破损形态的服务端自动修复计时（每 10 秒自动恢复 1 点耐久，不需要材料）。
@@ -189,12 +209,20 @@ public class CreateSandustry {
         NeoForge.EVENT_BUS.addListener(SandSwordPullManager::onServerStopped);
         // 群友：受到攻击时打断睡眠/胡萝卜召唤，并在伤害结算前处理原有闪避。
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, QunyouEvents::onIncomingDamage);
+        // 技术验证：捕获服务端蒸汽笛上升沿；后续谜题系统应监听 SteamWhistlePerformanceEvent。
+        NeoForge.EVENT_BUS.addListener(SteamWhistlePerformanceProbe::onPerformance);
+        NeoForge.EVENT_BUS.addListener(MelodyPuzzleManager::onPerformance);
+        NeoForge.EVENT_BUS.addListener(MelodyPuzzleManager::onAddReloadListener);
+        NeoForge.EVENT_BUS.addListener(MelodyPuzzleManager::onServerTick);
+        NeoForge.EVENT_BUS.addListener(MelodyPuzzleManager::onChunkUnload);
+        NeoForge.EVENT_BUS.addListener(MelodyPuzzleManager::onServerStopped);
 
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
         ModBlocks.registerEncasingVariants(event);
         event.enqueueWork(CreateHeatCompat::registerBoilerHeater);
+        event.enqueueWork(BrassArmorFlorinolCompat::registerTools);
         LOGGER.info("Create Sandustry common setup complete");
     }
 

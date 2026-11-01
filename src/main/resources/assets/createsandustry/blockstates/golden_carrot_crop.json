@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "age=0": { "model": "createsandustry:block/golden_carrot_stage0" },
+    "age=1": { "model": "createsandustry:block/golden_carrot_stage1" },
+    "age=2": { "model": "createsandustry:block/golden_carrot_stage2" },
+    "age=3": { "model": "createsandustry:block/golden_carrot_stage3" }
+  }
+}

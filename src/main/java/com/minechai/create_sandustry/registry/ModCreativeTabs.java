@@ -40,12 +40,21 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.LIVING_SAND.get());
                         output.accept(ModItems.QUNYOU_SPAWN_EGG.get());
                         output.accept(ModItems.SAND_BALL.get());
+                        output.accept(ModItems.SAND_HEART.get());
+                        output.accept(ModItems.GOLDEN_HEART.get());
                         output.accept(ModItems.POTATO_ROCKET.get());
                         output.accept(ModItems.SAND_SOUL.get());
                         output.accept(ModItems.SAND_MASTER_SWORD.get());
                         // 直接给“刚断裂”的那一份（耐久 0），避免创造栏里出现正好处于修复完成状态的破损剑。
                         output.accept(SandMasterSwordForms.createBrokenInstance());
                         output.accept(ModItems.SAND_SWORD.get());
+                        output.accept(ModItems.MUSIC_DISC_OPENING.get());
+                        output.accept(ModItems.MUSIC_DISC_AWAKENING.get());
+                        output.accept(ModItems.DISC_FRAGMENT_AWAKENING.get());
+                        output.accept(ModItems.MUSIC_DISC_HEALING.get());
+                        output.accept(ModItems.DISC_FRAGMENT_HEALING.get());
+                        output.accept(ModItems.MUSIC_DISC_BIRDS.get());
+                        output.accept(ModItems.DISC_FRAGMENT_BIRDS.get());
                         output.accept(SandSwordForms.createBrokenInstance());
                         output.accept(ModItems.RESIDUE.get());
                         output.accept(ModItems.MYSTERIOUS_LUMP.get());
@@ -54,6 +63,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.FLORINOL_BATTERY.get());
                         output.accept(ModItems.FLORINOL_SOIL.get());
                         output.accept(ModItems.THERMAL_RELAY.get());
+                        output.accept(ModItems.GOLDEN_DIRT.get());
+                        output.accept(ModItems.GOLDEN_FARMLAND.get());
                         output.accept(ModItems.AMETHYST_FLOWER_SEEDS.get());
                         output.accept(ModItems.DORMANT_SEEDS.get());
                         output.accept(ModItems.AMETHYST_PETAL.get());

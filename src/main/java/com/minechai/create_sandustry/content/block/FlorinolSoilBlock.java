@@ -2,6 +2,8 @@ package com.minechai.create_sandustry.content.block;
 
 import java.util.Optional;
 
+import com.minechai.create_sandustry.content.block.entity.ThermalBufferBlockEntity;
+import com.minechai.create_sandustry.content.block.machine.ThermalBufferBlock;
 import com.minechai.create_sandustry.content.conversion.FlorinolSoilConversionManager;
 import com.minechai.create_sandustry.registry.ModTags;
 import com.mojang.serialization.MapCodec;
@@ -50,7 +52,18 @@ public class FlorinolSoilBlock extends Block {
 
     public static boolean hasAdjacentHeatSource(ServerLevel level, BlockPos pos) {
         for (Direction direction : Direction.values()) {
-            if (isHeatSource(level.getBlockState(pos.relative(direction)))) {
+            BlockPos neighborPos = pos.relative(direction);
+            BlockState neighborState = level.getBlockState(neighborPos);
+            if (neighborState.getBlock() instanceof ThermalBufferBlock) {
+                // 热能缓冲器使用 BlockEntity 中的真实热等级，并尊重红石封闭状态。
+                if (level.getBlockEntity(neighborPos) instanceof ThermalBufferBlockEntity buffer
+                        && !neighborState.getValue(ThermalBufferBlock.POWERED)
+                        && buffer.getThermalLevel() >= 1) {
+                    return true;
+                }
+                continue;
+            }
+            if (isHeatSource(neighborState)) {
                 return true;
             }
         }
@@ -58,6 +71,12 @@ public class FlorinolSoilBlock extends Block {
     }
 
     public static boolean isHeatSource(BlockState state) {
+        if (state.getBlock() instanceof ThermalBufferBlock) {
+            // 红石封闭时即使方块状态里的 HEAT_LEVEL 是旧值也不供热。
+            return !state.getValue(ThermalBufferBlock.POWERED)
+                    && state.getValue(ThermalBufferBlock.HEAT_LEVEL)
+                            .isAtLeast(BlazeBurnerBlock.HeatLevel.SMOULDERING);
+        }
         if (state.hasProperty(BlazeBurnerBlock.HEAT_LEVEL)) {
             return state.getValue(BlazeBurnerBlock.HEAT_LEVEL)
                     .isAtLeast(BlazeBurnerBlock.HeatLevel.SMOULDERING);

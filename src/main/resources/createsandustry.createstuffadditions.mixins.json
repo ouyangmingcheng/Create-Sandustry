@@ -1,0 +1,20 @@
+{
+  "required": false,
+  "package": "com.minechai.create_sandustry.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "createstuffadditions.PortableDrillBlockDestroyedMixin",
+    "createstuffadditions.PortableDrillToolTickMixin",
+    "createstuffadditions.BrassJetpackFlorinolMixin",
+    "createstuffadditions.BrassExoskeletonFlorinolMixin"
+  ],
+  "client": [
+    "createstuffadditions.PortableDrillEnergyBarMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

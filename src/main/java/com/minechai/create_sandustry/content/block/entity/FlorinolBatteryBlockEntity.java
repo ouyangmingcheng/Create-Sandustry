@@ -7,10 +7,12 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 import com.minechai.create_sandustry.registry.ModBlocks;
 import com.minechai.create_sandustry.content.block.machine.FlorinolBatteryBlock;
+import com.minechai.create_sandustry.content.block.machine.ThermalBufferBlock;
 import com.minechai.create_sandustry.config.ModConfigs;
 import com.minechai.create_sandustry.registry.ModFluids;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
@@ -59,6 +61,8 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
     private int soilCells;          // 当前弗洛林土壤格数
     private int scanCooldown;
     private boolean needsValidation;
+    private UUID batteryId = UUID.randomUUID();
+    private int residualFe;
 
     public FlorinolBatteryBlockEntity(BlockPos pos, BlockState state) {
         this(ModBlockEntities.FLORINOL_BATTERY.get(), pos, state);
@@ -120,8 +124,17 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
         return interiorCapacity;
     }
 
+    public UUID getBatteryId() {
+        return batteryId;
+    }
+
+    /** 不足一整格、暂时留存在总控中的 FE。 */
+    public int getResidualFe() {
+        return residualFe;
+    }
+
     public int getEnergyStored() {
-        return florinolCells * fePerCell();
+        return florinolCells * fePerCell() + residualFe;
     }
 
     public int getMaxEnergyStored() {
@@ -141,16 +154,16 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
             return FlorinolBatteryBlock.DisplayState.EMPTY;
         if (soilCells >= interiorCapacity)
             return FlorinolBatteryBlock.DisplayState.SOIL;
-        if (florinolCells <= 0)
+        long stored = getEnergyStored();
+        if (stored <= 0)
             return FlorinolBatteryBlock.DisplayState.EMPTY;
 
-        long cells = florinolCells;
-        long capacity = interiorCapacity;
+        long capacity = getMaxEnergyStored();
         // 按“当前处于第几个三分之一”显示：
         // (0, 1/3] -> ONE_THIRD，(1/3, 2/3] -> TWO_THIRDS，(2/3, 1] -> FULL。
-        if (cells * 3 <= capacity)
+        if (stored * 3 <= capacity)
             return FlorinolBatteryBlock.DisplayState.ONE_THIRD;
-        if (cells * 3 <= capacity * 2)
+        if (stored * 3 <= capacity * 2)
             return FlorinolBatteryBlock.DisplayState.TWO_THIRDS;
         return FlorinolBatteryBlock.DisplayState.FULL;
     }
@@ -293,6 +306,47 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
         return result;
     }
 
+    /**
+     * 精确提取任意数量 FE，供工具按每次工作消耗。
+     *
+     * <p>若请求不是整格电量，会先把足够多的弗洛林液格转为土壤，
+     * 再把本次没有用完的 FE 留在 {@link #residualFe} 中，供后续操作继续使用。
+     */
+    public int extractEnergyPrecise(int maxExtract, boolean simulate) {
+        if (!assembled || !(level instanceof ServerLevel sl) || maxExtract <= 0)
+            return 0;
+        int available = getEnergyStored();
+        int extracted = Math.min(maxExtract, available);
+        if (extracted <= 0)
+            return 0;
+        if (simulate)
+            return extracted;
+
+        int fePer = fePerCell();
+        int remainingEnergy = available - extracted;
+        int targetCells = Math.min(florinolCells, remainingEnergy / fePer);
+        int cellsToConvert = Math.max(0, florinolCells - targetCells);
+        int remaining = cellsToConvert;
+        for (int y = minCorner.getY() + 1; y <= maxCorner.getY() && remaining > 0; y++)
+            for (int x = minCorner.getX() + 1; x < maxCorner.getX() && remaining > 0; x++)
+                for (int z = minCorner.getZ() + 1; z < maxCorner.getZ() && remaining > 0; z++) {
+                    BlockPos c = new BlockPos(x, y, z);
+                    if (sl.getFluidState(c).getType() == ModFluids.FLORINOL.get()) {
+                        sl.setBlock(c, ModBlocks.FLORINOL_SOIL.get().defaultBlockState(), Block.UPDATE_CLIENTS);
+                        remaining--;
+                    }
+                }
+
+        residualFe = Math.max(0, remainingEnergy - targetCells * fePer);
+        setChanged();
+        if (cellsToConvert > 0) {
+            refresh();
+        } else {
+            sendData();
+        }
+        return extracted;
+    }
+
     /** 每次「液 ↔ 土」转化后进行更新。 */
     private void refresh() {
         validate();
@@ -398,8 +452,10 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
         // 维护 ACTIVE
         if (assembled)
             ACTIVE.add(this);
-        else
+        else {
             ACTIVE.remove(this);
+            residualFe = 0;
+        }
 
         // 仅在状态变化时同步：sendData 通知客户端（Jade/护目镜），invalidateCapabilities 刷新能力缓存
         boolean changed = assembled != wasAssembled
@@ -433,9 +489,12 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
 
     /** 填充壁：框架玻璃 + 岩浆块 + 热能缓冲器。 */
     private static boolean isFillerWall(BlockState s) {
+        // 热能缓冲器的所有热值和红石状态都是合法填充壁；
+        // 具体是否供热由 FlorinolSoilBlock 的相邻热源判定负责。
+        if (s.getBlock() instanceof ThermalBufferBlock)
+            return true;
         return s.is(AllPaletteBlocks.FRAMED_GLASS.get())
-                || s.is(Blocks.MAGMA_BLOCK)
-                || s.is(ModBlocks.THERMAL_RELAY.get());
+                || s.is(Blocks.MAGMA_BLOCK);
     }
 
     private static boolean isController(BlockState s) {
@@ -455,6 +514,8 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
         tag.putInt("FlorinolCells", florinolCells);
         tag.putInt("SoilCells", soilCells);
         tag.putInt("InteriorCapacity", interiorCapacity);
+        tag.putUUID("BatteryId", batteryId);
+        tag.putInt("ResidualFe", residualFe);
         if (minCorner != null)
             tag.putLong("MinCorner", minCorner.asLong());
         if (maxCorner != null)
@@ -468,6 +529,9 @@ public class FlorinolBatteryBlockEntity extends SmartBlockEntity implements IHav
         florinolCells = tag.getInt("FlorinolCells");
         soilCells = tag.getInt("SoilCells");
         interiorCapacity = tag.getInt("InteriorCapacity");
+        if (tag.hasUUID("BatteryId"))
+            batteryId = tag.getUUID("BatteryId");
+        residualFe = Math.max(0, tag.getInt("ResidualFe"));
         if (tag.contains("MinCorner"))
             minCorner = BlockPos.of(tag.getLong("MinCorner"));
         if (tag.contains("MaxCorner"))

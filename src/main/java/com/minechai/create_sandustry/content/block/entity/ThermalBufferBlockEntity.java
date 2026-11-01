@@ -212,23 +212,28 @@ public class ThermalBufferBlockEntity extends SmartBlockEntity implements IHaveG
 
     private boolean updateThermalLevel(boolean force) {
         int nextLevel = applyHysteresis(this.storedHeat, this.thermalLevel);
-        if (!force && nextLevel == this.thermalLevel) {
+        boolean levelChanged = nextLevel != this.thermalLevel;
+
+        if (!force && !levelChanged && (this.level == null || this.level.isClientSide)) {
             return false;
         }
 
         this.thermalLevel = nextLevel;
         if (this.level == null || this.level.isClientSide) {
-            return true;
+            return levelChanged;
         }
 
+        // 即使热等级没有变化，也要校正方块状态中的 blaze 值，
+        // 避免区块重载或红石状态变化后留下旧的 HEAT_LEVEL。
         HeatLevel exposedLevel = this.isSealed() ? HeatLevel.NONE : toHeatLevel(nextLevel);
         BlockState state = this.getBlockState();
         if (state.getValue(ThermalBufferBlock.HEAT_LEVEL) != exposedLevel) {
             this.level.setBlockAndUpdate(this.worldPosition,
                     state.setValue(ThermalBufferBlock.HEAT_LEVEL, exposedLevel));
             this.notifyUpdate();
+            return true;
         }
-        return true;
+        return levelChanged;
     }
 
     private static HeatLevel toHeatLevel(int level) {
