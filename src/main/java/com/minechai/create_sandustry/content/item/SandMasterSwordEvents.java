@@ -132,10 +132,14 @@ public final class SandMasterSwordEvents {
         int ticks = player.getData(ModAttachments.SAND_MASTER_SWORD_REPAIR_TICKS) + 1;
         if (ticks < REPAIR_INTERVAL_TICKS) {
             player.setData(ModAttachments.SAND_MASTER_SWORD_REPAIR_TICKS, ticks);
+            if (ticks % 20 == 0) {
+                player.setData(ModAttachments.SAND_MASTER_SWORD_REPAIR_DISPLAY_TICKS, ticks);
+            }
             return;
         }
         // 到点：无论这次是否成功修复都重新计时，10 秒后再试一次。
         player.setData(ModAttachments.SAND_MASTER_SWORD_REPAIR_TICKS, 0);
+        player.setData(ModAttachments.SAND_MASTER_SWORD_REPAIR_DISPLAY_TICKS, 0);
         tryRepairOnce(player);
     }
 

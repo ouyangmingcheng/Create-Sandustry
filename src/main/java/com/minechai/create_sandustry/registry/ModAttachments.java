@@ -51,6 +51,12 @@ public final class ModAttachments {
                     .serialize(Codec.INT)
                     .build());
 
+    /** Tooltip-only snapshot of the repair cycle, synchronized once per second. */
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<Integer>> SAND_MASTER_SWORD_REPAIR_DISPLAY_TICKS =
+            ATTACHMENT_TYPES.register("sand_master_sword_repair_display_ticks", () -> AttachmentType.<Integer>builder(() -> 0)
+                    .sync(ByteBufCodecs.VAR_INT)
+                    .build());
+
     /** 月亮崇拜期间完成的有效跳跃次数。 */
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<Integer>> MOON_WORSHIP_JUMPS =
             ATTACHMENT_TYPES.register("moon_worship_jumps", () -> AttachmentType.<Integer>builder(() -> 0)

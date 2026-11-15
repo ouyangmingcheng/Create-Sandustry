@@ -38,6 +38,7 @@
     "LevelDaytimeMixin"
   ],
   "client": [
+    "CreativeModeInventoryScreenMixin",
     "PonderExperienceLightingMixin",
     "SequencedAssemblyGravityJeiMixin",
     "ItemRendererMixin",

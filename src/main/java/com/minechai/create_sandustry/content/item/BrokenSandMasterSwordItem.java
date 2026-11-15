@@ -1,15 +1,10 @@
 package com.minechai.create_sandustry.content.item;
 
-import java.util.List;
-
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
 /**
@@ -61,10 +56,4 @@ public class BrokenSandMasterSwordItem extends Item {
         return false;
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
-                                TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.translatable("item.createsandustry.sand_master_sword_broken.tooltip")
-                .withStyle(ChatFormatting.GRAY));
-    }
 }

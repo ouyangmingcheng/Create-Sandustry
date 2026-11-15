@@ -1,15 +1,11 @@
 package com.minechai.create_sandustry.content.item;
 
-import java.util.List;
 
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.TooltipFlag;
 
 /**
  * 沙噬剑（完整形态）。
@@ -78,10 +74,4 @@ public class SandMasterSwordItem extends SwordItem {
         BreakableSwordDurability.hurtAndBreakOrBreak(stack, attacker, () -> SandMasterSwordForms.toBroken(stack));
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
-                                TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.translatable("item.createsandustry.sand_master_sword.tooltip")
-                .withStyle(ChatFormatting.GRAY));
-    }
 }

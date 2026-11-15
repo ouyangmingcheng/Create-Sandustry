@@ -166,6 +166,9 @@ configurations {
 }
 
 dependencies {
+    // Create: Biotech 1.3.1, NeoForge 1.21.1; development runtime only.
+    localRuntime "maven.modrinth:UW0IjVT0:Y7ktTdpL"
+
 
 
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
