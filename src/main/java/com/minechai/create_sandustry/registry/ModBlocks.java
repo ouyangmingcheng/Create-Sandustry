@@ -49,6 +49,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(CreateSandustry.MODID);
+public static final DeferredBlock<com.simibubi.create.content.materials.ExperienceBlock> GOLDEN_EXPERIENCE_BLOCK = BLOCKS.register("golden_experience_block", () -> new com.simibubi.create.content.materials.ExperienceBlock(BlockBehaviour.Properties.ofFullCopy(AllBlocks.EXPERIENCE_BLOCK.get())));
 
     /** 沙金机壳：正式 Create 机壳，连接纹理与套壳行为由 Create 原生系统驱动。 */
     public static final DeferredBlock<CasingBlock> SAND_CASING = BLOCKS.register(

@@ -38,6 +38,7 @@
     "LevelDaytimeMixin"
   ],
   "client": [
+    "PonderExperienceLightingMixin",
     "SequencedAssemblyGravityJeiMixin",
     "ItemRendererMixin",
     "LocalPlayerDropMixin",

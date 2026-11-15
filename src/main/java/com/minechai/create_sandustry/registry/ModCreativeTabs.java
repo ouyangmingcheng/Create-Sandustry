@@ -67,6 +67,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.KINETIC_PRESS.get());
                         output.accept(ModItems.FLORINOL_SOIL.get());
                         output.accept(ModItems.THERMAL_RELAY.get());
+                        output.accept(ModItems.GOLDEN_EXPERIENCE_BLOCK.get());
+                        output.accept(ModItems.GOLDEN_EXPERIENCE_NUGGET.get());
                         output.accept(ModItems.GOLDEN_DIRT.get());
                         output.accept(ModItems.GOLDEN_FARMLAND.get());
                         output.accept(ModItems.AMETHYST_FLOWER_SEEDS.get());

@@ -37,6 +37,13 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ModItems {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(CreateSandustry.MODID);
+public static final DeferredItem<BlockItem> GOLDEN_EXPERIENCE_BLOCK = ITEMS.registerItem("golden_experience_block", properties -> new BlockItem(ModBlocks.GOLDEN_EXPERIENCE_BLOCK.get(), properties) {
+        @Override
+        public net.minecraft.network.chat.Component getName(net.minecraft.world.item.ItemStack stack) {
+            return super.getName(stack).copy().withStyle(net.minecraft.ChatFormatting.GOLD);
+        }
+    });
+public static final DeferredItem<com.minechai.create_sandustry.content.item.GoldenExperienceNuggetItem> GOLDEN_EXPERIENCE_NUGGET = ITEMS.registerItem("golden_experience_nugget", com.minechai.create_sandustry.content.item.GoldenExperienceNuggetItem::new);
 
     /** 沙合金：普通物品，仅用于物品、纹理与标签。 */
     public static final DeferredItem<Item> SAND_ALLOY = ITEMS.registerSimpleItem("sand_alloy");

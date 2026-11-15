@@ -13,6 +13,11 @@ public final class ModSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(Registries.SOUND_EVENT, CreateSandustry.MODID);
 
+    public static final DeferredHolder<SoundEvent, SoundEvent> KINETIC_PRESS_START =
+            register("kinetic_press.start");
+    public static final DeferredHolder<SoundEvent, SoundEvent> KINETIC_PRESS_IMPACT =
+            register("kinetic_press.impact");
+
     public static final DeferredHolder<SoundEvent, SoundEvent> OPENING_CLUE =
             register("music.opening_clue");
     public static final DeferredHolder<SoundEvent, SoundEvent> OPENING_SOLUTION =

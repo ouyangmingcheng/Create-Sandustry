@@ -18,6 +18,7 @@ public final class ModPonderScenes {
     }
 
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
+        com.minechai.create_sandustry.content.ponder.scenes.GoldenExperienceScenes.register(helper);
         ThermalRelayScenes.register(helper);
         FlorinolBatteryScenes.register(helper);
         FlorinolSoilScenes.register(helper);

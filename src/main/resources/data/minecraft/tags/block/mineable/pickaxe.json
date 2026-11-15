@@ -7,6 +7,7 @@
     "createsandustry:sand_encased_shaft",
     "createsandustry:sand_encased_fluid_pipe",
     "createsandustry:thermal_relay",
-    "createsandustry:kinetic_press"
+    "createsandustry:kinetic_press",
+    "createsandustry:golden_experience_block"
   ]
 }

@@ -1,15 +1,11 @@
 package com.minechai.create_sandustry.content.item;
 
 import com.minechai.create_sandustry.content.sandheart.SandHeartManager;
-import java.util.List;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 /**
@@ -42,12 +38,5 @@ public final class SandHeartItem extends Item {
         SandHeartManager.addUnits(player, unitsToAdd);
         stack.consume(HEARTS_PER_USE, player);
         return InteractionResultHolder.consume(stack);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
-            TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.translatable("item.createsandustry.sand_heart.tooltip")
-                .withStyle(ChatFormatting.GRAY));
     }
 }

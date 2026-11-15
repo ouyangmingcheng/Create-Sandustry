@@ -84,6 +84,10 @@ public final class SandustryJeiPlugin implements IModPlugin {
         }
         registration.addRecipes(MYSTERY_CONVERSION, List.of(
                 createConversion(
+                        "golden_experience_block",
+                        Ingredient.of(AllBlocks.EXPERIENCE_BLOCK.get()),
+                        ModItems.GOLDEN_EXPERIENCE_BLOCK.get().getDefaultInstance()),
+                createConversion(
                         "florinol_soil",
                         Ingredient.of(ModItems.FLORINOL_SOIL.get()),
                         ModItems.FLORINOL_BUCKET.get().getDefaultInstance()),

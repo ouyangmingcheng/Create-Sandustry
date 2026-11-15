@@ -31,6 +31,7 @@ public final class KineticPressProcessor {
     private final KineticPressInputHandler inputHandler;
     private final KineticPressOutputHandler outputHandler;
     private final KineticPressOutputManager outputManager;
+    private final KineticPressSounds sounds = new KineticPressSounds();
 
     private final List<ActiveTask> activeTasks = new ArrayList<>(MAX_BATCH_ITEMS);
     private List<KineticPressAnimationSnapshot> clientAnimations = List.of();
@@ -84,11 +85,10 @@ public final class KineticPressProcessor {
         }
 
         flushPendingOutputs();
-        tickActiveTasks();
+        boolean completed = tickActiveTasks();
         flushPendingOutputs();
-        if (batchLocked) {
-            startAffordableTasks(level);
-        }
+        boolean started = batchLocked && startAffordableTasks(level);
+        sounds.tick(level, blockEntity.getBlockPos(), started, completed);
 
         if (batchLocked && activeTasks.isEmpty() && pendingOutputs.isEmpty()
                 && !hasProcessableInput(level)) {
@@ -102,9 +102,9 @@ public final class KineticPressProcessor {
         clientTimeline.tick();
     }
 
-    private void tickActiveTasks() {
+    private boolean tickActiveTasks() {
         if (activeTasks.isEmpty()) {
-            return;
+            return false;
         }
 
         boolean changed = false;
@@ -131,11 +131,12 @@ public final class KineticPressProcessor {
             if (completed) blockEntity.sendDataImmediately();
             else blockEntity.sendData();
         }
+        return completed;
     }
 
-    private void startAffordableTasks(Level level) {
+    private boolean startAffordableTasks(Level level) {
         if (!blockEntity.isStructureValid() || activeTasks.size() >= MAX_BATCH_ITEMS) {
-            return;
+            return false;
         }
 
         boolean started = false;
@@ -201,6 +202,7 @@ public final class KineticPressProcessor {
         if (started) {
             markChangedAndSync();
         }
+        return started;
     }
 
     private boolean canReserveOutputCapacity(KineticPressRecipe recipe) {

@@ -1,7 +1,6 @@
 package com.minechai.create_sandustry.content.item;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 /**
@@ -32,6 +30,11 @@ public final class GoldenHeartItem extends Item {
 
     public GoldenHeartItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        return super.getName(stack).copy().withStyle(ChatFormatting.GOLD);
     }
 
     @Override
@@ -54,12 +57,5 @@ public final class GoldenHeartItem extends Item {
 
         stack.consume(HEARTS_PER_USE, player);
         return InteractionResultHolder.consume(stack);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
-            TooltipFlag tooltipFlag) {
-        tooltipComponents.add(Component.translatable("item.createsandustry.golden_heart.tooltip")
-                .withStyle(ChatFormatting.GRAY));
     }
 }
