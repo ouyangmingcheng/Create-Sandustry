@@ -62,22 +62,41 @@ FlorinolToolEnergy.unbind(stack);
 
 `create_sa:portable_drill` 已由 `PortableDrillFlorinolCompat` 接入：
 
-- 每个方块消耗 10 FE（由 10 mB 原始燃料 × `florinol_battery.fe_per_mb` 得出）；
+- 每个方块消耗 100 FE（统一换算：10 mB 燃料 = 100 FE）；
 - 绑定后不再消耗熔岩或水，完全由 FE 驱动；
 - Digging 的 3×3 额外方块和 Chunk Eater 的连锁方块分别计费；
 - 绑定后由 FE 替代熔岩燃料，原 Create SA 流体燃料过程会被兼容 Mixin 跳过；
 - 电池卸载、结构失效或 FE 不足时无法继续破坏方块；
 - Shift+右键解除绑定。
-## Create SA 黄铜装备适配
+## 统一能量换算
 
-以下物品已注册为可绑定装备：
+所有 Create SA 适配统一使用：
+
+```text
+100 FE = 10 mB 上游燃料
+```
+
+对应 API：
+
+```java
+FlorinolToolEnergy.getFeCostForFuelMb(10); // 100
+FlorinolToolEnergy.getStandardOperationCost(); // 100
+```
+
+## Create SA 装备适配
+
+以下胸甲已注册为可绑定装备：
 
 - `create_sa:brass_jetpack_chestplate`
 - `create_sa:brass_exoskeleton_chestplate`
+- `create_sa:netherite_jetpack_chestplate`
+- `create_sa:netherite_exoskeleton_chestplate`
 
 由于装备通常穿在身上，绑定方式为：将装备拿在主手，右键已激活的弗洛林电池总控，再穿回装备槽；Shift+右键可解除绑定。
 
-- 黄铜喷气背包：每 20 tick 消耗一次 10 FE，替代原 10 mB 燃料和供水检查。
-- 黄铜外骨骼：每 80 tick 消耗一次 10 FE，替代原燃料和水，并保持力量、急迫与空手暴击击退效果。
-- 装备槽中的绑定装备也会由服务端每 20 tick 刷新 FE 快照。
+- 黄铜喷气背包：每 20 tick 消耗 100 FE。
+- 黄铜外骨骼：每 80 tick 消耗 100 FE，并保持力量、急迫与空手暴击击退。
+- 下界合金喷气背包：5/20/30 tick 的三档工作周期均按每轮 100 FE 计费，并保留熔岩鞘翅能力。
+- 下界合金外骨骼：复用外骨骼 tick 逻辑，每 80 tick 消耗 100 FE。
+- 所有绑定装备在装备槽中都会由服务端每 20 tick 刷新 FE 快照。
 - FE 条和 Tooltip 使用与便携钻头相同的显示逻辑。

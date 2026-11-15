@@ -34,6 +34,26 @@ public final class ModConfigs {
                     "默认 20（约每秒 1 次）。")
             .defineInRange("florinol_battery.scan_interval", 20, 1, Integer.MAX_VALUE);
 
+    // Kinetic Press
+    /** Phase-one compatibility option; phase two quick placement never breaks blocks. */
+    public static final ModConfigSpec.DoubleValue KINETIC_PRESS_PLACEMENT_MAX_HARDNESS = BUILDER
+            .comment("第一阶段兼容配置；第二阶段快速放置不再破坏任何方块，此值目前不参与判定。")
+            .defineInRange("kineticPressPlacementMaxHardness", 5.0D, 0.0D, 1000.0D);
+
+    public static final ModConfigSpec.IntValue KINETIC_PRESS_EXTRA_ENERGY_PER_HEIGHT = BUILDER
+            .comment("重力压制器实际工作高度低于配方要求高度时，每缺少 1 格额外消耗的 FE。",
+                    "默认 200 FE。实际高度达到或超过要求高度时不再增加消耗。")
+            .defineInRange("kinetic_press.extra_energy_per_missing_height", 200, 0, Integer.MAX_VALUE);
+
+    public static final ModConfigSpec.DoubleValue KINETIC_PRESS_ANIMATION_EXPONENT = BUILDER
+            .comment("重力压制器物品下落动画的指数加速系数 k。",
+                    "公式：(exp(k*u)-1)/(exp(k)-1)，默认 7.0；增大 k 会让前段更慢、末段更集中。",
+                    "u 为服务端同步加工进度与加工总时间的比值。")
+            .defineInRange("kinetic_press.animation_exponent", 7.0D, 0.01D, 20.0D);
+    public static final ModConfigSpec.DoubleValue GRAVITY_MAXIMUM_BOUNCE_VELOCITY = BUILDER
+            .comment("重力构件半成品的反弹安全速度上限，单位 block/tick；独立于方块弹性系数，不提供最低反弹速度。")
+            .defineInRange("gravity_mechanism.maximum_bounce_velocity", 2.0D, 0.1D, 4.0D);
+
     // Living Sand
     public static final ModConfigSpec.DoubleValue LIVING_SAND_SPAWN_FROM_SAND = BUILDER
             .comment("玩家破坏普通沙子时生成活沙的概率。",

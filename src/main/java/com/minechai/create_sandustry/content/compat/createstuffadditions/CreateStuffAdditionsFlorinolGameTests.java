@@ -20,12 +20,20 @@ public final class CreateStuffAdditionsFlorinolGameTests {
         try {
             Class.forName("net.mcreator.createstuffadditions.procedures.BrassEncasedPropelerBodyTickEventProcedure");
             Class.forName("net.mcreator.createstuffadditions.procedures.BrassExoskeletonBodyTickEventProcedure");
+            Class.forName("net.mcreator.createstuffadditions.procedures.NetheriteJetpackChestplateTickEventProcedure");
+            Class.forName("net.mcreator.createstuffadditions.item.NetheriteJetpackItem$Chestplate");
             Item jetpack = BuiltInRegistries.ITEM.get(BrassArmorFlorinolCompat.BRASS_JETPACK_ID);
             Item exoskeleton = BuiltInRegistries.ITEM.get(BrassArmorFlorinolCompat.BRASS_EXOSKELETON_ID);
             helper.assertTrue(FlorinolToolEnergy.isBindingCapable(new ItemStack(jetpack)),
                     "Brass jetpack should be Florinol-bindable");
             helper.assertTrue(FlorinolToolEnergy.isBindingCapable(new ItemStack(exoskeleton)),
                     "Brass exoskeleton should be Florinol-bindable");
+            Item netheriteJetpack = BuiltInRegistries.ITEM.get(BrassArmorFlorinolCompat.NETHERITE_JETPACK_ID);
+            Item netheriteExoskeleton = BuiltInRegistries.ITEM.get(BrassArmorFlorinolCompat.NETHERITE_EXOSKELETON_ID);
+            helper.assertTrue(FlorinolToolEnergy.isBindingCapable(new ItemStack(netheriteJetpack)),
+                    "Netherite jetpack should be Florinol-bindable");
+            helper.assertTrue(FlorinolToolEnergy.isBindingCapable(new ItemStack(netheriteExoskeleton)),
+                    "Netherite exoskeleton should be Florinol-bindable");
             helper.succeed();
         } catch (Throwable throwable) {
             helper.fail("Create SA brass armor mixin targets failed to load: " + throwable);

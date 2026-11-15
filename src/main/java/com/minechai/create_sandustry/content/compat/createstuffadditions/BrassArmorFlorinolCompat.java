@@ -2,7 +2,6 @@ package com.minechai.create_sandustry.content.compat.createstuffadditions;
 
 import com.minechai.create_sandustry.api.florinol.FlorinolToolEnergy;
 import com.minechai.create_sandustry.api.florinol.FlorinolToolEnergySnapshot;
-import com.minechai.create_sandustry.config.ModConfigs;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,19 +25,25 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 
-/** FE mode for the Create SA brass jetpack and brass exoskeleton chestplate. */
+/** FE mode for Create SA brass/netherite jetpack and exoskeleton chestplates. */
 public final class BrassArmorFlorinolCompat {
     public static final ResourceLocation BRASS_JETPACK_ID =
             ResourceLocation.fromNamespaceAndPath("create_sa", "brass_jetpack_chestplate");
     public static final ResourceLocation BRASS_EXOSKELETON_ID =
             ResourceLocation.fromNamespaceAndPath("create_sa", "brass_exoskeleton_chestplate");
+    public static final ResourceLocation NETHERITE_JETPACK_ID =
+            ResourceLocation.fromNamespaceAndPath("create_sa", "netherite_jetpack_chestplate");
+    public static final ResourceLocation NETHERITE_EXOSKELETON_ID =
+            ResourceLocation.fromNamespaceAndPath("create_sa", "netherite_exoskeleton_chestplate");
 
-    /** Both upstream armor pieces consume 10 mB of fuel per work interval. */
-    public static final int FUEL_MB_PER_INTERVAL = 100;
+    /** Each upstream armor work interval consumes 10 mB of fuel. */
+    public static final int FUEL_MB_PER_INTERVAL = 10;
 
     public static void registerTools() {
         registerTool(BRASS_JETPACK_ID);
         registerTool(BRASS_EXOSKELETON_ID);
+        registerTool(NETHERITE_JETPACK_ID);
+        registerTool(NETHERITE_EXOSKELETON_ID);
     }
 
     private static void registerTool(ResourceLocation id) {
@@ -49,16 +54,17 @@ public final class BrassArmorFlorinolCompat {
     }
 
     public static int getFeCost(ItemStack stack) {
-        return FUEL_MB_PER_INTERVAL * ModConfigs.FLORINOL_BATTERY_FE_PER_MB.get();
+        return FlorinolToolEnergy.getFeCostForFuelMb(FUEL_MB_PER_INTERVAL);
     }
 
-    public static boolean isBrassArmor(ItemStack stack) {
+    public static boolean isSupportedArmor(ItemStack stack) {
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return BRASS_JETPACK_ID.equals(id) || BRASS_EXOSKELETON_ID.equals(id);
+        return BRASS_JETPACK_ID.equals(id) || BRASS_EXOSKELETON_ID.equals(id)
+                || NETHERITE_JETPACK_ID.equals(id) || NETHERITE_EXOSKELETON_ID.equals(id);
     }
 
     public static boolean canOperate(LevelAccessor world, ItemStack stack) {
-        if (!isBrassArmor(stack) || !FlorinolToolEnergy.hasBinding(stack)) {
+        if (!isSupportedArmor(stack) || !FlorinolToolEnergy.hasBinding(stack)) {
             return false;
         }
         int cost = getFeCost(stack);
@@ -80,7 +86,7 @@ public final class BrassArmorFlorinolCompat {
 
     public static FluidStack redirectDrain(ItemStack stack, FluidStack fluid, boolean simulate,
                                            LevelAccessor world) {
-        if (!isBrassArmor(stack) || !FlorinolToolEnergy.hasBinding(stack)) {
+        if (!isSupportedArmor(stack) || !FlorinolToolEnergy.hasBinding(stack)) {
             return drainFluid(stack, fluid, simulate);
         }
         if (world.isClientSide()) {

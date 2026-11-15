@@ -271,6 +271,7 @@ public final class MelodyPuzzleManager {
             for (MelodyPuzzleDefinition.Reward reward : session.definition.rewards()) {
                 dropReward(level, session.key.pos(), reward.createStack());
             }
+            applyWeatherReward(level, session.definition.weather());
         } else {
             LOGGER.warn("Melody puzzle '{}' at {} completed without its clue disc; reward suppressed",
                     session.definition.id(), session.key.pos());
@@ -391,6 +392,17 @@ public final class MelodyPuzzleManager {
         return y != 0 ? y : Integer.compare(first.getZ(), second.getZ());
     }
 
+    private static void applyWeatherReward(ServerLevel level, @Nullable MelodyPuzzleDefinition.WeatherReward weather) {
+        if (weather == null) {
+            return;
+        }
+        int duration = weather.durationTicks();
+        switch (weather.kind()) {
+            case CLEAR -> level.setWeatherParameters(duration, 0, false, false);
+            case RAIN -> level.setWeatherParameters(0, duration, true, false);
+            case THUNDER -> level.setWeatherParameters(0, duration, true, true);
+        }
+    }
     private static void dropReward(ServerLevel level, BlockPos pos, ItemStack stack) {
         Vec3 dropPos = Vec3.atLowerCornerWithOffset(pos, 0.5D, 1.01D, 0.5D)
                 .offsetRandom(level.random, 0.7F);

@@ -6,5 +6,7 @@
   "music.healing_clue": {"sounds": [{"name": "createsandustry:music/healing_clue", "stream": true}]},
   "music.healing_solution": {"sounds": [{"name": "createsandustry:music/healing_solution", "stream": true}]},
   "music.birds_clue": {"sounds": [{"name": "createsandustry:music/birds_clue", "stream": true}]},
-  "music.birds_solution": {"sounds": [{"name": "createsandustry:music/birds_solution", "stream": true}]}
+  "music.birds_solution": {"sounds": [{"name": "createsandustry:music/birds_solution", "stream": true}]},
+  "music.bignortheastismyhomeland_clue": {"sounds": [{"name": "createsandustry:music/bignortheastismyhomeland_clue", "stream": true}]},
+  "music.bignortheastismyhomeland_solution": {"sounds": [{"name": "createsandustry:music/bignortheastismyhomeland_solution", "stream": true}]}
 }

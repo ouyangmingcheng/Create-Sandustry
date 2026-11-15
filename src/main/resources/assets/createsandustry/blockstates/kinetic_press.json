@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "working=false,powered=false": {
+      "model": "createsandustry:block/kinetic_press"
+    },
+    "working=false,powered=true": {
+      "model": "createsandustry:block/kinetic_press_powered"
+    },
+    "working=true,powered=false": {
+      "model": "createsandustry:block/kinetic_press_working"
+    },
+    "working=true,powered=true": {
+      "model": "createsandustry:block/kinetic_press_powered"
+    }
+  }
+}

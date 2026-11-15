@@ -40,11 +40,13 @@ public final class SandifiedOreRuleGameTests {
     @GameTest(template = "time_bearing_empty", templateNamespace = CreateSandustry.MODID, timeoutTicks = 40)
     public static void replacesNormalAndDeepslateSources(GameTestHelper helper) {
         BlockPos normalOre = new BlockPos(0, 0, 0);
-        BlockPos deepslateOre = new BlockPos(1, 0, 0);
+        BlockPos absolute = helper.absolutePos(normalOre);
+        // GameTest randomizes its world origin. This rule scans ONE chunk, so keep
+        // both fixtures in that chunk even when the template starts at its east edge.
+        BlockPos deepslateOre = new BlockPos((absolute.getX() & 15) == 15 ? -1 : 1, 0, 0);
         helper.setBlock(normalOre, Blocks.COAL_ORE);
         helper.setBlock(deepslateOre, Blocks.DEEPSLATE_COAL_ORE);
 
-        BlockPos absolute = helper.absolutePos(normalOre);
         GeologyGenerationContext context = new GeologyGenerationContext(
                 helper.getLevel(),
                 RandomSource.create(2L),

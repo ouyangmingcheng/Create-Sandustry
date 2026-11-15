@@ -4,6 +4,7 @@ import com.minechai.create_sandustry.content.block.entity.ThermalBufferBlockEnti
 import com.minechai.create_sandustry.content.block.entity.SandMasterSwordPedestalBlockEntity;
 import com.minechai.create_sandustry.content.block.entity.LivingSandBlockEntity;
 import com.minechai.create_sandustry.content.block.entity.FlorinolBatteryBlockEntity;
+import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressBlockEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -36,6 +37,12 @@ public final class ModBlockEntities {
             BLOCK_ENTITY_TYPES.register(
                     "thermal_relay",
                     () -> BlockEntityType.Builder.of(ThermalBufferBlockEntity::new, ModBlocks.THERMAL_RELAY.get())
+                            .build(null));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<KineticPressBlockEntity>> KINETIC_PRESS =
+            BLOCK_ENTITY_TYPES.register(
+                    "kinetic_press",
+                    () -> BlockEntityType.Builder.of(KineticPressBlockEntity::new, ModBlocks.KINETIC_PRESS.get())
                             .build(null));
 
     public static void register(IEventBus eventBus) {

@@ -1,0 +1,16 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "createsandustry:wet_sand"
+    },
+    {
+      "item": "createsandustry:volatile_sand"
+    }
+  ],
+  "results": [
+    {
+      "id": "createsandustry:thunder_sand"
+    }
+  ]
+}

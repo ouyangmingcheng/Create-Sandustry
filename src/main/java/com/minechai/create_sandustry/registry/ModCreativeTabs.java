@@ -29,6 +29,8 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.MOONHOP.get());
                         output.accept(ModItems.CHOCOLATE_MOONHOP.get());
                         output.accept(ModItems.MOONHOP_BOARD.get());
+                        output.accept(ModItems.GRAVITY_MECHANISM.get());
+                        output.accept(ModItems.MOONHOP_BLOCK.get());
                         output.accept(ModItems.SAND_CASING.get());
                         output.accept(ModItems.HARDENED_SAND.get());
                         output.accept(ModItems.PETRIFIED_SAND.get());
@@ -55,12 +57,14 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.DISC_FRAGMENT_HEALING.get());
                         output.accept(ModItems.MUSIC_DISC_BIRDS.get());
                         output.accept(ModItems.DISC_FRAGMENT_BIRDS.get());
+                        output.accept(ModItems.MUSIC_DISC_BIG_NORTHEAST.get());
                         output.accept(SandSwordForms.createBrokenInstance());
                         output.accept(ModItems.RESIDUE.get());
                         output.accept(ModItems.MYSTERIOUS_LUMP.get());
                         output.accept(ModItems.FLORINOL_BUCKET.get());
                         output.accept(ModItems.BURNT_RESIDUE.get());
                         output.accept(ModItems.FLORINOL_BATTERY.get());
+                        output.accept(ModItems.KINETIC_PRESS.get());
                         output.accept(ModItems.FLORINOL_SOIL.get());
                         output.accept(ModItems.THERMAL_RELAY.get());
                         output.accept(ModItems.GOLDEN_DIRT.get());
@@ -80,6 +84,7 @@ public final class ModCreativeTabs {
     private ModCreativeTabs() {
     }
 }
+
 
 
 

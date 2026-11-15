@@ -5,8 +5,7 @@ import com.minechai.create_sandustry.registry.ModItems;
 import java.util.List;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.registry.ModItems;
-import com.minechai.create_sandustry.registry.ModRecipeTypes;
+import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipe;
 import com.minechai.create_sandustry.content.recipe.RandomSaplingMixingRecipe;
 import com.minechai.create_sandustry.content.recipe.SiftingRecipe;
 import com.simibubi.create.AllBlocks;
@@ -39,6 +38,7 @@ public final class SandustryJeiPlugin implements IModPlugin {
 
     private CreateRecipeCategory<RandomSaplingMixingRecipe> category;
     private CreateRecipeCategory<SiftingRecipe> siftingCategory;
+    private CreateRecipeCategory<KineticPressRecipe> kineticPressCategory;
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -62,7 +62,13 @@ public final class SandustryJeiPlugin implements IModPlugin {
                 .emptyBackground(177, 103)
                 .build(ModRecipeTypes.SIFTING_ID, SiftingCategory::new);
 
-        registration.addRecipeCategories(this.category, this.siftingCategory);
+        this.kineticPressCategory = new CreateRecipeCategory.Builder<>(KineticPressRecipe.class)
+                .addTypedRecipes(ModRecipeTypes.KINETIC_PRESSING::get)
+                .catalyst(ModItems.KINETIC_PRESS::get)
+                .itemIcon(ModItems.KINETIC_PRESS.get())
+                .emptyBackground(177, 80)
+                .build(com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipeType.ID, KineticPressCategory::new);
+        registration.addRecipeCategories(this.category, this.siftingCategory, this.kineticPressCategory);
     }
 
     @Override
@@ -72,6 +78,9 @@ public final class SandustryJeiPlugin implements IModPlugin {
         }
         if (this.siftingCategory != null) {
             this.siftingCategory.registerRecipes(registration);
+        }
+        if (this.kineticPressCategory != null) {
+            this.kineticPressCategory.registerRecipes(registration);
         }
         registration.addRecipes(MYSTERY_CONVERSION, List.of(
                 createConversion(
@@ -85,7 +94,15 @@ public final class SandustryJeiPlugin implements IModPlugin {
                 createConversion(
                         "moonhop",
                         Ingredient.of(ModItems.MOONCRYSTAL.get()),
-                        ModItems.MOONHOP.get().getDefaultInstance())));
+                        ModItems.MOONHOP.get().getDefaultInstance()),
+                createConversion(
+                        "sand_master_sword",
+                        Ingredient.of(ModItems.SAND_SWORD.get()),
+                        ModItems.SAND_MASTER_SWORD.get().getDefaultInstance()),
+                createConversion(
+                        "opening_disc_to_sand_sword",
+                        Ingredient.of(ModItems.MUSIC_DISC_OPENING.get()),
+                        ModItems.SAND_SWORD.get().getDefaultInstance())));
     }
 
     @Override
@@ -95,6 +112,9 @@ public final class SandustryJeiPlugin implements IModPlugin {
         }
         if (this.siftingCategory != null) {
             this.siftingCategory.registerCatalysts(registration);
+        }
+        if (this.kineticPressCategory != null) {
+            this.kineticPressCategory.registerCatalysts(registration);
         }
     }
 

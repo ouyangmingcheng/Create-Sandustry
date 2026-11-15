@@ -11,6 +11,19 @@ public final class ModCapabilities {
     }
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        // 重力压制器基座：只有水平四面接受 FE 输入。
+        event.registerBlockEntity(
+                Capabilities.EnergyStorage.BLOCK,
+                ModBlockEntities.KINETIC_PRESS.get(),
+                (blockEntity, side) -> side != null && side.getAxis().isHorizontal()
+                        ? blockEntity.getEnergyStorage() : null);
+        // 重力压制器：顶面输入缓存，其余面只允许提取输出缓存。
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.KINETIC_PRESS.get(),
+                (blockEntity, side) -> side == net.minecraft.core.Direction.UP
+                        ? blockEntity.getInputHandler()
+                        : blockEntity.getOutputHandler());
         // 总控方块直接暴露 FE。
         event.registerBlockEntity(
                 Capabilities.EnergyStorage.BLOCK,

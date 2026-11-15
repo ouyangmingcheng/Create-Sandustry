@@ -65,12 +65,13 @@
 
 - 脚本：tools/generate_sandified_ore_textures.py
 - 无第三方 Python 依赖；内置 PNG 读写器支持 Minecraft 使用的 4 位索引 PNG。
-- 遮罩依据源基底精确 RGBA 调色板成员关系，并用普通/深层矿石交叉验证，不使用 RGB 阈值或整体染色。
-- 确定矿物像素逐像素保留源 RGBA；透明像素保留原透明度。
-- 同时属于两套基底调色板的像素全部记录在 generation_report.json 和 manual_review.md 中。
+- 纹理已改为原创稀疏矿物颗粒：每面六处、共 15–18 个像素，矿物占比约 5.9%–7.0%，呈现沙中夹少量矿物的感觉。
+- 矿物使用三阶明暗、左上受光，按矿种区分颜色和颗粒形状；铜矿包含铜色与氧化绿，去除原版矿脉的大块轮廓与石质描边。
+- 颗粒以外的全部像素精确保留原沙子基底；硬化沙与石化沙共享同矿种颗粒布局，报告记录实际颗粒坐标与覆盖率。
 - 输出均为 16x16 RGBA PNG，使用 filter 0 和直接像素复制，无平滑、缩放或插值。
 - 生成器只读取依赖 JAR 和项目源纹理，不读取既有输出作为输入，因此重复运行不会累计失真。
 - 预览：docs/sandified_ores/preview.png
+- 原尺寸、8 倍放大与两种基底的 3×3 平铺预览：docs/sandified_ores/grain_review.png；已检查离线预览，未进行游戏内实机检查。
 - 人工审核清单：docs/sandified_ores/manual_review.md
 - 生成报告：docs/sandified_ores/generation_report.json
 

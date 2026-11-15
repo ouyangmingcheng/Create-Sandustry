@@ -3,6 +3,13 @@
   "package": "com.minechai.create_sandustry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "PistonGravityMotionMixin",
+    "ItemEntityGravityCollectionMixin",
+    "HopperGravityCollectionMixin",
+    "CreateGravityBeltCollectionMixin",
+    "CreateGravityDepotCollectionMixin",
+    "CreateGravityChuteCollectionMixin",
+    "CreateGravityChuteSuctionMixin",
     "ItemStackMixin",
     "InventoryGoldenFriedRiceMixin",
     "PlayerSetItemSlotMixin",
@@ -13,8 +20,10 @@
     "ServerGamePacketListenerImplMixin",
     "AbstractContainerMenuMixin",
     "MechanicalMixerRandomRecipeMixin",
+    "MechanicalPressMoonhopMixin",
     "DepotMoonCrystalConversionMixin",
     "ChuteMoonCrystalConversionMixin",
+    "ChuteKineticPressInputMixin",
     "BeltBlockEntitySiftingMixin",
     "TransportedItemStackSiftingMixin",
     "LightningBoltMixin",
@@ -29,6 +38,7 @@
     "LevelDaytimeMixin"
   ],
   "client": [
+    "SequencedAssemblyGravityJeiMixin",
     "ItemRendererMixin",
     "LocalPlayerDropMixin",
     "GuiHeartMixin",

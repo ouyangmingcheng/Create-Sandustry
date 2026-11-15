@@ -1,0 +1,7 @@
+{
+  "selector": "createsandustry:moonhop_block",
+  "priority": 1001,
+  "properties": {
+    "sable:restitution": 0.8
+  }
+}

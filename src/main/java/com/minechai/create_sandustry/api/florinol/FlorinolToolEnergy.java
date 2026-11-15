@@ -4,7 +4,6 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-import com.minechai.create_sandustry.config.ModConfigs;
 import com.minechai.create_sandustry.content.block.entity.FlorinolBatteryBlockEntity;
 import com.minechai.create_sandustry.registry.ModDataComponents;
 
@@ -33,8 +32,22 @@ public final class FlorinolToolEnergy {
     private static final Map<Item, ToIntFunction<ItemStack>> EXTERNAL_COST_PROVIDERS =
             new IdentityHashMap<>();
 
+    /** Standard upstream fuel operation used by Create SA equipment. */
+    public static final int FUEL_MB_PER_OPERATION = 10;
+    /** Unified conversion used by every Florinol-powered Create SA item. */
+    public static final int FE_PER_10_MB_FUEL = 100;
+
+    /** Converts an upstream fuel amount to the unified FE cost. */
+    public static int getFeCostForFuelMb(int fuelMb) {
+        return Math.max(0, fuelMb) * FE_PER_10_MB_FUEL / FUEL_MB_PER_OPERATION;
+    }
+
+    public static int getStandardOperationCost() {
+        return getFeCostForFuelMb(FUEL_MB_PER_OPERATION);
+    }
+
     /** Upstream portable drill consumes 10 mB of fuel per broken block. */
-    public static final int PORTABLE_DRILL_FUEL_MB_PER_OPERATION = 100;
+    public static final int PORTABLE_DRILL_FUEL_MB_PER_OPERATION = FUEL_MB_PER_OPERATION;
 
     public static boolean isPortableDrill(ItemStack stack) {
         return PORTABLE_DRILL_ID.equals(BuiltInRegistries.ITEM.getKey(stack.getItem()));
@@ -66,8 +79,7 @@ public final class FlorinolToolEnergy {
             return Math.max(0, externalCost.applyAsInt(stack));
         }
         if (isPortableDrill(stack)) {
-            return PORTABLE_DRILL_FUEL_MB_PER_OPERATION
-                    * ModConfigs.FLORINOL_BATTERY_FE_PER_MB.get();
+            return getFeCostForFuelMb(PORTABLE_DRILL_FUEL_MB_PER_OPERATION);
         }
         return 0;
     }

@@ -1,0 +1,6 @@
+{
+  "parent": "createsandustry:block/kinetic_press_base",
+  "textures": {
+    "particle": "createsandustry:block/kinetic_press"
+  }
+}

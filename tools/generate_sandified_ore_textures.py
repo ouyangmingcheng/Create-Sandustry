@@ -1,20 +1,8 @@
 #!/usr/bin/env python3
-"""Generate hardened/petrified sand ore textures from verified source assets.
+"""Generate sand-dominant ores with original, hand-placed mineral grains.
 
-The mask is deliberately not based on a simple RGB difference threshold.
-
-Classification:
-1. Collect the exact color palette of the real source base texture.
-2. A pixel outside the corresponding base palette is a confident mineral pixel.
-3. Cross-check the normal/deepslate ore pair. A pixel outside either palette is
-   confident mineral because both variants use the same mineral silhouette.
-4. A pixel inside both palettes is uncertain. If it touches confident mineral,
-   preserve the source pixel to avoid destroying a same-color mineral detail;
-   otherwise replace it with the target base. Every uncertain coordinate and the
-   decision taken are recorded in the generated report.
-
-Only exact palette membership, exact source pixels and direct RGBA pixel copying
-are used. No smoothing, scaling or source-file overwrite occurs.
+Small shaded clusters occupy less than 10% of each face. The host texture is
+copied exactly everywhere else; source ores are visual references only.
 """
 from __future__ import annotations
 
@@ -122,112 +110,80 @@ def ensure_same_size(entry_name: str, source: PngImage, base: PngImage) -> None:
         )
 
 
-def _has_adjacent(mask: list[bool], width: int, height: int, index: int) -> bool:
-    x = index % width
-    y = index // width
-    for dy in (-1, 0, 1):
-        for dx in (-1, 0, 1):
-            if dx == 0 and dy == 0:
-                continue
-            nx, ny = x + dx, y + dy
-            if 0 <= nx < width and 0 <= ny < height and mask[ny * width + nx]:
-                return True
-    return False
+# Three shades per mineral, lit from upper left. Warm shadows keep grains
+# embedded in sand; no stone/deepslate outlines or full mineral veins.
+GRAIN_PALETTES = {
+    "coal": ("70675a", "494740", "373a35"),
+    "iron": ("e1b492", "bb8564", "906447"),
+    "copper": ("e1a075", "be7751", "925b40"),
+    "gold": ("f8dc79", "e3af35", "b38229"),
+    "redstone": ("e27661", "bd433c", "873b32"),
+    "lapis": ("7798cd", "416caf", "365184"),
+    "diamond": ("abebe0", "58bdb8", "398d91"),
+    "emerald": ("9cda98", "4ba966", "347850"),
+    "zinc": ("e0e2c7", "acbeb1", "7d968b"),
+}
+OXIDIZED_COPPER = ("a4c5a0", "6b9e87", "4e7f70")
+
+# Six irregular deposits per face, with broad gaps of uninterrupted sand.
+# Each digit selects light/base/shadow; dots leave the original host visible.
+# Offsets and silhouettes are original and intentionally differ by mineral.
+GRAIN_LAYOUTS = {
+    "coal": ((2, 2, "01/.2"), (10, 1, "01"), (7, 6, "01/12"),
+             (1, 10, "01/.2"), (12, 9, "01/.2"), (7, 13, "01")),
+    "iron": ((1, 3, "011"), (10, 2, "01/.2"), (6, 7, "011"),
+             (12, 10, "01"), (2, 12, "011"), (8, 14, "01")),
+    "copper": ((2, 1, "01/.2"), (11, 3, "01/2."), (6, 6, "01/.2"),
+               (1, 10, "01"), (11, 11, "01/.2"), (6, 14, "01")),
+    "gold": ((3, 2, "01/.2"), (11, 1, "01"), (7, 6, "01/12"),
+             (1, 10, "01"), (12, 10, "01/.2"), (6, 13, "01/.2")),
+    "redstone": ((1, 2, "011"), (10, 3, "01/.2"), (5, 6, "01/.2"),
+                 (12, 9, "011"), (2, 11, "01"), (7, 14, "011")),
+    "lapis": ((2, 1, "01/12"), (11, 3, "01"), (6, 6, "01/.2"),
+              (1, 10, "01/.2"), (12, 11, "01/12"), (6, 14, "01")),
+    "diamond": ((2, 2, "0./12"), (11, 1, "01"), (7, 6, "0./12"),
+                (1, 10, "01"), (12, 10, "0./12"), (6, 13, "0./12")),
+    "emerald": ((3, 1, "0/1/2"), (11, 3, "01"), (7, 6, "0/1/2"),
+                (1, 10, "0/1/2"), (12, 10, "01"), (7, 13, "0/1/2")),
+    "zinc": ((1, 3, "01/.2"), (10, 1, "01/2."), (6, 7, "01"),
+             (12, 10, "01/2."), (2, 12, "01"), (8, 14, "01")),
+}
+
+
+def rgba(hex_color):
+    return tuple(bytes.fromhex(hex_color)) + (255,)
 
 
 def generate_pair_textures(
-    hardened_entry,
-    petrified_entry,
-    regular_ore: PngImage,
-    regular_base: PngImage,
-    deepslate_ore: PngImage,
-    deepslate_base: PngImage,
-    hardened_base: PngImage,
-    petrified_base: PngImage,
+    hardened_entry, petrified_entry, regular_ore, regular_base,
+    deepslate_ore, deepslate_base, hardened_base, petrified_base,
 ):
-    ensure_same_size(hardened_entry.id, regular_ore, regular_base)
-    ensure_same_size(petrified_entry.id, deepslate_ore, deepslate_base)
-    ensure_same_size(hardened_entry.id, regular_ore, hardened_base)
-    ensure_same_size(petrified_entry.id, deepslate_ore, petrified_base)
-
-    width = regular_ore.width
-    height = regular_ore.height
-    count = width * height
-    regular_palette = regular_base.palette()
-    deepslate_palette = deepslate_base.palette()
-
-    regular_outside = [regular_ore.pixels[i] not in regular_palette for i in range(count)]
-    deepslate_outside = [deepslate_ore.pixels[i] not in deepslate_palette for i in range(count)]
-    confident = [regular_outside[i] or deepslate_outside[i] for i in range(count)]
-
     results = []
     for entry, source, target_base in (
         (hardened_entry, regular_ore, hardened_base),
         (petrified_entry, deepslate_ore, petrified_base),
     ):
-        output_pixels: list[tuple[int, int, int, int]] = []
-        uncertain: list[dict] = []
-        preserved_confident = 0
-        preserved_uncertain = 0
-        preserved_transparent = 0
-        replaced_background = 0
-        for i, source_pixel in enumerate(source.pixels):
-            target_pixel = target_base.pixels[i]
-            x, y = i % width, i // width
-            if source_pixel[3] != 255:
-                output_pixels.append(source_pixel)
-                preserved_transparent += 1
-                if confident[i]:
-                    preserved_confident += 1
-                else:
-                    uncertain.append({
-                        "x": x,
-                        "y": y,
-                        "rgba": list(source_pixel),
-                        "decision": "preserve_transparent",
-                    })
-                continue
-            if confident[i]:
-                output_pixels.append(source_pixel)
-                preserved_confident += 1
-                continue
-            preserve_uncertain = False
-            if preserve_uncertain:
-                output_pixels.append(source_pixel)
-                preserved_uncertain += 1
-                decision = "preserve_near_confident_mineral"
-            else:
-                output_pixels.append(target_pixel)
-                replaced_background += 1
-                decision = "replace_as_background"
-            uncertain.append({
-                "x": x,
-                "y": y,
-                "rgba": list(source_pixel),
-                "decision": decision,
-            })
-
-        result = PngImage(width, height, output_pixels)
-        for i, pixel in enumerate(result.pixels):
-            if pixel != source.pixels[i] and pixel != target_base.pixels[i]:
-                raise AssertionError(f"{entry.id}: non-palette pixel introduced at {i}")
-            if confident[i] and pixel != source.pixels[i]:
-                raise AssertionError(f"{entry.id}: mineral pixel changed at {i}")
-            if source.pixels[i][3] != 255 and pixel != source.pixels[i]:
-                raise AssertionError(f"{entry.id}: source alpha semantics changed at {i}")
+        ensure_same_size(entry.id, source, target_base)
+        pixels = list(target_base.pixels)
+        grains = []
+        for number, (x, y, pattern) in enumerate(GRAIN_LAYOUTS[entry.ore.key]):
+            palette = GRAIN_PALETTES[entry.ore.key]
+            if entry.ore.key == "copper" and number in (1, 4):
+                palette = OXIDIZED_COPPER
+            colors = tuple(rgba(color) for color in palette)
+            for dy, row in enumerate(pattern.split("/")):
+                for dx, shade in enumerate(row):
+                    if shade == ".":
+                        continue
+                    index = (y + dy) * 16 + x + dx
+                    pixels[index] = colors[int(shade)]
+                    grains.append([x + dx, y + dy])
         results.append({
-            "entry": entry,
-            "source": source,
-            "target_base": target_base,
-            "result": result,
-            "uncertain": uncertain,
-            "preserved_confident": preserved_confident,
-            "preserved_uncertain": preserved_uncertain,
-            "preserved_transparent": preserved_transparent,
-            "replaced_background": replaced_background,
-            "base_palette_size": len(regular_palette if entry is hardened_entry else deepslate_palette),
+            "entry": entry, "source": source, "target_base": target_base,
+            "result": PngImage(16, 16, pixels),
+            "mineral_pixels": len(grains), "grain_coordinates": grains,
+            "base_palette_size": len(target_base.palette()),
         })
-
     return results
 
 
@@ -270,13 +226,37 @@ def render_preview(pairs_data, out_path: Path) -> None:
             blit_scaled(image, tile_image, x, y, scale)
         draw_text(
             image,
-            f"H UNCERTAIN {len(data['hardened_uncertain'])}  P UNCERTAIN {len(data['petrified_uncertain'])}",
+            f"MINERAL {data['mineral_pixels']}/256  SAND {256 - data['mineral_pixels']}/256",
             row_label_width + gap,
             y + tile + 5,
             1,
             GRAY,
         )
         draw_rect(image, 1, y - 2, width - 2, row_height - 2, (55, 55, 55, 255))
+    save_png(out_path, image)
+
+
+def render_grain_review(pairs_data, out_path: Path) -> None:
+    """Nearest-neighbour 1x/8x swatches and 3x3 walls for both hosts."""
+    image = make_image(1304, 628, DARK)
+    draw_text(image, "SPARSE MINERALS IN SAND", 12, 10, 2, ACCENT)
+    for col, data in enumerate(pairs_data):
+        x = 12 + col * 144
+        draw_text(image, data["ore"].key, x, 34, 1, WHITE)
+        for row, key in enumerate(("hardened_result", "petrified_result")):
+            texture = data[key]
+            y = 50 + row * 164
+            blit_scaled(image, texture, x, y, 8)
+            blit_scaled(image, texture, x, y + 134, 1)
+            draw_text(image, "1X", x + 24, y + 138, 1, GRAY)
+    draw_text(image, "3X3 TILE - HARDENED", 12, 382, 1, ACCENT)
+    draw_text(image, "3X3 TILE - PETRIFIED", 12, 504, 1, ACCENT)
+    for col, data in enumerate(pairs_data):
+        for row, key in enumerate(("hardened_result", "petrified_result")):
+            for ty in range(3):
+                for tx in range(3):
+                    blit_scaled(image, data[key], 12 + col * 144 + tx * 32,
+                                398 + row * 122 + ty * 32, 2)
     save_png(out_path, image)
 
 
@@ -406,16 +386,10 @@ def main() -> int:
                     ),
                     "output_texture_sha256": sha256_bytes(output_bytes),
                     "base_palette_size": result_data["base_palette_size"],
-                    "confident_mineral_pixels": result_data["preserved_confident"],
-                    "preserved_uncertain_near_mineral": result_data["preserved_uncertain"],
-                    "replaced_background_pixels": result_data["replaced_background"],
-                    "preserved_transparent_pixels": result_data["preserved_transparent"],
-                    "uncertain_pixel_count": len(result_data["uncertain"]),
-                    "uncertain_pixels": [
-                        [item["x"], item["y"], item["decision"]]
-                        for item in result_data["uncertain"]
-                    ],
-                    "review_required": bool(result_data["uncertain"]),
+                    "mineral_pixels": result_data["mineral_pixels"],
+                    "mineral_coverage_percent": round(result_data["mineral_pixels"] / 256 * 100, 2),
+                    "unchanged_host_pixels": 256 - result_data["mineral_pixels"],
+                    "grain_coordinates": result_data["grain_coordinates"],
                 })
                 mapping_entries.append({
                     "source_block": entry.source_block,
@@ -438,24 +412,22 @@ def main() -> int:
                 "deepslate_base": deepslate_base,
                 "petrified_base": petrified_base,
                 "petrified_result": results[1]["result"],
-                "hardened_uncertain": results[0]["uncertain"],
-                "petrified_uncertain": results[1]["uncertain"],
+                "mineral_pixels": results[0]["mineral_pixels"],
             })
 
     preview_path = docs_dir / "preview.png"
     render_preview(preview_pairs, preview_path)
+    render_grain_review(preview_pairs, docs_dir / "grain_review.png")
 
     report = {
-        "schema_version": 1,
+        "schema_version": 2,
         "tool": "tools/generate_sandified_ore_textures.py",
         "method": {
-            "comparison": "exact RGBA palette membership plus normal/deepslate cross-check",
+            "design": "original sparse mineral grains, six clusters per face",
+            "coverage": "less than 10 percent; remaining host pixels unchanged",
+            "shading": "three mineral shades, upper-left light, no stone outlines",
             "interpolation": "none",
             "encoding": "RGBA8, filter 0",
-            "ambiguous_policy": (
-                "replace with target base while listing every uncertain coordinate; "
-                "the normal/deepslate cross-check protects confident mineral pixels"
-            ),
         },
         "minecraft_jar": minecraft_jar.name,
         "create_jar": create_jar.name,
@@ -470,46 +442,27 @@ def main() -> int:
         write_json(docs_dir / "generation_report.json", report)
 
         lines = [
-            "# 沙化矿石纹理人工审核清单",
-            "",
-            "纹理遮罩使用“源基底精确调色板匹配 + 普通/深层矿石交叉验证”，不使用 RGB 阈值、平滑或缩放。",
-            "矿物候选像素保留源 PNG 的精确 RGBA；透明像素始终保留原始语义。",
-            "颜色同时属于两套基底调色板的像素被列为不确定像素，并按背景替换以便复核。",
-            "",
-            "## 自动检查摘要",
-            "",
-            "| 目标方块 | 矿物像素 | 不确定像素 | 替换背景像素 | 尺寸 |",
-            "|---|---:|---:|---:|---:|",
+            "# 沙化矿石纹理审核", "",
+            "本版改为原创的稀疏矿物颗粒，不再移植原版矿脉轮廓。",
+            "每面六处小颗粒，矿物覆盖率低于 10%；其余像素精确保留沙子基底。",
+            "三阶明暗、左上受光；铜矿保留铜色与氧化绿，锌矿为低饱和灰绿，宝石保持色相差异。",
+            "硬化沙与石化沙共享矿物布局，依靠原有基底区分。", "",
+            "| 方块 | 矿物像素 | 占比 | 保留沙子像素 |",
+            "|---|---:|---:|---:|",
         ]
         for item in report_entries:
             lines.append(
-                f"| {item['target_block']} | {item['confident_mineral_pixels']} | "
-                f"{item['uncertain_pixel_count']} | "
-                f"{item['replaced_background_pixels']} | {item['dimensions'][0]}x{item['dimensions'][1]} |"
+                f"| {item['target_block']} | {item['mineral_pixels']} | "
+                f"{item['mineral_coverage_percent']}% | {item['unchanged_host_pixels']} |"
             )
         lines.extend([
-            "",
-            "## 人工检查步骤",
-            "",
-            "- [ ] 打开 'docs/sandified_ores/preview.png'，逐行核对 8 列：普通源矿、石基底、硬化沙基底、硬化结果、深层源矿、深板岩基底、石化沙基底、石化结果。",
-            "- [ ] 核对矿物颜色、像素轮廓、位置与源矿一致，且背景没有残留石头/深板岩像素块。",
-            "- [ ] 核对不确定像素列表；若其中包含矿物同色像素，按报告坐标调整遮罩或人工修补。",
-            "- [ ] 核对 16×16 尺寸、透明通道以及所有模型/方块状态引用。",
-            "",
-            "## 不确定像素坐标",
-            "",
-            "格式：(x, y, 决策)。replace_as_background 表示该像素颜色同时属于两套基底调色板，无法仅凭颜色确认是否为同色矿物，因此按背景替换并列出复核。",
-            "",
+            "", "## 预览", "",
+            "preview.png：源矿石、源基底、沙子基底与新版纹理并排。",
+            "grain_review.png：全系列 1 倍/8 倍预览及两种基底的 3×3 连续平铺。",
+            "自动检查覆盖率、完全不透明、16×16 尺寸与基底像素保留；视觉检查关注辨识度、颗粒明暗与平铺。",
         ])
-        for item in report_entries:
-            lines.append(f"### '{item['target_block']}'")
-            coords = ", ".join(
-                f"({x},{y},{decision})" for x, y, decision in item["uncertain_pixels"]
-            )
-            lines.append(coords if coords else "无")
-            lines.append("")
         (docs_dir / "manual_review.md").write_text(
-            "\n".join(lines).rstrip() + "\n", encoding="utf-8", newline="\n"
+            "\n".join(lines) + "\n", encoding="utf-8", newline="\n"
         )
 
     print(

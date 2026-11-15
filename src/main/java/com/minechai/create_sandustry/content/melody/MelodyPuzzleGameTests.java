@@ -6,6 +6,7 @@ import com.minechai.create_sandustry.CreateSandustry;
 import com.minechai.create_sandustry.registry.ModItems;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
@@ -29,12 +30,16 @@ public final class MelodyPuzzleGameTests {
             CreateSandustry.MODID, "healing");
     private static final ResourceLocation BIRDS = ResourceLocation.fromNamespaceAndPath(
             CreateSandustry.MODID, "birds");
+    private static final ResourceLocation BIG_NORTHEAST = ResourceLocation.fromNamespaceAndPath(
+            CreateSandustry.MODID, "bignortheastismyhomeland");
     private static final List<Integer> OPENING_ANSWER = List.of(
             69, 69, 69, 66, 64, 66, 69, 64, 61,
             64, 66, 69, 68, 64, 66);
     private static final List<Integer> AWAKENING_ANSWER = List.of(64, 66);
     private static final List<Integer> HEALING_ANSWER = List.of(59, 62, 59);
     private static final List<Integer> BIRDS_ANSWER = List.of(69, 68, 69);
+    private static final List<Integer> BIG_NORTHEAST_ANSWER = List.of(
+            74, 74, 74, 72, 74, 69, 72, 69, 72, 69, 76, 74);
 
     private MelodyPuzzleGameTests() {
     }
@@ -420,6 +425,50 @@ public final class MelodyPuzzleGameTests {
         helper.succeed();
     }
 
+    @GameTest(template = "steam_whistle_empty", templateNamespace = CreateSandustry.MODID, timeoutTicks = 20)
+    public static void loadsBigNortheastDefinitionAndExactAnswer(GameTestHelper helper) {
+        MelodyPuzzleDefinition definition = MelodyPuzzleManager.definitionForTesting(BIG_NORTHEAST);
+        helper.assertTrue(definition != null, "BigNortheast 谜题定义必须成功加载");
+        helper.assertTrue(definition.answer().equals(BIG_NORTHEAST_ANSWER), "BigNortheast 答案顺序不正确");
+        helper.assertTrue(definition.rewards().isEmpty(), "BigNortheast 不应配置物品奖励");
+        helper.assertTrue(definition.weather() != null, "BigNortheast 必须配置天气奖励");
+        helper.assertTrue(definition.weather().kind() == MelodyPuzzleDefinition.WeatherKind.THUNDER,
+                "BigNortheast 天气奖励必须是雷雨");
+        helper.assertTrue(definition.weather().durationTicks() == 12000, "雷雨持续时间应为 12000 tick");
+
+        ItemStack disc = new ItemStack(ModItems.MUSIC_DISC_BIG_NORTHEAST.get());
+        helper.assertTrue(Boolean.TRUE.equals(disc.get(DataComponents.ENCHANTMENT_GLINT_OVERRIDE)),
+                "BigNortheast 唱片必须强制启用附魔光效");
+        helper.succeed();
+    }
+
+    @GameTest(template = "steam_whistle_empty", templateNamespace = CreateSandustry.MODID, timeoutTicks = 30)
+    public static void bigNortheastMelodyStartsThunderstorm(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = new BlockPos(1, 1, 1);
+        JukeboxBlockEntity jukebox = placeJukeboxWithDisc(
+                helper, pos, ModItems.MUSIC_DISC_BIG_NORTHEAST.get());
+        MelodyPuzzleManager.PuzzleSession session = requireSession(helper, level, pos);
+        long baseTick = level.getGameTime() + 1;
+        MelodyPuzzleManager.forceWaitingForTesting(session, level, baseTick);
+
+        for (int i = 0; i < BIG_NORTHEAST_ANSWER.size(); i++) {
+            long tick = baseTick + i;
+            MelodyPuzzleManager.queueForSessionForTesting(session, BIG_NORTHEAST_ANSWER.get(i), true, tick);
+            MelodyPuzzleManager.tickSession(session, level, tick);
+        }
+
+        helper.assertTrue(session.state == MelodyPuzzleState.PLAYING_SOLUTION,
+                "BigNortheast 正确旋律后应播放谜底");
+        jukebox.getSongPlayer().stop(level, jukebox.getBlockState());
+        MelodyPuzzleManager.tickSession(session, level, baseTick + 20);
+
+        helper.assertTrue(level.getLevelData().isRaining(), "谜底结束后应开始降雨");
+        helper.assertTrue(level.getLevelData().isThundering(), "谜底结束后应开始雷暴");
+        helper.assertTrue(jukebox.getTheItem().isEmpty(), "BigNortheast 成功后应消耗谜面唱片");
+        level.setWeatherParameters(1200, 0, false, false);
+        helper.succeed();
+    }
     private static JukeboxBlockEntity placeBirdsJukebox(GameTestHelper helper, BlockPos localPos) {
         return placeJukeboxWithDisc(helper, localPos, ModItems.MUSIC_DISC_BIRDS.get());
     }

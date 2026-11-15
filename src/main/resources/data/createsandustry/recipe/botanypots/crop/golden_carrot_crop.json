@@ -8,6 +8,6 @@
   "type": "botanypots:block_derived_crop",
   "block": "createsandustry:golden_carrot_crop",
   "soil": {
-    "item": "createsandustry:golden_farmland"
+    "tag": "createsandustry:golden_soil"
   }
 }

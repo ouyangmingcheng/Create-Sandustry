@@ -89,6 +89,10 @@ public final class RocketPotatoIntegration {
         }
     }
 
+    public static void detonateConsumed(ServerLevel level, Vec3 center) {
+        detonate(level, center, 3.0F, 5.0F, 0.6F);
+    }
+
     private static void detonate(ServerLevel level, Vec3 center, float radius, float maxDamage,
                                  float maxHardness) {
         DamageSource damageSource = level.damageSources().explosion(null, null);

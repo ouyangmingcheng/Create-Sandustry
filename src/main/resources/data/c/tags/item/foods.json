@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "createsandustry:mooncrystal",
+    "createsandustry:moonhop",
+    "createsandustry:chocolate_moonhop",
+    "createsandustry:sand_ball",
+    "createsandustry:potato_rocket"
+  ]
+}

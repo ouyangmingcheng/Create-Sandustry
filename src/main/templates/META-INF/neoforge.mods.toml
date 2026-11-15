@@ -63,6 +63,9 @@ config="createsandustry.poopsky.mixins.json"
 config="createsandustry.aeronautics.mixins.json"
 
 [[mixins]]
+config="createsandustry.sable.mixins.json"
+
+[[mixins]]
 config="createsandustry.createstuffadditions.mixins.json"
 
 # The [[accessTransformers]] block allows you to declare where your AT file is.

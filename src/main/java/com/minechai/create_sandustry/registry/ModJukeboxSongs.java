@@ -16,6 +16,8 @@ public final class ModJukeboxSongs {
     public static final ResourceKey<JukeboxSong> HEALING_SOLUTION = create("healing_solution");
     public static final ResourceKey<JukeboxSong> BIRDS_CLUE = create("birds_clue");
     public static final ResourceKey<JukeboxSong> BIRDS_SOLUTION = create("birds_solution");
+    public static final ResourceKey<JukeboxSong> BIG_NORTHEAST_CLUE = create("bignortheastismyhomeland_clue");
+    public static final ResourceKey<JukeboxSong> BIG_NORTHEAST_SOLUTION = create("bignortheastismyhomeland_solution");
 
     private static ResourceKey<JukeboxSong> create(String path) {
         return ResourceKey.create(Registries.JUKEBOX_SONG,

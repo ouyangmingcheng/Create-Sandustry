@@ -18,6 +18,7 @@ import com.minechai.create_sandustry.content.belt.SiftingBeltEvents;
 import com.minechai.create_sandustry.content.block.CatLitterBlock;
 import com.minechai.create_sandustry.registry.ModBlockEntities;
 import com.minechai.create_sandustry.content.block.entity.FlorinolBatteryBlockEntity;
+import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressBlockEntity;
 import com.minechai.create_sandustry.registry.ModBlocks;
 import com.minechai.create_sandustry.content.block.SandFortuneDrops;
 import com.minechai.create_sandustry.content.block.SpecialSandCauldronConversion;
@@ -27,13 +28,15 @@ import com.minechai.create_sandustry.content.block.ThunderSandEffects;
 import com.minechai.create_sandustry.content.client.effect.GoldenGlintRenderBuffers;
 import com.minechai.create_sandustry.content.client.effect.GoldenSelectionEffectRenderer;
 import com.minechai.create_sandustry.content.client.hud.SandHeartBossOverlay;
-import com.minechai.create_sandustry.content.client.hud.SandHeartHudRenderer;
 import com.minechai.create_sandustry.content.client.render.SandBladeCrescentRenderer;
 import com.minechai.create_sandustry.content.client.render.SandMasterSwordBeamRenderer;
+import com.minechai.create_sandustry.content.client.event.MoonhopBoardItemDecorator;
+import com.minechai.create_sandustry.content.client.event.MoonhopBlockClient;
 import com.minechai.create_sandustry.content.client.event.SandCasingClient;
 import com.minechai.create_sandustry.content.client.event.SiftingBeltClientEvents;
 import com.minechai.create_sandustry.content.client.event.ThermalBufferItemProperties;
 import com.minechai.create_sandustry.config.ModConfigs;
+import com.minechai.create_sandustry.content.gravity.GravityBouncePhysics;
 import com.minechai.create_sandustry.content.timebearing.TimeBearingEvents;
 import com.minechai.create_sandustry.content.conversion.FlorinolSoilEvents;
 import com.minechai.create_sandustry.content.conversion.MoonCrystalDepotEvents;
@@ -54,6 +57,7 @@ import com.minechai.create_sandustry.content.entity.QunyouEvents;
 import com.minechai.create_sandustry.content.event.GoldenSelectionEvents;
 import com.minechai.create_sandustry.content.event.SandMasterSwordPedestalEvents;
 import com.minechai.create_sandustry.content.melody.MelodyPuzzleManager;
+import com.minechai.create_sandustry.content.moonhop.MoonhopTooltipEvents;
 import com.minechai.create_sandustry.content.steamwhistle.SteamWhistlePerformanceProbe;
 import com.minechai.create_sandustry.registry.ModFluids;
 import com.minechai.create_sandustry.content.compat.create.HardenedSandSandpaperInteraction;
@@ -101,7 +105,8 @@ public class CreateSandustry {
             SandCasingClient.register(modEventBus);
             ThermalBufferItemProperties.register(modEventBus);
             GoldenSelectionEffectRenderer.register(modEventBus);
-            modEventBus.addListener(SandHeartHudRenderer::register);
+            MoonhopBoardItemDecorator.register(modEventBus);
+            MoonhopBlockClient.register(modEventBus);
             // 剑气实体渲染器。
             modEventBus.addListener(net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers.class,
                     event -> event.registerEntityRenderer(ModEntityTypes.SAND_MASTER_SWORD_BEAM.get(),
@@ -138,6 +143,8 @@ public class CreateSandustry {
         ModCreativeTabs.register(modEventBus);
 
         NeoForge.EVENT_BUS.addListener(SandustryCommands::register);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, GravityBouncePhysics::onPreTick);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, GravityBouncePhysics::onPostTick);
         // 时间轴承：服务端状态、区块生命周期和世界时间增量。
         NeoForge.EVENT_BUS.addListener(TimeBearingEvents::onServerStarted);
         NeoForge.EVENT_BUS.addListener(TimeBearingEvents::onServerStopped);
@@ -146,8 +153,10 @@ public class CreateSandustry {
         NeoForge.EVENT_BUS.addListener(TimeBearingEvents::onChunkUnload);
         NeoForge.EVENT_BUS.addListener(TimeBearingEvents::onLevelUnload);
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.addListener(KineticPressBlockEntity::onNeighborNotify);
         NeoForge.EVENT_BUS.addListener(ThunderSandEffects::onServerTick);
         NeoForge.EVENT_BUS.addListener(GoldenSelectionEvents::onItemTooltip);
+        NeoForge.EVENT_BUS.addListener(MoonhopTooltipEvents::onItemTooltip);
         NeoForge.EVENT_BUS.addListener(GoldenSelectionEffectEvents::onItemUseFinish);
         NeoForge.EVENT_BUS.addListener(GoldenSelectionEffectEvents::onBlockBreak);
         NeoForge.EVENT_BUS.addListener(LivingSandEvents::onBlockBreak);

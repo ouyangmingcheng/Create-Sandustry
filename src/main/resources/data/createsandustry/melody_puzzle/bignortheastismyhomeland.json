@@ -1,0 +1,19 @@
+{
+  "id": "bignortheastismyhomeland",
+  "clue_sound": "createsandustry:music.bignortheastismyhomeland_clue",
+  "solution_sound": "createsandustry:music.bignortheastismyhomeland_solution",
+  "answer": [
+    74, 74, 74,
+    72, 74, 69,
+    72, 69, 72,
+    69, 76, 74
+  ],
+  "input_timeout": 400,
+  "range": 16,
+  "audio_range": 16,
+  "reward": [],
+  "weather": {
+    "type": "thunder",
+    "duration": 12000
+  }
+}

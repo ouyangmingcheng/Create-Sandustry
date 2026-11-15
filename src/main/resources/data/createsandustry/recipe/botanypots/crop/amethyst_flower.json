@@ -8,6 +8,6 @@
   "type": "botanypots:block_derived_crop",
   "block": "createsandustry:amethyst_flower",
   "soil": {
-    "item": "createsandustry:golden_farmland"
+    "tag": "createsandustry:golden_soil"
   }
 }

@@ -1,6 +1,7 @@
 package com.minechai.create_sandustry.registry;
 
 import com.minechai.create_sandustry.CreateSandustry;
+import com.minechai.create_sandustry.content.gravity.GravityBounceTracker;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -25,6 +26,12 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 public final class ModAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
             DeferredRegister.create(NeoForgeRegistries.Keys.ATTACHMENT_TYPES, CreateSandustry.MODID);
+
+    /** A saved ItemEntity flight resumes; newly dropped stacks start with a fresh attachment. */
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<GravityBounceTracker>> GRAVITY_BOUNCE =
+            ATTACHMENT_TYPES.register("gravity_bounce", () -> AttachmentType.builder(GravityBounceTracker::new)
+                    .serialize(GravityBounceTracker.CODEC)
+                    .build());
 
     /** 实体当前拥有的沙心数量，单位：半颗沙心（玩家与生物通用；生物身上是“虚拟沙心”）。 */
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<Integer>> SAND_HEARTS =

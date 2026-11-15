@@ -13,11 +13,13 @@ import com.minechai.create_sandustry.content.item.LivingSandItem;
 import com.minechai.create_sandustry.content.item.BrokenSandSwordItem;
 import com.minechai.create_sandustry.content.item.BrokenSandMasterSwordItem;
 import com.minechai.create_sandustry.CreateSandustry;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.DiscFragmentItem;
@@ -71,8 +73,24 @@ public final class ModItems {
                     .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_BOOST, 30 * 20, 0), 1.0F)
                     .build())));
 
-    /** 月跃板：沿用旧版月跃石废案纹理的普通物品。 */
+    /** 月跃石板：使用新母图粉紫渐变动画的完成品。 */
     public static final DeferredItem<Item> MOONHOP_BOARD = ITEMS.registerSimpleItem("moonhop_board");
+
+    public static final DeferredItem<Item> GRAVITY_MECHANISM = ITEMS.registerSimpleItem("gravity_mechanism");
+
+    /** Create supplies the native progress bar; the recipe supplies the native assembly tooltip. */
+    public static final DeferredItem<SequencedAssemblyItem> INCOMPLETE_GRAVITY_MECHANISM = ITEMS.registerItem(
+            "incomplete_gravity_mechanism", SequencedAssemblyItem::new);
+
+    /** 月跃石块：粉紫渐变动画方块对应的 BlockItem。 */
+    public static final DeferredItem<BlockItem> MOONHOP_BLOCK = ITEMS.registerSimpleBlockItem(
+            "moonhop_block",
+            ModBlocks.MOONHOP_BLOCK);
+
+    /** 未完成月跃石板：机械压机累计高度过程中的不可堆叠中间产物。 */
+    public static final DeferredItem<Item> INCOMPLETE_MOONHOP_BOARD = ITEMS.registerItem(
+            "incomplete_moonhop_board",
+            properties -> new Item(properties.stacksTo(1)));
 
     public static final DeferredItem<BlockItem> SAND_CASING = ITEMS.registerSimpleBlockItem("sand_casing", ModBlocks.SAND_CASING);
     public static final DeferredItem<BlockItem> WET_SAND = ITEMS.registerSimpleBlockItem("wet_sand", ModBlocks.WET_SAND);
@@ -115,7 +133,10 @@ public final class ModItems {
             GoldenHeartItem::new);
 
     /** 火箭土豆：机械动力土豆加农炮的高速弹药。 */
-    public static final DeferredItem<Item> POTATO_ROCKET = ITEMS.registerSimpleItem("potato_rocket");
+    public static final DeferredItem<com.minechai.create_sandustry.content.item.RocketPotatoItem> POTATO_ROCKET =
+            ITEMS.registerItem("potato_rocket", properties ->
+                    new com.minechai.create_sandustry.content.item.RocketPotatoItem(
+                            properties.food(net.minecraft.world.food.Foods.BAKED_POTATO)));
 
     /** 沙噬剑（完整形态）：攻击力 3 点，命中施加沙化，耐久耗尽后变为破损形态。 */
     public static final DeferredItem<SandMasterSwordItem> SAND_MASTER_SWORD = ITEMS.registerItem(
@@ -183,6 +204,16 @@ public final class ModItems {
     public static final DeferredItem<DiscFragmentItem> DISC_FRAGMENT_BIRDS = ITEMS.registerItem(
             "disc_fragment_birds",
             DiscFragmentItem::new);
+
+    /** Wy0000-BigNortheastIsMyHomeland 谜题唱片，使用兔子脚纹理和原版附魔光效。 */
+    public static final DeferredItem<Item> MUSIC_DISC_BIG_NORTHEAST = ITEMS.registerItem(
+            "music_disc_bignortheastismyhomeland",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+                    .jukeboxPlayable(ModJukeboxSongs.BIG_NORTHEAST_CLUE)
+                    .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
+                    .component(ModDataComponents.MELODY_PUZZLE_ID.get(), "bignortheastismyhomeland")));
     /** 沙金剑（破损形态）：不能作为武器，只能与沙团无序合成恢复耐久。 */
     public static final DeferredItem<BrokenSandSwordItem> SAND_SWORD_BROKEN = ITEMS.registerItem(
             "sand_sword_broken",
@@ -199,6 +230,9 @@ public final class ModItems {
     public static final DeferredItem<BlockItem> FLORINOL_BATTERY = ITEMS.registerSimpleBlockItem(
             "florinol_battery",
             ModBlocks.FLORINOL_BATTERY);
+    public static final DeferredItem<BlockItem> KINETIC_PRESS = ITEMS.registerSimpleBlockItem(
+            "kinetic_press",
+            ModBlocks.KINETIC_PRESS);
     public static final DeferredItem<BlockItem> FLORINOL_SOIL = ITEMS.registerSimpleBlockItem(
             "florinol_soil",
             ModBlocks.FLORINOL_SOIL);
@@ -235,8 +269,4 @@ public final class ModItems {
     private ModItems() {
     }
 }
-
-
-
-
 

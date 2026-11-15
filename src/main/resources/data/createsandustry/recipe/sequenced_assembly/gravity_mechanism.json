@@ -1,0 +1,34 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "createsandustry:moonhop_board"
+  },
+  "transitional_item": {
+    "id": "createsandustry:incomplete_gravity_mechanism"
+  },
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createsandustry:incomplete_gravity_mechanism" },
+        { "item": "create:precision_mechanism" }
+      ],
+      "results": [
+        { "id": "createsandustry:incomplete_gravity_mechanism" }
+      ]
+    },
+    {
+      "type": "createsandustry:bounce_activation",
+      "ingredients": [
+        { "item": "createsandustry:incomplete_gravity_mechanism" }
+      ],
+      "results": [
+        { "id": "createsandustry:incomplete_gravity_mechanism" }
+      ]
+    }
+  ],
+  "results": [
+    { "id": "createsandustry:gravity_mechanism" }
+  ],
+  "loops": 1
+}

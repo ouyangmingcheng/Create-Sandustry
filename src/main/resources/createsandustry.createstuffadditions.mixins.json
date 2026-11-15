@@ -6,7 +6,9 @@
     "createstuffadditions.PortableDrillBlockDestroyedMixin",
     "createstuffadditions.PortableDrillToolTickMixin",
     "createstuffadditions.BrassJetpackFlorinolMixin",
-    "createstuffadditions.BrassExoskeletonFlorinolMixin"
+    "createstuffadditions.BrassExoskeletonFlorinolMixin",
+    "createstuffadditions.NetheriteJetpackFlorinolMixin",
+    "createstuffadditions.NetheriteJetpackElytraMixin"
   ],
   "client": [
     "createstuffadditions.PortableDrillEnergyBarMixin"

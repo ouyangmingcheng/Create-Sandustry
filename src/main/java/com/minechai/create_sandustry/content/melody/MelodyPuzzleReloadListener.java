@@ -97,27 +97,47 @@ public final class MelodyPuzzleReloadListener extends SimpleJsonResourceReloadLi
         }
 
         List<MelodyPuzzleDefinition.Reward> rewards = new ArrayList<>();
-        for (JsonElement rewardElement : GsonHelper.getAsJsonArray(json, "reward")) {
-            JsonObject rewardJson = GsonHelper.convertToJsonObject(rewardElement, "reward");
-            ResourceLocation itemId = parseId(GsonHelper.getAsString(rewardJson, "item"));
-            Item item = BuiltInRegistries.ITEM.getOptional(itemId)
-                    .orElseThrow(() -> new IllegalArgumentException("unknown item " + itemId));
-            int count = GsonHelper.getAsInt(rewardJson, "count", 1);
-            if (count <= 0) {
-                throw new IllegalArgumentException("reward count must be positive: " + itemId);
+        if (json.has("reward")) {
+            for (JsonElement rewardElement : GsonHelper.getAsJsonArray(json, "reward")) {
+                JsonObject rewardJson = GsonHelper.convertToJsonObject(rewardElement, "reward");
+                ResourceLocation itemId = parseId(GsonHelper.getAsString(rewardJson, "item"));
+                Item item = BuiltInRegistries.ITEM.getOptional(itemId)
+                        .orElseThrow(() -> new IllegalArgumentException("unknown item " + itemId));
+                int count = GsonHelper.getAsInt(rewardJson, "count", 1);
+                if (count <= 0) {
+                    throw new IllegalArgumentException("reward count must be positive: " + itemId);
+                }
+                ItemStack validationStack = new ItemStack(item, count);
+                if (count > validationStack.getMaxStackSize()) {
+                    throw new IllegalArgumentException("reward count exceeds max stack size: " + itemId);
+                }
+                rewards.add(new MelodyPuzzleDefinition.Reward(item, count));
             }
-            ItemStack validationStack = new ItemStack(item, count);
-            if (count > validationStack.getMaxStackSize()) {
-                throw new IllegalArgumentException("reward count exceeds max stack size: " + itemId);
-            }
-            rewards.add(new MelodyPuzzleDefinition.Reward(item, count));
         }
-        if (rewards.isEmpty()) {
-            throw new IllegalArgumentException("reward must contain at least one item");
+
+        MelodyPuzzleDefinition.WeatherReward weather = null;
+        if (json.has("weather")) {
+            JsonObject weatherJson = GsonHelper.convertToJsonObject(json.get("weather"), "weather");
+            String type = GsonHelper.getAsString(weatherJson, "type");
+            MelodyPuzzleDefinition.WeatherKind kind = switch (type) {
+                case "clear" -> MelodyPuzzleDefinition.WeatherKind.CLEAR;
+                case "rain" -> MelodyPuzzleDefinition.WeatherKind.RAIN;
+                case "thunder" -> MelodyPuzzleDefinition.WeatherKind.THUNDER;
+                default -> throw new IllegalArgumentException("unknown weather type: " + type);
+            };
+            int duration = GsonHelper.getAsInt(weatherJson, "duration", 12_000);
+            if (duration <= 0 || duration > 1_728_000) {
+                throw new IllegalArgumentException("weather duration must be in 1..1728000 ticks");
+            }
+            weather = new MelodyPuzzleDefinition.WeatherReward(kind, duration);
+        }
+
+        if (rewards.isEmpty() && weather == null) {
+            throw new IllegalArgumentException("puzzle must define at least one item or weather reward");
         }
 
         return new MelodyPuzzleDefinition(id, clueSound, solutionSound, clueSong, solutionSong,
-                answer, timeout, range, audioRange, rewards);
+                answer, timeout, range, audioRange, rewards, weather);
     }
 
     private void requireSound(ResourceLocation soundId) {

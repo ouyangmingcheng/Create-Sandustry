@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.minechai.create_sandustry.CreateSandustry;
 import com.minechai.create_sandustry.api.florinol.FlorinolToolBinding;
 import com.minechai.create_sandustry.api.florinol.FlorinolToolEnergySnapshot;
+import com.minechai.create_sandustry.content.moonhop.MoonhopProcessState;
 import com.mojang.serialization.Codec;
 
 import net.minecraft.core.UUIDUtil;
@@ -51,6 +52,25 @@ public final class ModDataComponents {
                     .networkSynchronized(FlorinolToolEnergySnapshot.STREAM_CODEC)
                     .build());
 
+    /** 未完成月跃石板的累计压制状态；普通月跃石不携带此组件。 */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<MoonhopProcessState>> MOONHOP_PROCESS_STATE =
+            DATA_COMPONENT_TYPES.register("moonhop_process_state", () -> DataComponentType.<MoonhopProcessState>builder()
+                    .persistent(MoonhopProcessState.CODEC)
+                    .networkSynchronized(MoonhopProcessState.STREAM_CODEC)
+                    .build());
+
+    /** 重力构件半成品累计经历的真实弹跳数；随物品栈进入库存、Create 物流和存档。 */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GRAVITY_TOTAL_BOUNCES =
+            DATA_COMPONENT_TYPES.register("gravity_total_bounces", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.intRange(0, Integer.MAX_VALUE))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+    /** 已经结束的有效弹跳链数量；仅此计数决定后续损坏率，随物品栈持久化和同步。 */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> GRAVITY_INTERRUPTION_COUNT =
+            DATA_COMPONENT_TYPES.register("gravity_interruption_count", () -> DataComponentType.<Integer>builder()
+                    .persistent(Codec.intRange(0, Integer.MAX_VALUE))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
     /** 谜面唱片对应的服务端谜题 ID；普通唱片没有此组件。 */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> MELODY_PUZZLE_ID =
             DATA_COMPONENT_TYPES.register("melody_puzzle_id", () -> DataComponentType.<String>builder()

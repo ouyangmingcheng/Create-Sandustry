@@ -29,6 +29,10 @@ public final class ModSounds {
             register("music.birds_clue");
     public static final DeferredHolder<SoundEvent, SoundEvent> BIRDS_SOLUTION =
             register("music.birds_solution");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BIG_NORTHEAST_CLUE =
+            register("music.bignortheastismyhomeland_clue");
+    public static final DeferredHolder<SoundEvent, SoundEvent> BIG_NORTHEAST_SOLUTION =
+            register("music.bignortheastismyhomeland_solution");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String path) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, path);

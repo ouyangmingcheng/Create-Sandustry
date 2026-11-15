@@ -19,6 +19,8 @@ import com.minechai.create_sandustry.CreateSandustry;
 import com.minechai.create_sandustry.content.block.crop.AmethystFlowerBlock;
 import com.minechai.create_sandustry.content.block.crop.GoldenCarrotCropBlock;
 import com.minechai.create_sandustry.content.block.machine.FlorinolBatteryBlock;
+import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressBlock;
+import com.minechai.create_sandustry.content.moonhop.MoonhopBlock;
 import com.minechai.create_sandustry.content.block.machine.ThermalBufferBlock;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllBlockEntityTypes;
@@ -64,7 +66,7 @@ public final class ModBlocks {
                     .mapColor(MapColor.SAND)
                     .sound(SoundType.NETHERITE_BLOCK), SAND_CASING::get));
 
-    /** 沙金套壳流体管道：用于验证沙金机壳在另一类 Create 可套壳方块上的兼容性。 */
+    /** 仅保留旧存档中的沙金套壳流体管道；不再注册为可右键套壳的变体。 */
     public static final DeferredBlock<EncasedPipeBlock> SAND_ENCASED_FLUID_PIPE = BLOCKS.register(
             "sand_encased_fluid_pipe",
             () -> new EncasedPipeBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK)
@@ -83,6 +85,11 @@ public final class ModBlocks {
     public static final DeferredBlock<Block> PETRIFIED_SAND = BLOCKS.registerSimpleBlock(
             "petrified_sand",
             petrifiedSandProperties());
+
+    /** 月跃石块：黏液块式弹跳与音效，但完全不黏附。 */
+    public static final DeferredBlock<MoonhopBlock> MOONHOP_BLOCK = BLOCKS.register(
+            "moonhop_block", () -> new MoonhopBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SLIME_BLOCK)
+                    .mapColor(MapColor.COLOR_PINK)));
 
     /** Sandified ore variants, keyed by the namespace-free registry path. */
     public static final Map<String, DeferredBlock<Block>> SANDIFIED_ORES = createSandifiedOres();
@@ -124,6 +131,13 @@ public final class ModBlocks {
                     .liquid()
                     .sound(SoundType.EMPTY)));
 
+    /** 重力压制器基座：结构状态、工作高度与 FE 均保存在方块实体中。 */
+    public static final DeferredBlock<KineticPressBlock> KINETIC_PRESS = BLOCKS.register(
+            "kinetic_press",
+            () -> new KineticPressBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.copperMetal())
+                    .noOcclusion()
+                    .isViewBlocking((state, level, pos) -> false)
+                    .isSuffocating((state, level, pos) -> false)));
     public static final DeferredBlock<FlorinolBatteryBlock> FLORINOL_BATTERY = BLOCKS.register(
             "florinol_battery",
             () -> new FlorinolBatteryBlock(BlockBehaviour.Properties.ofFullCopy(SharedProperties.copperMetal())
@@ -182,7 +196,6 @@ public final class ModBlocks {
     public static void registerEncasingVariants(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             EncasingRegistry.addVariant(AllBlocks.SHAFT.get(), SAND_ENCASED_SHAFT.get());
-            EncasingRegistry.addVariant(AllBlocks.FLUID_PIPE.get(), SAND_ENCASED_FLUID_PIPE.get());
         });
     }
 

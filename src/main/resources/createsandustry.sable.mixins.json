@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.minechai.create_sandustry.mixin.sable",
+  "plugin": "com.minechai.create_sandustry.content.compat.sable.MoonhopSableMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixinextras": {"minVersion": "0.5.3"},
+  "mixins": ["MoonhopEntityMoveMixin", "MoonhopSubLevelCollisionMixin"],
+  "injectors": {"defaultRequire": 1}
+}

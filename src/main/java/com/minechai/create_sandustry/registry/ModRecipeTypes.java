@@ -1,12 +1,16 @@
 package com.minechai.create_sandustry.registry;
 
 import com.minechai.create_sandustry.content.recipe.SiftingRecipe;
+import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipe;
+import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipeSerializer;
+import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipeType;
 import com.minechai.create_sandustry.content.recipe.SandSwordRepairRecipeSerializer;
 import com.minechai.create_sandustry.content.recipe.SandSwordDeployingRecipe;
 import com.minechai.create_sandustry.content.recipe.RandomSaplingMixingRecipe;
 import com.minechai.create_sandustry.content.recipe.CauldronConversionRecipeSerializer;
 import com.minechai.create_sandustry.content.recipe.CauldronConversionRecipe;
 import com.minechai.create_sandustry.CreateSandustry;
+import com.minechai.create_sandustry.content.gravity.BounceActivationRecipe;
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;
 import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
@@ -32,6 +36,33 @@ public final class ModRecipeTypes {
             ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "random_sapling_mixing");
     public static final ResourceLocation SIFTING_ID =
             ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "sifting");
+    public static final ResourceLocation BOUNCE_ACTIVATION_ID =
+            ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "bounce_activation");
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<BounceActivationRecipe>> BOUNCE_ACTIVATION =
+            RECIPE_TYPES.register("bounce_activation", () -> RecipeType.simple(BOUNCE_ACTIVATION_ID));
+    public static final DeferredHolder<RecipeSerializer<?>, StandardProcessingRecipe.Serializer<BounceActivationRecipe>>
+            BOUNCE_ACTIVATION_SERIALIZER = RECIPE_SERIALIZERS.register("bounce_activation",
+                    () -> new StandardProcessingRecipe.Serializer<>(BounceActivationRecipe::new));
+
+    public static final IRecipeTypeInfo BOUNCE_ACTIVATION_INFO = new IRecipeTypeInfo() {
+        @Override
+        public ResourceLocation getId() {
+            return BOUNCE_ACTIVATION_ID;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends RecipeSerializer<?>> T getSerializer() {
+            return (T) BOUNCE_ACTIVATION_SERIALIZER.get();
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType() {
+            return (RecipeType<R>) BOUNCE_ACTIVATION.get();
+        }
+    };
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<CauldronConversionRecipe>> CAULDRON_CONVERSION =
             RECIPE_TYPES.register("cauldron_conversion",
@@ -65,6 +96,13 @@ public final class ModRecipeTypes {
             SIFTING_SERIALIZER = RECIPE_SERIALIZERS.register("sifting",
                     () -> new StandardProcessingRecipe.Serializer<>(SiftingRecipe::new));
 
+    public static final DeferredHolder<RecipeType<?>, RecipeType<KineticPressRecipe>> KINETIC_PRESSING =
+            RECIPE_TYPES.register("pressing",
+                    () -> RecipeType.<KineticPressRecipe>simple(KineticPressRecipeType.ID));
+
+    public static final DeferredHolder<RecipeSerializer<?>, KineticPressRecipeSerializer>
+            KINETIC_PRESSING_SERIALIZER = RECIPE_SERIALIZERS.register("pressing",
+                    KineticPressRecipeSerializer::new);
     public static final IRecipeTypeInfo RANDOM_SAPLING_MIXING_INFO = new IRecipeTypeInfo() {
         @Override
         public ResourceLocation getId() {

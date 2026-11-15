@@ -6,6 +6,7 @@
     "createsandustry:sand_casing",
     "createsandustry:sand_encased_shaft",
     "createsandustry:sand_encased_fluid_pipe",
-    "createsandustry:thermal_relay"
+    "createsandustry:thermal_relay",
+    "createsandustry:kinetic_press"
   ]
 }

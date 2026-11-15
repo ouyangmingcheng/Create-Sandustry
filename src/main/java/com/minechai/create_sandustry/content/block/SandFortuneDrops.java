@@ -26,8 +26,9 @@ import net.neoforged.neoforge.event.level.BlockDropsEvent;
  * 时运挖掘处理：玩家用带「时运」附魔的工具挖掘沙子类方块时的两项额外规则。
  *
  * <ol>
- *     <li><b>用沙团替换普通沙子掉落</b>：掉落里的 {@code minecraft:sand} / {@code minecraft:red_sand}
- *         会被替换成同数量的 {@code createsandustry:sand_ball}（原地替换，不会同时掉沙子与沙团）；
+ *     <li><b>概率用沙团替换普通沙子掉落</b>：每次挖掘只判定一次，时运 I → 10%、II → 20%、
+ *         III 及以上 → 30%。命中时将首组 {@code minecraft:sand} / {@code minecraft:red_sand}
+ *         掉落替换为 1 个 {@code createsandustry:sand_ball}；未命中时保留原掉落。
  *         其它既有掉落（精准采集掉方块本身、其它附加掉落）保持不变。没有时运时完全不介入。</li>
  *     <li><b>额外金粒</b>：时运 I → 0~3、II → 0~6、III 及以上 → 1~9（均匀整数，含两端）。</li>
  * </ol>
@@ -74,8 +75,8 @@ public final class SandFortuneDrops {
             return;
         }
 
-        // 1) 用沙团替换普通沙子 / 红沙掉落（与是否有额外金粒无关）。
-        replaceSandDrops(event.getDrops());
+        // 1) 按时运等级概率将普通沙子 / 红沙掉落替换为 1 个沙团。
+        replaceSandDrops(event.getDrops(), level.getRandom(), fortune);
 
         // 2) 额外金粒。
         int count = nuggetCount(level.getRandom(), fortune);
@@ -84,12 +85,15 @@ public final class SandFortuneDrops {
         }
     }
 
-    /** 把掉落中的原版沙子 / 红沙原地替换为等量沙团，其它掉落保持不变。 */
-    private static void replaceSandDrops(java.util.List<ItemEntity> drops) {
+    /** 每次挖掘最多抽取一次，按 10% / 20% / 30% 概率把首组沙子 / 红沙替换为 1 个沙团。 */
+    private static void replaceSandDrops(java.util.List<ItemEntity> drops, RandomSource random, int fortuneLevel) {
         for (ItemEntity drop : drops) {
             ItemStack stack = drop.getItem();
             if (stack.is(Items.SAND) || stack.is(Items.RED_SAND)) {
-                drop.setItem(new ItemStack(ModItems.SAND_BALL.get(), stack.getCount()));
+                if (random.nextInt(10) < Math.min(fortuneLevel, 3)) {
+                    drop.setItem(new ItemStack(ModItems.SAND_BALL.get(), 1));
+                }
+                return;
             }
         }
     }

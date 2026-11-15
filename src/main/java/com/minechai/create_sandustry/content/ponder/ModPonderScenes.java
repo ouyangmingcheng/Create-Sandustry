@@ -2,6 +2,7 @@ package com.minechai.create_sandustry.content.ponder;
 
 import com.minechai.create_sandustry.content.ponder.scenes.FlorinolBatteryScenes;
 import com.minechai.create_sandustry.content.ponder.scenes.FlorinolSoilScenes;
+import com.minechai.create_sandustry.content.ponder.scenes.KineticPressScenes;
 import com.minechai.create_sandustry.content.ponder.scenes.MoonCrystalScenes;
 import com.minechai.create_sandustry.content.ponder.scenes.MoonhopScenes;
 import com.minechai.create_sandustry.content.ponder.scenes.ThermalRelayScenes;
@@ -22,5 +23,6 @@ public final class ModPonderScenes {
         FlorinolSoilScenes.register(helper);
         MoonCrystalScenes.register(helper);
         MoonhopScenes.register(helper);
+        KineticPressScenes.register(helper);
     }
 }
