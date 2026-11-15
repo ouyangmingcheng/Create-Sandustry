@@ -51,9 +51,11 @@ replay_pid*
 ### Local decompiled/reference sources ###
 /net/
 
-### Generated texture tooling output ###
-/tools/preview/
-/coin_textures/verify_report.txt
+### Local assets, documentation, dependencies and tools ###
+/coin_textures/
+/docs/
+/libs/
+/tools/
 
 ### Local temporary and OS files ###
 /$null
