@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.event.SandMasterSwordPedestalEvents;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordPedestalEvents;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LightningBolt;

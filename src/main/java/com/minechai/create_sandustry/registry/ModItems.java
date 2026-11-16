@@ -1,17 +1,17 @@
 package com.minechai.create_sandustry.registry;
 
-import com.minechai.create_sandustry.content.item.ThermalBufferBlockItem;
-import com.minechai.create_sandustry.content.item.SandSwordItem;
-import com.minechai.create_sandustry.content.item.SandMasterSwordItem;
-import com.minechai.create_sandustry.content.item.SandBallItem;
-import com.minechai.create_sandustry.content.item.SandHeartItem;
-import com.minechai.create_sandustry.content.item.GoldenHeartItem;
-import com.minechai.create_sandustry.content.item.MysteriousLumpItem;
-import com.minechai.create_sandustry.content.item.MoonCrystalItem;
-import com.minechai.create_sandustry.content.item.ModTiers;
-import com.minechai.create_sandustry.content.item.LivingSandItem;
-import com.minechai.create_sandustry.content.item.BrokenSandSwordItem;
-import com.minechai.create_sandustry.content.item.BrokenSandMasterSwordItem;
+import com.minechai.create_sandustry.content.thermalbuffer.ThermalBufferBlockItem;
+import com.minechai.create_sandustry.content.sandsword.SandSwordItem;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordItem;
+import com.minechai.create_sandustry.content.sand.SandBallItem;
+import com.minechai.create_sandustry.content.sandheart.SandHeartItem;
+import com.minechai.create_sandustry.content.sandheart.GoldenHeartItem;
+import com.minechai.create_sandustry.content.materials.MysteriousLumpItem;
+import com.minechai.create_sandustry.content.mooncrystal.MoonCrystalItem;
+import com.minechai.create_sandustry.registry.ModTiers;
+import com.minechai.create_sandustry.content.livingsand.LivingSandItem;
+import com.minechai.create_sandustry.content.sandsword.BrokenSandSwordItem;
+import com.minechai.create_sandustry.content.sandmastersword.BrokenSandMasterSwordItem;
 import com.minechai.create_sandustry.CreateSandustry;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 
@@ -43,7 +43,7 @@ public static final DeferredItem<BlockItem> GOLDEN_EXPERIENCE_BLOCK = ITEMS.regi
             return super.getName(stack).copy().withStyle(net.minecraft.ChatFormatting.GOLD);
         }
     });
-public static final DeferredItem<com.minechai.create_sandustry.content.item.GoldenExperienceNuggetItem> GOLDEN_EXPERIENCE_NUGGET = ITEMS.registerItem("golden_experience_nugget", com.minechai.create_sandustry.content.item.GoldenExperienceNuggetItem::new);
+public static final DeferredItem<com.minechai.create_sandustry.content.experience.GoldenExperienceNuggetItem> GOLDEN_EXPERIENCE_NUGGET = ITEMS.registerItem("golden_experience_nugget", com.minechai.create_sandustry.content.experience.GoldenExperienceNuggetItem::new);
 
     /** 沙合金：普通物品，仅用于物品、纹理与标签。 */
     public static final DeferredItem<Item> SAND_ALLOY = ITEMS.registerSimpleItem("sand_alloy");
@@ -140,9 +140,9 @@ public static final DeferredItem<com.minechai.create_sandustry.content.item.Gold
             GoldenHeartItem::new);
 
     /** 火箭土豆：机械动力土豆加农炮的高速弹药。 */
-    public static final DeferredItem<com.minechai.create_sandustry.content.item.RocketPotatoItem> POTATO_ROCKET =
+    public static final DeferredItem<com.minechai.create_sandustry.content.potatorocket.RocketPotatoItem> POTATO_ROCKET =
             ITEMS.registerItem("potato_rocket", properties ->
-                    new com.minechai.create_sandustry.content.item.RocketPotatoItem(
+                    new com.minechai.create_sandustry.content.potatorocket.RocketPotatoItem(
                             properties.food(net.minecraft.world.food.Foods.BAKED_POTATO)));
 
     /** 沙噬剑（完整形态）：攻击力 3 点，命中施加沙化，耐久耗尽后变为破损形态。 */

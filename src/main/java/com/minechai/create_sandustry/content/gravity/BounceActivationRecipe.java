@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import com.minechai.create_sandustry.content.compat.jei.GravityBounceAssemblySubCategory;
+import com.minechai.create_sandustry.compat.jei.GravityBounceAssemblySubCategory;
 import com.minechai.create_sandustry.registry.ModRecipeTypes;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;

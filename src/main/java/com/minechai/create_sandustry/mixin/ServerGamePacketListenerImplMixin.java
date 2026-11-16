@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.minechai.create_sandustry.content.item.SandMasterSwordEvents;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordEvents;
 
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.server.level.ServerPlayer;

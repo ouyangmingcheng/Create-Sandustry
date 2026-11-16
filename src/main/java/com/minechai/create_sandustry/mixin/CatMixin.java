@@ -1,7 +1,7 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.compat.minecraft.CatLitterConversion;
-import com.minechai.create_sandustry.content.compat.create.CatSeatHealing;
+import com.minechai.create_sandustry.compat.minecraft.CatLitterConversion;
+import com.minechai.create_sandustry.compat.create.CatSeatHealing;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.animal.Cat;

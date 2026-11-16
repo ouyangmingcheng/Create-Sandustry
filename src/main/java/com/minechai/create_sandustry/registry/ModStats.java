@@ -1,7 +1,7 @@
 package com.minechai.create_sandustry.registry;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.content.event.ArchaeologyCompletedEvent;
+import com.minechai.create_sandustry.foundation.event.ArchaeologyCompletedEvent;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.core.BlockPos;

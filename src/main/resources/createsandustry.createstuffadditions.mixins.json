@@ -3,15 +3,15 @@
   "package": "com.minechai.create_sandustry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "createstuffadditions.PortableDrillBlockDestroyedMixin",
-    "createstuffadditions.PortableDrillToolTickMixin",
-    "createstuffadditions.BrassJetpackFlorinolMixin",
-    "createstuffadditions.BrassExoskeletonFlorinolMixin",
-    "createstuffadditions.NetheriteJetpackFlorinolMixin",
-    "createstuffadditions.NetheriteJetpackElytraMixin"
+    "compat.createstuffadditions.PortableDrillBlockDestroyedMixin",
+    "compat.createstuffadditions.PortableDrillToolTickMixin",
+    "compat.createstuffadditions.BrassJetpackFlorinolMixin",
+    "compat.createstuffadditions.BrassExoskeletonFlorinolMixin",
+    "compat.createstuffadditions.NetheriteJetpackFlorinolMixin",
+    "compat.createstuffadditions.NetheriteJetpackElytraMixin"
   ],
   "client": [
-    "createstuffadditions.PortableDrillEnergyBarMixin"
+    "compat.createstuffadditions.PortableDrillEnergyBarMixin"
   ],
   "injectors": {
     "defaultRequire": 1

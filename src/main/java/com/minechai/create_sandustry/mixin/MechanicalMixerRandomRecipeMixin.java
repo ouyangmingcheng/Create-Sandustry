@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.recipe.RandomSaplingMixingRecipe;
+import com.minechai.create_sandustry.content.goldenflora.RandomSaplingMixingRecipe;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 
 import net.minecraft.world.item.crafting.Recipe;

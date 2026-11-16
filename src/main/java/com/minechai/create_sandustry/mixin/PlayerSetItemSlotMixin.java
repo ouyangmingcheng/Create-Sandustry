@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.advancement.GoldenFriedRiceAdvancements;
+import com.minechai.create_sandustry.content.goldenfriedrice.GoldenFriedRiceAdvancements;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.config.ModConfigs;
+import com.minechai.create_sandustry.infrastructure.config.ModConfigs;
 import com.minechai.create_sandustry.registry.ModAttachments;
 
 import net.minecraft.core.BlockPos;

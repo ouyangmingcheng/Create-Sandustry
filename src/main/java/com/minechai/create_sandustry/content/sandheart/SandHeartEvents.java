@@ -1,5 +1,7 @@
 package com.minechai.create_sandustry.content.sandheart;
 
+import com.minechai.create_sandustry.content.sandmastersword.SandSwordHealthPenalty;
+
 import com.minechai.create_sandustry.registry.ModItems;
 import com.minechai.create_sandustry.registry.ModMobEffects;
 

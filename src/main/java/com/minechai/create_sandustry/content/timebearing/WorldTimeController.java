@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.config.ModConfigs;
+import com.minechai.create_sandustry.infrastructure.config.ModConfigs;
 import com.simibubi.create.content.contraptions.bearing.ClockworkBearingBlockEntity;
 
 import net.minecraft.core.BlockPos;

@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.block.entity.SandMasterSwordPedestalBlockEntity;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordPedestalBlockEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;

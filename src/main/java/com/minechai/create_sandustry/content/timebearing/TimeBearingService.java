@@ -3,7 +3,7 @@ package com.minechai.create_sandustry.content.timebearing;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import com.minechai.create_sandustry.config.ModConfigs;
+import com.minechai.create_sandustry.infrastructure.config.ModConfigs;
 import com.simibubi.create.content.contraptions.bearing.ClockworkBearingBlockEntity;
 
 import net.minecraft.core.BlockPos;

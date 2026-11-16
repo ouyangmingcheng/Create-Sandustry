@@ -1,10 +1,10 @@
 package com.minechai.create_sandustry.registry;
 
-import com.minechai.create_sandustry.content.block.entity.ThermalBufferBlockEntity;
-import com.minechai.create_sandustry.content.block.entity.SandMasterSwordPedestalBlockEntity;
-import com.minechai.create_sandustry.content.block.entity.LivingSandBlockEntity;
-import com.minechai.create_sandustry.content.block.entity.FlorinolBatteryBlockEntity;
-import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressBlockEntity;
+import com.minechai.create_sandustry.content.thermalbuffer.ThermalBufferBlockEntity;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordPedestalBlockEntity;
+import com.minechai.create_sandustry.content.livingsand.LivingSandBlockEntity;
+import com.minechai.create_sandustry.content.florinolbattery.FlorinolBatteryBlockEntity;
+import com.minechai.create_sandustry.content.kineticpress.KineticPressBlockEntity;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;

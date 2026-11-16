@@ -1,12 +1,12 @@
 package com.minechai.create_sandustry.registry;
 
-import com.minechai.create_sandustry.content.entity.SandMasterSwordBeam;
-import com.minechai.create_sandustry.content.entity.SandBladeCrescent;
-import com.minechai.create_sandustry.content.entity.QunyouGoldenCarrotProjectile;
-import com.minechai.create_sandustry.content.entity.QunyouClone;
-import com.minechai.create_sandustry.content.entity.QunyouCarrotProjectile;
-import com.minechai.create_sandustry.content.entity.Qunyou;
-import com.minechai.create_sandustry.content.entity.LivingSand;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordBeam;
+import com.minechai.create_sandustry.content.sandmastersword.SandBladeCrescent;
+import com.minechai.create_sandustry.content.qunyou.QunyouGoldenCarrotProjectile;
+import com.minechai.create_sandustry.content.qunyou.QunyouClone;
+import com.minechai.create_sandustry.content.qunyou.QunyouCarrotProjectile;
+import com.minechai.create_sandustry.content.qunyou.Qunyou;
+import com.minechai.create_sandustry.content.livingsand.LivingSand;
 import com.minechai.create_sandustry.CreateSandustry;
 
 import net.minecraft.core.registries.Registries;

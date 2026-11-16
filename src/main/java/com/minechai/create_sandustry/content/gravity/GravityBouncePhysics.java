@@ -2,7 +2,7 @@ package com.minechai.create_sandustry.content.gravity;
 
 import java.util.function.BiConsumer;
 
-import com.minechai.create_sandustry.config.ModConfigs;
+import com.minechai.create_sandustry.infrastructure.config.ModConfigs;
 import com.minechai.create_sandustry.content.moonhop.MoonhopBlock;
 import com.minechai.create_sandustry.registry.ModAttachments;
 

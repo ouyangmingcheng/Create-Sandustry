@@ -1,11 +1,11 @@
 package com.minechai.create_sandustry.registry;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.worldgen.geology.GeologyFeature;
-import com.minechai.create_sandustry.worldgen.geology.special.CatLitterClusterFeature;
-import com.minechai.create_sandustry.worldgen.geology.special.LivingSandClusterFeature;
-import com.minechai.create_sandustry.worldgen.geology.special.SuspiciousGravelClusterFeature;
-import com.minechai.create_sandustry.worldgen.geology.special.SuspiciousSandClusterFeature;
+import com.minechai.create_sandustry.content.worldgen.geology.GeologyFeature;
+import com.minechai.create_sandustry.content.worldgen.geology.special.CatLitterClusterFeature;
+import com.minechai.create_sandustry.content.worldgen.geology.special.LivingSandClusterFeature;
+import com.minechai.create_sandustry.content.worldgen.geology.special.SuspiciousGravelClusterFeature;
+import com.minechai.create_sandustry.content.worldgen.geology.special.SuspiciousSandClusterFeature;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.neoforged.bus.api.IEventBus;

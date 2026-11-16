@@ -3,8 +3,8 @@
   "package": "com.minechai.create_sandustry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "poopsky.FecalIncontinenceEffectMixin",
-    "poopsky.PoopTntUtilMixin"
+    "compat.poopsky.FecalIncontinenceEffectMixin",
+    "compat.poopsky.PoopTntUtilMixin"
   ],
   "injectors": {
     "defaultRequire": 1

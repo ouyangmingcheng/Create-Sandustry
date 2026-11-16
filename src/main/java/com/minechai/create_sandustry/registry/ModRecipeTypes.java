@@ -1,14 +1,14 @@
 package com.minechai.create_sandustry.registry;
 
-import com.minechai.create_sandustry.content.recipe.SiftingRecipe;
-import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipe;
-import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipeSerializer;
-import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressRecipeType;
-import com.minechai.create_sandustry.content.recipe.SandSwordRepairRecipeSerializer;
-import com.minechai.create_sandustry.content.recipe.SandSwordDeployingRecipe;
-import com.minechai.create_sandustry.content.recipe.RandomSaplingMixingRecipe;
-import com.minechai.create_sandustry.content.recipe.CauldronConversionRecipeSerializer;
-import com.minechai.create_sandustry.content.recipe.CauldronConversionRecipe;
+import com.minechai.create_sandustry.content.sifting.SiftingRecipe;
+import com.minechai.create_sandustry.content.kineticpress.KineticPressRecipe;
+import com.minechai.create_sandustry.content.kineticpress.KineticPressRecipeSerializer;
+import com.minechai.create_sandustry.content.kineticpress.KineticPressRecipeType;
+import com.minechai.create_sandustry.content.sandsword.SandSwordRepairRecipeSerializer;
+import com.minechai.create_sandustry.content.sandsword.SandSwordDeployingRecipe;
+import com.minechai.create_sandustry.content.goldenflora.RandomSaplingMixingRecipe;
+import com.minechai.create_sandustry.content.sand.CauldronConversionRecipeSerializer;
+import com.minechai.create_sandustry.content.sand.CauldronConversionRecipe;
 import com.minechai.create_sandustry.CreateSandustry;
 import com.minechai.create_sandustry.content.gravity.BounceActivationRecipe;
 import com.simibubi.create.content.kinetics.deployer.ItemApplicationRecipe;

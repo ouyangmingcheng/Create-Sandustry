@@ -1,25 +1,22 @@
+# Create: Sandustry · 沙金工艺
 
-Installation information
-=======
+Minecraft 1.21.1 / NeoForge 21.1 / Java 21 / Create 6.0.10。
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+项目按功能模块组织，具体目录职责、玩法归属和初始化流程见 [项目结构说明](ARCHITECTURE.md)。
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+## 开发与验证
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+在项目目录运行：
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+```powershell
+.\gradlew.bat build
+.\gradlew.bat runGameTestServer
+.\gradlew.bat runClient
+```
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+开发依赖和运行配置见 `build.gradle`，版本参数见 `gradle.properties`。`localRuntime` 依赖仅用于开发运行环境。
+
+## 资料
+
+- [NeoForge 文档](https://docs.neoforged.net/)
+- [Mojang 映射许可说明](https://github.com/NeoForged/NeoForm/blob/main/Mojang.md)

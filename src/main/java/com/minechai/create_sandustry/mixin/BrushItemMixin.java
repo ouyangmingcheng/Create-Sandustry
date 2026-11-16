@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.compat.create.DeployerBrushCompat;
+import com.minechai.create_sandustry.compat.create.DeployerBrushCompat;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BrushItem;
 import net.minecraft.world.item.context.UseOnContext;

@@ -1,7 +1,7 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.conversion.MoonCrystalConversion;
-import com.minechai.create_sandustry.content.conversion.MoonCrystalConversionCache;
+import com.minechai.create_sandustry.content.mooncrystal.MoonCrystalConversion;
+import com.minechai.create_sandustry.content.mooncrystal.MoonCrystalConversionCache;
 import com.minechai.create_sandustry.registry.ModItems;
 import com.minechai.create_sandustry.registry.ModStats;
 import com.simibubi.create.content.logistics.depot.DepotBehaviour;

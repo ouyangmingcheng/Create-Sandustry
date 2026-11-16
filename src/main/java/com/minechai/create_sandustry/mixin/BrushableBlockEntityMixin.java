@@ -1,11 +1,11 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.event.ArchaeologyCompletedEvent;
+import com.minechai.create_sandustry.foundation.event.ArchaeologyCompletedEvent;
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.config.ModConfigs;
-import com.minechai.create_sandustry.content.block.BrushableFallProtection;
-import com.minechai.create_sandustry.content.block.entity.BrushProgressAccess;
-import com.minechai.create_sandustry.content.loot.UniversalArchaeologyLootPool;
+import com.minechai.create_sandustry.infrastructure.config.ModConfigs;
+import com.minechai.create_sandustry.content.archaeology.BrushableFallProtection;
+import com.minechai.create_sandustry.content.archaeology.BrushProgressAccess;
+import com.minechai.create_sandustry.content.archaeology.UniversalArchaeologyLootPool;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;

@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.content.item.SandMasterSwordForms;
-import com.minechai.create_sandustry.content.item.SandSwordForms;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordForms;
+import com.minechai.create_sandustry.content.sandsword.SandSwordForms;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;

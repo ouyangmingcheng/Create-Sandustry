@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.block.machine.kinetic_press.KineticPressBlockEntity;
+import com.minechai.create_sandustry.content.kineticpress.KineticPressBlockEntity;
 import com.simibubi.create.content.logistics.chute.ChuteBlockEntity;
 
 import net.minecraft.world.item.ItemStack;

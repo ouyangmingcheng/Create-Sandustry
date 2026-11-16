@@ -4,7 +4,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.minechai.create_sandustry.CreateSandustry;
-import com.minechai.create_sandustry.content.compat.sable.SableMoonhopBounce;
+import com.minechai.create_sandustry.compat.sable.SableMoonhopBounce;
 import com.minechai.create_sandustry.registry.ModAttachments;
 import com.minechai.create_sandustry.registry.ModBlocks;
 import com.mojang.authlib.GameProfile;

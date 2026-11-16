@@ -1,7 +1,7 @@
 package com.minechai.create_sandustry.registry;
 
-import com.minechai.create_sandustry.content.block.machine.FlorinolBatteryEnergyStorage;
-import com.minechai.create_sandustry.content.block.machine.SandCasingEnergyStorage;
+import com.minechai.create_sandustry.content.florinolbattery.FlorinolBatteryEnergyStorage;
+import com.minechai.create_sandustry.content.sandcasing.SandCasingEnergyStorage;
 
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;

@@ -3,7 +3,7 @@
   "package": "com.minechai.create_sandustry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "aeronautics.LevititeBlendHelperMixin"
+    "compat.aeronautics.LevititeBlendHelperMixin"
   ],
   "injectors": {
     "defaultRequire": 1

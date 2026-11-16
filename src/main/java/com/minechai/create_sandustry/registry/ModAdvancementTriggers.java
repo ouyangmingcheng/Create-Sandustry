@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.registry;
 
-import com.minechai.create_sandustry.content.advancement.GoldenFriedRiceTrigger;
+import com.minechai.create_sandustry.content.goldenfriedrice.GoldenFriedRiceTrigger;
 import com.minechai.create_sandustry.CreateSandustry;
 
 import net.minecraft.advancements.CriterionTrigger;

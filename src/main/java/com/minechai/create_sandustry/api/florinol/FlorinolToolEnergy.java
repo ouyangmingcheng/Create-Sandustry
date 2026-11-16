@@ -4,7 +4,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-import com.minechai.create_sandustry.content.block.entity.FlorinolBatteryBlockEntity;
+import com.minechai.create_sandustry.content.florinolbattery.FlorinolBatteryBlockEntity;
 import com.minechai.create_sandustry.registry.ModDataComponents;
 
 import net.minecraft.core.component.DataComponents;

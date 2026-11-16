@@ -38,17 +38,17 @@
     "LevelDaytimeMixin"
   ],
   "client": [
-    "CreativeModeInventoryScreenMixin",
-    "PonderExperienceLightingMixin",
-    "SequencedAssemblyGravityJeiMixin",
-    "ItemRendererMixin",
-    "LocalPlayerDropMixin",
-    "GuiHeartMixin",
-    "HumanoidModelMixin",
-    "PlayerRendererMixin",
-    "ItemInHandRendererMixin",
-    "ClientSwingLockMixin",
-    "BeltRendererSiftingMixin"
+    "client.CreativeModeInventoryScreenMixin",
+    "client.PonderExperienceLightingMixin",
+    "client.SequencedAssemblyGravityJeiMixin",
+    "client.ItemRendererMixin",
+    "client.LocalPlayerDropMixin",
+    "client.GuiHeartMixin",
+    "client.HumanoidModelMixin",
+    "client.PlayerRendererMixin",
+    "client.ItemInHandRendererMixin",
+    "client.ClientSwingLockMixin",
+    "client.BeltRendererSiftingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

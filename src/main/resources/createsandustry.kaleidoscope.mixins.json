@@ -3,7 +3,7 @@
   "package": "com.minechai.create_sandustry.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "kaleidoscope.KaleidoscopeQualityUtilsMixin"
+    "compat.kaleidoscope.KaleidoscopeQualityUtilsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.belt.SiftingBeltProcessor;
+import com.minechai.create_sandustry.content.sifting.SiftingBeltProcessor;
 import com.simibubi.create.content.kinetics.belt.BeltBlockEntity;
 
 import org.spongepowered.asm.mixin.Mixin;

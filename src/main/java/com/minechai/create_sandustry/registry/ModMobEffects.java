@@ -1,9 +1,9 @@
 package com.minechai.create_sandustry.registry;
 
-import com.minechai.create_sandustry.content.effect.SandificationEffect;
-import com.minechai.create_sandustry.content.effect.SandHardcoreEffect;
-import com.minechai.create_sandustry.content.effect.MoonWorshipEffect;
-import com.minechai.create_sandustry.content.effect.GoldenSelectionEffect;
+import com.minechai.create_sandustry.content.sandification.SandificationEffect;
+import com.minechai.create_sandustry.content.sandification.SandHardcoreEffect;
+import com.minechai.create_sandustry.content.moonhop.MoonWorshipEffect;
+import com.minechai.create_sandustry.content.goldenselection.GoldenSelectionEffect;
 import com.minechai.create_sandustry.CreateSandustry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;

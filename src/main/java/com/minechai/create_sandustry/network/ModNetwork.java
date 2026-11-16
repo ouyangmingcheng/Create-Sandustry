@@ -1,10 +1,10 @@
 package com.minechai.create_sandustry.network;
 
-import com.minechai.create_sandustry.content.client.event.MelodyPuzzleAudioClient;
-import com.minechai.create_sandustry.content.client.event.MelodyPuzzleClientState;
-import com.minechai.create_sandustry.content.client.event.SwordPullClient;
-import com.minechai.create_sandustry.content.item.SandMasterSwordEvents;
-import com.minechai.create_sandustry.content.sandheart.SandSwordPullManager;
+import com.minechai.create_sandustry.content.melody.client.MelodyPuzzleAudioClient;
+import com.minechai.create_sandustry.content.melody.client.MelodyPuzzleClientState;
+import com.minechai.create_sandustry.content.sandmastersword.client.SwordPullClient;
+import com.minechai.create_sandustry.content.sandmastersword.SandMasterSwordEvents;
+import com.minechai.create_sandustry.content.sandmastersword.SandSwordPullManager;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;

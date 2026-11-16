@@ -1,6 +1,6 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.belt.SiftingProgressAccess;
+import com.minechai.create_sandustry.content.sifting.SiftingProgressAccess;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 
 import net.minecraft.core.HolderLookup;

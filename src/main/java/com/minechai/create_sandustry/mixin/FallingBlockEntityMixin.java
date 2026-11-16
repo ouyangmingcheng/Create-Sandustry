@@ -1,7 +1,7 @@
 package com.minechai.create_sandustry.mixin;
 
-import com.minechai.create_sandustry.content.block.BrushableFallProtection;
-import com.minechai.create_sandustry.content.block.FallingBlockDropRules;
+import com.minechai.create_sandustry.content.archaeology.BrushableFallProtection;
+import com.minechai.create_sandustry.foundation.block.FallingBlockDropRules;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.item.FallingBlockEntity;
