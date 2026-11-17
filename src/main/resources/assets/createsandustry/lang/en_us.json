@@ -55,14 +55,9 @@
   "block.createsandustry.florinol": "Florinol",
   "fluid_type.createsandustry.florinol": "Florinol",
   "item.createsandustry.residue": "Residue",
-  "message.createsandustry.sifting_belt.installed": "Sifting mesh installed. Sneak-right-click or click the bottom face to place a Chute below.",
-  "message.createsandustry.sifting_belt.removed": "Sifting mesh removed; the Chute has been returned.",
-  "message.createsandustry.sifting_belt.already_installed": "This belt segment already has a sifting mesh. Sneak-right-click or click the bottom face to place a Chute below.",
-  "message.createsandustry.sifting_belt.requires_horizontal": "Sifting meshes can only be installed on horizontal belts.",
   "item.createsandustry.florinol_bucket": "Florinol Bucket",
   "item.createsandustry.burnt_residue": "Burnt Residue",
   "item.createsandustry.amethyst_flower_seeds": "Amethyst Flower Seeds",
-  "item.createsandustry.dormant_seeds": "Dormant Seeds",
   "item.createsandustry.amethyst_petal": "Amethyst Petal",
   "goggles.createsandustry.florinol_battery.title": "Florinol Battery Info:",
   "goggles.createsandustry.florinol_battery.fluid": "Florinol: %s B / %s B",
@@ -289,7 +284,6 @@
   "message.createsandustry.kinetic_press.path_blocked": "The path is blocked at %s.",
   "tooltip.createsandustry.gravity.success": "Success chance: %s%%",
   "tooltip.createsandustry.gravity.damage": "Damage chance: %s%%",
-  "config.jade.plugin_createsandustry.kinetic_press": "Kinetic Press",
   "subtitles.createsandustry.kinetic_press.start": "Kinetic Press engages",
   "subtitles.createsandustry.kinetic_press.impact": "Kinetic Press thuds",
   "block.createsandustry.golden_experience_block": "Block of Golden Experience",
@@ -299,6 +293,5 @@
   "item.createsandustry.golden_experience_nugget.tooltip.behaviour1": "_Absorb_ the contained _experience_",
   "createsandustry.ponder.golden_experience.header": "Golden Experience Block Conversion",
   "createsandustry.ponder.golden_experience.text_1": "Place a Block of Experience near a charged Creeper.",
-  "createsandustry.ponder.golden_experience.text_2": "Only charged Creeper explosions can transform each affected block, with a 50%% chance.",
-  "createsandustry.ponder.golden_experience.text_3": "The block transforms in place. Failed attempts leave the original block intact for another try."
+  "createsandustry.ponder.golden_experience.text_2": "The explosion may turn it into a Block of Golden Experience."
 }

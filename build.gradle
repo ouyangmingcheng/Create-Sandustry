@@ -166,8 +166,8 @@ configurations {
 }
 
 dependencies {
-    // Create: Biotech 1.3.1, NeoForge 1.21.1; development runtime only.
-    localRuntime "maven.modrinth:UW0IjVT0:Y7ktTdpL"
+    // Create: Biotech 2.0.0-beta.3, NeoForge 1.21.1; development runtime only.
+    localRuntime "maven.modrinth:UW0IjVT0:exGZMIgK"
 
 
 
@@ -184,10 +184,18 @@ dependencies {
     compileOnly files('libs/kaleidoscopecookery-1.6.0-neoforge+mc1.21.1.jar')
     localRuntime files('libs/kaleidoscopecookery-1.6.0-neoforge+mc1.21.1.jar')
 
-    api "dev.latvian.mods:kubejs-neoforge:2101.7.2-build.348"
+    // Biotech 2.0.0-beta.3 requires build.381 or newer when KubeJS is installed.
+    api "dev.latvian.mods:kubejs-neoforge:2101.7.2-build.381"
 
     // 可选：用于接口注入数据
-    interfaceInjectionData "dev.latvian.mods:kubejs-neoforge:2101.7.2-build.348"
+    interfaceInjectionData "dev.latvian.mods:kubejs-neoforge:2101.7.2-build.381"
+
+    constraints {
+        runtimeOnly('dev.latvian.mods:better-advanced-tooltips:2101.1.0-build.6') {
+            version { strictly '2101.1.0-build.6' }
+            because 'Keep KubeJS runtime dependencies on Minecraft 1.21.1 and Java 21.'
+        }
+    }
 
     implementation "maven.modrinth:T38eAZQC:1qmcLagN"
 

@@ -93,7 +93,6 @@ public final class ModCreativeTabs {
                 ModItems.GOLDEN_FARMLAND.get(),
                 ModItems.GOLDEN_OAK_SAPLING.get(),
                 ModItems.GOLDEN_OAK_LEAVES.get(),
-                ModItems.DORMANT_SEEDS.get(),
                 ModItems.AMETHYST_FLOWER_SEEDS.get(),
                 ModItems.AMETHYST_PETAL.get()));
 

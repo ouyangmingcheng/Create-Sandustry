@@ -4,7 +4,7 @@
   "pattern": ["IPI", "ECE", "IBI"],
   "key": {
     "I": {"item": "minecraft:iron_ingot"},
-    "P": {"item": "create:precision_mechanism"},
+    "P": {"item": "createsandustry:gravity_mechanism"},
     "E": {"item": "create:electron_tube"},
     "C": {"item": "create:brass_casing"},
     "B": {"item": "minecraft:iron_block"}

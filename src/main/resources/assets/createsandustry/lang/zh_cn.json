@@ -55,14 +55,9 @@
   "block.createsandustry.florinol": "弗洛林电池液",
   "fluid_type.createsandustry.florinol": "弗洛林电池液",
   "item.createsandustry.residue": "残渣",
-  "message.createsandustry.sifting_belt.installed": "筛网已安装，湿沙经过时会自动筛出金粒；潜行右键或点击底面可在下方放置溜槽",
-  "message.createsandustry.sifting_belt.removed": "筛网已拆除，溜槽已返还",
-  "message.createsandustry.sifting_belt.already_installed": "该传送带段已经安装了筛网；潜行右键或点击底面可在下方放置溜槽",
-  "message.createsandustry.sifting_belt.requires_horizontal": "筛网只能安装在水平传送带上",
   "item.createsandustry.florinol_bucket": "弗洛林电池液桶",
   "item.createsandustry.burnt_residue": "焦化残渣",
   "item.createsandustry.amethyst_flower_seeds": "紫金花种子",
-  "item.createsandustry.dormant_seeds": "失活种子",
   "item.createsandustry.amethyst_petal": "紫金花瓣",
   "goggles.createsandustry.florinol_battery.title": "弗洛林电池信息：",
   "goggles.createsandustry.florinol_battery.fluid": "弗洛林液体: %s B / %s B",
@@ -289,7 +284,6 @@
   "message.createsandustry.kinetic_press.path_blocked": "路径在 %s 处被阻挡。",
   "tooltip.createsandustry.gravity.success": "成功概率：%s%%",
   "tooltip.createsandustry.gravity.damage": "损坏概率：%s%%",
-  "config.jade.plugin_createsandustry.kinetic_press": "重力压制器",
   "subtitles.createsandustry.kinetic_press.start": "重力压制器：启动",
   "subtitles.createsandustry.kinetic_press.impact": "重力压制器：落压",
   "block.createsandustry.golden_experience_block": "金验块",
@@ -298,7 +292,6 @@
   "item.createsandustry.golden_experience_nugget.tooltip.condition1": "使用时",
   "item.createsandustry.golden_experience_nugget.tooltip.behaviour1": "_吸收_其中包含的_经验值_",
   "createsandustry.ponder.golden_experience.header": "金验块的转化",
-  "createsandustry.ponder.golden_experience.text_1": "将经验块放置在闪电苦力怕旁。",
-  "createsandustry.ponder.golden_experience.text_2": "只有闪电苦力怕的爆炸能触发转化，每个受到波及的经验块独立有 50%% 概率转化为金验块。",
-  "createsandustry.ponder.golden_experience.text_3": "成功时原地转化；失败时保留经验块，可以再次引爆尝试。"
+  "createsandustry.ponder.golden_experience.text_1": "将经验块放在闪电苦力怕旁。",
+  "createsandustry.ponder.golden_experience.text_2": "引爆后，经验块有机会转化为金验块。"
 }

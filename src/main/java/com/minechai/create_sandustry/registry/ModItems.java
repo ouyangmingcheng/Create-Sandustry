@@ -249,7 +249,6 @@ public static final DeferredItem<com.minechai.create_sandustry.content.experienc
     public static final DeferredItem<ItemNameBlockItem> AMETHYST_FLOWER_SEEDS = ITEMS.registerItem(
             "amethyst_flower_seeds",
             properties -> new ItemNameBlockItem(ModBlocks.AMETHYST_FLOWER.get(), properties));
-    public static final DeferredItem<Item> DORMANT_SEEDS = ITEMS.registerSimpleItem("dormant_seeds");
     public static final DeferredItem<Item> AMETHYST_PETAL = ITEMS.registerSimpleItem("amethyst_petal");
     public static final DeferredItem<BlockItem> AMETHYST_FLOWER = ITEMS.registerSimpleBlockItem(
             "amethyst_flower",
