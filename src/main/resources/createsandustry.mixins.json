@@ -1,7 +1,12 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "package": "com.minechai.create_sandustry.mixin",
+  "plugin": "com.minechai.create_sandustry.infrastructure.SandustryMixinPlugin",
   "compatibilityLevel": "JAVA_21",
+  "mixinextras": {
+    "minVersion": "0.5.3"
+  },
   "mixins": [
     "PistonGravityMotionMixin",
     "ItemEntityGravityCollectionMixin",
@@ -35,7 +40,19 @@
     "ServerLevelJukeboxAudioMixin",
     "KineticStressAccessor",
     "ServerLevelTimeLockMixin",
-    "LevelDaytimeMixin"
+    "LevelDaytimeMixin",
+    "compat.kaleidoscope.KaleidoscopeQualityUtilsMixin",
+    "compat.poopsky.FecalIncontinenceEffectMixin",
+    "compat.poopsky.PoopTntUtilMixin",
+    "compat.aeronautics.LevititeBlendHelperMixin",
+    "compat.sable.MoonhopEntityMoveMixin",
+    "compat.sable.MoonhopSubLevelCollisionMixin",
+    "compat.createstuffadditions.PortableDrillBlockDestroyedMixin",
+    "compat.createstuffadditions.PortableDrillToolTickMixin",
+    "compat.createstuffadditions.BrassJetpackFlorinolMixin",
+    "compat.createstuffadditions.BrassExoskeletonFlorinolMixin",
+    "compat.createstuffadditions.NetheriteJetpackFlorinolMixin",
+    "compat.createstuffadditions.NetheriteJetpackElytraMixin"
   ],
   "client": [
     "client.CreativeModeInventoryScreenMixin",
@@ -48,7 +65,8 @@
     "client.PlayerRendererMixin",
     "client.ItemInHandRendererMixin",
     "client.ClientSwingLockMixin",
-    "client.BeltRendererSiftingMixin"
+    "client.BeltRendererSiftingMixin",
+    "compat.createstuffadditions.PortableDrillEnergyBarMixin"
   ],
   "injectors": {
     "defaultRequire": 1

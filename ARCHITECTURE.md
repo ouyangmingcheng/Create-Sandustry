@@ -49,6 +49,7 @@
 - `client/SandustryClient` 仅在物理客户端被调用，挂接客户端初始化。
 - 已使用 `@EventBusSubscriber` 的模块继续由 NeoForge 自动发现，避免重复注册。
 - 通用启动入口不能无条件调用客户端初始化；新增客户端 Mixin 必须放进配置的 `client` 列表。
+- 所有 Mixin 统一注册于 `createsandustry.mixins.json`，由 `infrastructure/SandustryMixinPlugin` 检查可选目标类与 Sable 是否存在，并保留可选兼容注入的警告容错行为；插件不得直接加载游戏类或可选模组 API。
 - 新功能优先放进 `content/<feature>/`；只有跨功能共用的基础实现才进入 `foundation/`。
 - 访问其他模组 API 的集成进入 `compat/`，并沿用现有可选加载检查。
 

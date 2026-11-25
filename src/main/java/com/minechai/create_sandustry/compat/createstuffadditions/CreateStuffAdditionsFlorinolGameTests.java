@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
@@ -17,6 +18,12 @@ public final class CreateStuffAdditionsFlorinolGameTests {
     @GameTest(template = "time_bearing_empty", templateNamespace = CreateSandustry.MODID,
             timeoutTicks = 20)
     public static void brassArmorMixinTargetsLoad(GameTestHelper helper) {
+        if (!ModList.get().isLoaded("create_sa")) {
+            helper.assertTrue(!BuiltInRegistries.ITEM.containsKey(BrassArmorFlorinolCompat.BRASS_JETPACK_ID),
+                    "Optional Create SA armor must not be registered when its mod is absent");
+            helper.succeed();
+            return;
+        }
         try {
             Class.forName("net.mcreator.createstuffadditions.procedures.BrassEncasedPropelerBodyTickEventProcedure");
             Class.forName("net.mcreator.createstuffadditions.procedures.BrassExoskeletonBodyTickEventProcedure");
