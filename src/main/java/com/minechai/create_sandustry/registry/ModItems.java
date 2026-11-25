@@ -170,6 +170,9 @@ public static final DeferredItem<com.minechai.create_sandustry.content.experienc
                     .jukeboxPlayable(ModJukeboxSongs.OPENING_CLUE)
                     .component(ModDataComponents.MELODY_PUZZLE_ID.get(), "opening")));
 
+    public static final DeferredItem<SequencedAssemblyItem> INCOMPLETE_MUSIC_DISC_OPENING = ITEMS.registerItem(
+            "incomplete_music_disc_opening", SequencedAssemblyItem::new);
+
     /** Song of Awakening 谜题唱片。 */
     public static final DeferredItem<Item> MUSIC_DISC_AWAKENING = ITEMS.registerItem(
             "music_disc_awakening",
