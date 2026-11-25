@@ -1,0 +1,7 @@
+{
+  "priority": 1001,
+  "selector": "createsandustry:golden_experience_block",
+  "properties": {
+    "sable:mass": 4.0
+  }
+}

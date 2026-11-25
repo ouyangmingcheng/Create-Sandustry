@@ -1,0 +1,21 @@
+{
+  "type": "createsandustry:pressing",
+  "ingredient": {
+    "item": "createsandustry:burnt_residue"
+  },
+  "results": [
+    {
+      "item": "createsandustry:amethyst_flower_seeds",
+      "count": 1,
+      "chance": 1.0
+    },
+    {
+      "item": "minecraft:gold_nugget",
+      "count": 1,
+      "chance": 0.25
+    }
+  ],
+  "processing_time": 20,
+  "required_height": 8,
+  "base_energy": 200
+}

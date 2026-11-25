@@ -1,0 +1,45 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:sturdy_sheet"
+  },
+  "transitional_item": {
+    "id": "createsandustry:incomplete_music_disc_opening"
+  },
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createsandustry:incomplete_music_disc_opening" },
+        { "item": "createsandustry:disc_fragment_awakening" }
+      ],
+      "results": [
+        { "id": "createsandustry:incomplete_music_disc_opening" }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createsandustry:incomplete_music_disc_opening" },
+        { "item": "createsandustry:disc_fragment_healing" }
+      ],
+      "results": [
+        { "id": "createsandustry:incomplete_music_disc_opening" }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        { "item": "createsandustry:incomplete_music_disc_opening" },
+        { "item": "createsandustry:disc_fragment_birds" }
+      ],
+      "results": [
+        { "id": "createsandustry:incomplete_music_disc_opening" }
+      ]
+    }
+  ],
+  "results": [
+    { "id": "createsandustry:music_disc_opening" }
+  ],
+  "loops": 1
+}

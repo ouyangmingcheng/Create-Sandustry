@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "createsandustry:golden_experience_block"
+    }
+  ],
+  "result": {
+    "id": "createsandustry:golden_experience_nugget",
+    "count": 9
+  }
+}

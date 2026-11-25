@@ -1,5 +1,7 @@
 # Create: Sandustry · 沙金工艺
 
+<img src="src/main/icon.png" alt="Create: Sandustry Logo" width="160">
+
 以还原《Sandustry》的设计理念与玩法为目标的 Minecraft 机械动力附属模组，目前主要服务于自制整合包。
 
 围绕沙子、黄金与机械加工，将筛振淘金、农业、能源循环、重力加工、旋律解谜和战斗串联起来。生产线除了考虑转速与物流，还需要利用热量、月光、加工高度和物品弹跳。
@@ -123,6 +125,7 @@
 | Create | 筛振传送带、机械手考古与喂猫、动力冲压、沙金套壳、热源、土豆加农炮、蒸汽笛与时钟轴承 |
 | JEI | 筛振、重力压制、随机树苗搅拌和重力构件装配展示 |
 | Jade | 重力压制器状态信息 |
+| KubeJS | 在服务端脚本中添加、移除和修改筛振及重力压制配方 |
 | Botany Pots | 黄金土壤、黄金胡萝卜与紫金花种植配方 |
 | Create: Connected | 黄铜溜槽筛振兼容 |
 | Create Stuff 'N Additions | 弗洛林工具、黄铜装备及相关装备行为兼容 |
@@ -137,6 +140,30 @@
 公共配置由 NeoForge 生成，主要包括世界生成、弗洛林电池能量换算、重力压制器高度补偿、特殊沙子触发概率、活沙行为、金选、月晶转化、月亮崇拜和时间锁等选项。
 
 可在 [配方目录](src/main/resources/data/createsandustry/recipe) 与 [旋律谜题目录](src/main/resources/data/createsandustry/melody_puzzle) 查看现有数据。整合包可通过数据包覆盖配方、战利品、标签和谜题；具体产出与数值以当前整合包配置及游戏内 JEI 为准。
+
+### KubeJS 配方
+
+安装 KubeJS 后，在 `kubejs/server_scripts/` 中添加脚本，使用 `/reload` 加载。两种配方都支持用物品 ID、`Item.of(...)` 或带 `count` 和 `chance` 的对象填写产出。输入可以是物品 ID 或 `#标签`。
+
+```js
+ServerEvents.recipes(event => {
+  const sandustry = event.recipes.createsandustry
+
+  // 筛振首项产出的概率须为 1，产物会留在传送带上。副产物从下方排出。
+  sandustry.sifting([
+    'minecraft:sand',
+    { id: 'minecraft:flint', count: 1, chance: 0.25 }
+  ], 'minecraft:gravel', 60).id('kubejs:sifting_gravel')
+
+  // 最后三个参数依次是加工时间（刻）、需求高度（格）和基础能耗（FE）。
+  sandustry.pressing([
+    'minecraft:flint',
+    { item: 'minecraft:iron_nugget', count: 2, chance: 0.25 }
+  ], '#c:sands', 40, 8, 200).id('kubejs:pressing_sand')
+})
+```
+
+配方类型分别为 `createsandustry:sifting` 和 `createsandustry:pressing`，可用于 `event.remove`、`event.replaceInput` 和 `event.replaceOutput` 的筛选条件。替换产出会保留原有数量与概率。
 
 ## 开发与构建
 

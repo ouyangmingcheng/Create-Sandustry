@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "createsandustry:item/golden_experience_nugget"
+  }
+}

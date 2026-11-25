@@ -1,0 +1,1 @@
+com.minechai.create_sandustry.compat.kubejs.SandustryKubeJSPlugin

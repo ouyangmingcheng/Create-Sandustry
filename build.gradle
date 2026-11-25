@@ -25,6 +25,10 @@ sourceSets.main.resources {
     exclude("**/*.bbmodel") // BlockBench project files
     exclude("src/generated/**/.cache") // datagen cache files
 }
+tasks.named('processResources') {
+    from('src/main/icon.png')
+}
+
 repositories.clear()
 repositories {
     maven { url = "https://libraries.minecraft.net/" }

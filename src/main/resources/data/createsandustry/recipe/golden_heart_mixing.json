@@ -1,0 +1,18 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:golden_experience_nugget" },
+    { "item": "createsandustry:sand_heart" }
+  ],
+  "results": [
+    { "id": "createsandustry:golden_heart", "count": 1 }
+  ]
+}

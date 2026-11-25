@@ -1,0 +1,14 @@
+{
+  "type": "create:mixing",
+  "heat_requirement": "heated",
+  "ingredients": [
+    { "item": "createsandustry:sand_ball" },
+    { "item": "createsandustry:sand_ball" },
+    { "item": "createsandustry:sand_ball" },
+    { "item": "createsandustry:sand_ball" },
+    { "item": "minecraft:gold_ingot" }
+  ],
+  "results": [
+    { "id": "createsandustry:sand_alloy", "count": 1 }
+  ]
+}
