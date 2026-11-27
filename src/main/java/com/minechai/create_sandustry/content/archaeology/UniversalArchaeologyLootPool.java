@@ -31,8 +31,10 @@ public final class UniversalArchaeologyLootPool {
      */
     private static final Set<ResourceLocation> EXCLUDED_ARCHAEOLOGY_LOOT = Set.of(
             ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "archaeology/cat_litter"),
-            ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "archaeology/cat_litter_fallback"),
-            ResourceLocation.fromNamespaceAndPath("kaleidoscope_end", "archaeology/suspicious_dragon_egg"));
+            ResourceLocation.fromNamespaceAndPath(CreateSandustry.MODID, "archaeology/cat_litter_fallback"));
+
+    /** 按命名空间排除整个模组的考古战利品表，也覆盖后续新增的表。 */
+    private static final Set<String> EXCLUDED_ARCHAEOLOGY_NAMESPACES = Set.of("kaleidoscope_end");
 
     private static Registry<LootTable> cachedRegistry;
     private static List<LootTable> cachedPool = List.of();
@@ -62,7 +64,9 @@ public final class UniversalArchaeologyLootPool {
             List<LootTable> built = new ArrayList<>();
             for (Map.Entry<ResourceKey<LootTable>, LootTable> entry : registry.entrySet()) {
                 boolean archaeologyType = entry.getValue().getParamSet() == LootContextParamSets.ARCHAEOLOGY;
-                boolean excluded = EXCLUDED_ARCHAEOLOGY_LOOT.contains(entry.getKey().location());
+                ResourceLocation id = entry.getKey().location();
+                boolean excluded = EXCLUDED_ARCHAEOLOGY_NAMESPACES.contains(id.getNamespace())
+                        || EXCLUDED_ARCHAEOLOGY_LOOT.contains(id);
                 if (archaeologyType && !excluded) {
                     built.add(entry.getValue());
                 }
