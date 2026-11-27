@@ -36,9 +36,9 @@ public final class GoldenExperienceScenes {
         scene.world().setBlock(input, AllBlocks.EXPERIENCE_BLOCK.getDefaultState(), false);
         // Keep the glowing demonstration separate from the normally shaded floor.
         scene.world().showIndependentSection(util.select().position(input), Direction.DOWN);
-        scene.overlay().showText(70).text("Place a Block of Experience near a charged Creeper.")
+        scene.overlay().showText(50).text("Place a Block of Experience near a charged Creeper.")
                 .pointAt(util.vector().blockSurface(input, Direction.UP)).placeNearTarget();
-        scene.idle(80);
+        scene.idle(40);
         scene.addKeyframe();
         var chargedCreeper = scene.world().createEntity(level -> {
             Creeper creeper = EntityType.CREEPER.create(level);
@@ -50,9 +50,9 @@ public final class GoldenExperienceScenes {
             }
             return creeper;
         });
-        scene.overlay().showText(70).text("The explosion may turn it into a Block of Golden Experience.")
+        scene.overlay().showText(50).text("The explosion may turn it into a Block of Golden Experience.")
                 .pointAt(util.vector().centerOf(blast)).placeNearTarget();
-        scene.idle(80);
+        scene.idle(60);
         scene.world().modifyEntity(chargedCreeper, entity -> entity.discard());
         scene.addInstruction(s -> {
             s.getWorld().addParticle(ParticleTypes.EXPLOSION_EMITTER, 2.5, 1.5, 1.5, 0, 0, 0);
@@ -60,7 +60,6 @@ public final class GoldenExperienceScenes {
         });
         scene.world().setBlock(input, ModBlocks.GOLDEN_EXPERIENCE_BLOCK.get().defaultBlockState(), false);
         scene.idle(25);
-        scene.idle(100);
         scene.markAsFinished();
     }
 }

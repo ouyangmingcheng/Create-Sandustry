@@ -60,9 +60,9 @@ public final class FlorinolSoilScenes {
         scene.idle(20);
 
         showText(scene, "\u00a7d弗洛林电池液\u00a7r能量耗尽会凝固为\u00a7e弗洛林土壤\u00a7r", CENTER_POINT, 60);
-        scene.idle(80);
+        scene.idle(60);
         showText(scene, "\u00a7e弗洛林土壤\u00a7r可以液化为\u00a7d弗洛林电池液\u00a7r", CENTER_POINT, 60);
-        scene.idle(80);
+        scene.idle(60);
         showText(scene, "这个过程需要热量", CENTER_POINT, 50);
         scene.idle(20);
 
